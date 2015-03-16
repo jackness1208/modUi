@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>表单控件-输入类(input,textarea) 自定义校验</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title="表单控件-输入类(input,textarea) 自定义校验">
+
+	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+
+	<!-- 自定义校验 -->
+	<h2 class="ins">自定义校验</h2>
+	<h3 class="ins">HTML模板写法</h3>
+	<div class="ins">
+		<form class="bs_form">
+			<table class="bs_table_s0">
+				<tr>
+					<th>
+						<label for="animal">自定义校验</label>
+					</th>
+					<td>
+						<input id="animal" name="animal" type="text" mod-required="true" mod-format="/^[a-z]+$/ig" mod-error-text="请输入英文">
+					</td>
+				</tr>
+				
+			</table>
+		</form>
+	</div>
+
+	<pre class="brush:xml;">
+&lt;!-- html --&gt;
+&lt;form class="bs_form"&gt;
+	&lt;table class="bs_table_s0"&gt;
+		&lt;tr&gt;
+			&lt;th&gt;
+				&lt;label for="animal"&gt;自定义校验&lt;/label&gt;
+			&lt;/th&gt;
+			&lt;td&gt;
+				&lt;input id="animal" name="animal" type="text" mod-required="true" mod-format="/^[a-z]+$/ig" mod-error-text="请输入英文"&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		
+	&lt;/table&gt;
+&lt;/form&gt;
+	</pre>
+
+	<h3 class="ins">javascript写法</h3>
+	<div class="ins">
+		<table class="bs_table_s0">
+			<tr>
+				<th>
+					<label for="animal1">自定义校验</label>
+				</th>
+				<td>
+					<input id="animal1" name="animal1" type="text">
+				</td>
+			</tr>
+			
+		</table>
+		
+	</div>
+
+	<pre class="brush:xml;">
+&lt;!-- html --&gt;
+&lt;table class="bs_table_s0"&gt;
+	&lt;tr&gt;
+		&lt;th&gt;
+			&lt;label for="animal1"&gt;自定义校验&lt;/label&gt;
+		&lt;/th&gt;
+		&lt;td&gt;
+			&lt;input id="animal1" name="animal1" type="text"&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	
+&lt;/table&gt;		
+	</pre>
+	<pre class="brush:js;">
+mod.widget("animal1",{
+	required:true,
+	format:/^[a-z]+$/ig,
+	errorText:"请输入英文"
+});
+	</pre>
+	<!--/自定义校验 -->
+	
+
+
+	<!-- end! -->
+	<h3 class="ins">mod.widget(target,op) 参数说明</h3>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>target</td>
+				<td>{object|string}</td>
+				<td>需要执行模块化的对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td>支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>format</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									自定义校验  自行填写正则如 /\s+/g<br>若不填 则为非空校验
+								</td>
+							</tr>
+							<tr>
+								<td>required</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否为必填项 默认 false</td>
+							</tr>
+							<tr>
+								<td>errorText</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>设置校验内容时错误的提示语</td>
+							</tr>
+							<tr>
+								<td>defaultText</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>设置控件默认的提示语</td>
+							</tr>
+							<tr>
+								<td>autocomplete</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>自动完成</td>
+							</tr>
+							<tr>
+								<td>action</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验的地址(不填则不用异步校验)</td>
+							</tr>
+							<tr>
+								<td>method</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验的方式 GET|POST</td>
+							</tr>
+							<tr>
+								<td>actionKey</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验时使用的 参数名 如 username:1</td>
+							</tr>
+							<tr>
+								<td>actionType</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验的途径 ajax|jsonp</td>
+							</tr>
+							<tr>
+								<td>actionCallback</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验成功后执行的方法</td>
+							</tr>
+							<tr>
+								<td>linked</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>关联( password2,date-interval 用参数)</td>
+							</tr>
+							<tr>
+								<td>size</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>字符长度(code 用参数)</td>
+							</tr>
+							
+							<tr>
+								<td>messageKey</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>错误信息对应的json 属性 默认与Config一致</td>
+							</tr>
+							<tr>
+								<td>statusKey</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>状态信息对应的json 属性 默认与Config一致</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+</div>
+	
+
+
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+
+<script>
+
+
+mod.widget("#animal1",{
+	required:true,
+	format:/^[a-z]+$/ig,
+	errorText:"请输入英文"
+});
+
+</script>
+
+

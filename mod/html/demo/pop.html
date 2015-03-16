@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>弹窗控件</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title="弹窗控件">
+
+	<h2 class="ins">通用部分</h2>
+	
+	<p class="ins">分为 一般模块(normal)，二次确认(confirm)，成功(success)，失败(error)，菊花(loading)</p>
+
+	<h3 class="ins">一般模块(normal)</h3>
+	<h4 class="ins">页面效果</h4>
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('normal','你好吗')">alert</a>
+	</div>
+	
+	<h4 class="ins">Javascript写法</h4>
+	<pre class="brush:js;">
+mod.dialog('normal','你好吗');
+	</pre>
+	
+	<h3 class="ins">二次确认(confirm)</h3>
+
+	<h4 class="ins">页面效果</h4>
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('confirm',{content:'你好吗',callback:function(){alert('果然很好')}})">confirm</a>
+	</div>
+	
+	<h4 class="ins">Javascript写法</h4>
+	<pre class="brush:js;">
+mod.dialog('confirm',{content:'你好吗',callback:function(){alert('果然很好')});
+	</pre>
+
+	<h3 class="ins">成功(success)</h3>
+
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('success','你好吗')">success</a>
+	</div>
+
+	<h4 class="ins">Javascript写法</h4>
+	<pre class="brush:js;">
+mod.dialog('success','你好吗');
+	</pre>
+
+	<h3 class="ins">失败(error)</h3>
+
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('error','你好吗')">error</a>
+	</div>
+
+	<h4 class="ins">Javascript写法</h4>
+	<pre class="brush:js;">
+mod.dialog('error','你好吗');
+	</pre>
+
+	<h3 class="ins">菊花(loading)</h3>
+
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('loading','你好吗')">loading</a>
+	</div>
+
+	<h4 class="ins">Javascript写法</h4>
+	<pre class="brush:js;">
+mod.dialog('loading','你好吗');
+	</pre>
+		
+	
+
+	<h2 class="ins">自定义部分</h2>
+
+	<h3 class="ins">模块效果</h3>
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;" onclick="pop.show();">自定义</a>
+		<div style="height:200px; display:none; background:gray" id="box01">你好吗</div>
+		
+	</div>
+	
+	<h3 class="ins">HTML部分内容</h3>
+	<pre class="brush:xml;">
+&lt;a class="bs_btn" href="javascript:;" onclick="pop.show();"&gt;自定义&lt;/a&gt;
+&lt;div style="height:200px; display:none; background:gray" id="box01"&gt;你好吗&lt;/div&gt;
+&lt;script&gt;
+var pop = mod.dialog('customPop',{width:'500px',title:'自定义区域',content:'#box01'.show:false});
+pop.hide();
+&lt;/script&gt;
+	</pre>
+
+	<h2 class="ins">mod.dialog(type,op) 参数说明</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>type</td>
+				<td>{string}</td>
+				<td>弹窗类型<br>normal|success|error|loading|自定义一个名字</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td width="70">支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>title</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>弹窗标题</td>
+							</tr>
+							<tr>
+								<td>content</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>弹窗内容|需要在弹窗中显示的对象(type 必须 = 自定义名字)</td>
+							</tr>
+							<tr>
+								<td>timeout</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>弹窗显示时长</td>
+							</tr>
+							<tr>
+								<td>mustConfirm</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>必须按确认才能继续操作</td>
+							</tr>
+							<tr>
+								<td>callback</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>回调函数</td>
+							</tr>
+							<tr>
+								<td>cancelCallback</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>取消操作的时候回调的函数(仅限于 type=confirm)</td>
+							</tr>
+							<tr>
+								<td>onload</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>加载完成时候回调的函数</td>
+							</tr>
+							<tr>
+								<td>type</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>弹窗类型，优先级比 type 高</td>
+							</tr>
+							<tr>
+								<td>width</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>弹窗宽度。默认跟样式</td>
+							</tr>
+							<tr>
+								<td>height</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>弹窗高度。默认auto</td>
+							</tr>
+							<tr>
+								<td>zIndex</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>z-index 默认 100</td>
+							</tr>
+							<tr>
+								<td>overtime</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>超过多少秒显示超时，默认跟 Config一致</td>
+							</tr>
+							<tr>
+								<td>delay</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>延迟 多少秒显示菊花</td>
+							</tr>
+							<tr>
+								<td>onovertime</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>请求超时后执行的方法</td>
+							</tr>
+							<tr>
+								<td>show</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否默认显示</td>
+							</tr>
+							<tr>
+								<td>sizingType <i class="bs_new_icon"></i></td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.10</strong></td>
+								<td>打开弹窗类型。<br>normal:普通<br>max:最大化<br>默认值为normal。</td>
+							</tr>
+							<tr>
+								<td>resize <i class="bs_new_icon"></i></td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.26</strong></td>
+								<td>是否允许调整弹窗大小。默认跟 Config一致</td>
+							</tr>
+							<tr>
+								<td>minimize <i class="bs_new_icon"></i></td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.26</strong></td>
+								<td>是否允许弹窗最小化。默认跟 Config一致</td>
+							</tr>
+							<tr>
+								<td>top <i class="bs_new_icon"></i></td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.29</strong></td>
+								<td>设置弹窗是否置顶</td>
+							</tr>
+							<tr>
+								<td>close <i class="bs_new_icon"></i></td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.30</strong></td>
+								<td>设置弹窗是否显示关闭按钮</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+
+	<h2 class="ins">mod.dialog(type,op) 返回：</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>pop</td>
+				<td>{object}</td>
+				<td>
+					弹窗对象<br>
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td width="70">支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>pop.show()</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>弹窗显示</td>
+							</tr>
+							<tr>
+								<td>pop.hide()</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>弹窗隐藏</td>
+							</tr>
+						</tbody>
+						
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+</div>
+
+
+
+
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+<script>
+var pop = mod.dialog('customPop',{width:'500px',title:'自定义区域',content:'#box01',show:false});
+</script>
+
+
+
+

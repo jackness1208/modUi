@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>按钮控件</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title='按钮控件'>
+	
+	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+
+	<h2 class="ins">白色按钮</h2>
+	
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;">按钮01</a>
+		<input type="button" class="bs_btn" value="按钮01.1" />
+	</div>
+
+	<pre class="brush:xml;">
+&lt;a class="bs_btn" href="javascript:;"&gt;按钮01&lt;/a&gt;
+&lt;input type="button" class="bs_btn" value="按钮01.1" /&gt;
+	</pre>
+
+
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;"  mod-type="1">按钮02</a>
+		<input type="button" class="bs_btn"  mod-type="1" value="按钮02" />
+	</div>
+
+	<pre class="brush:xml;">
+&lt;a class="bs_btn" href="javascript:;"  mod-type="1"&gt;按钮02&lt;/a&gt;
+&lt;input type="button" class="bs_btn"  mod-type="1" value="按钮02" /&gt;
+	</pre>
+
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;"  mod-type="2">按钮03</a>
+		<input type="button" class="bs_btn"  mod-type="2" value="按钮03" />
+	</div>
+
+	<pre class="brush:xml;">
+&lt;a class="bs_btn" href="javascript:;"  mod-type="2"&gt;按钮03&lt;/a&gt;
+&lt;input type="button" class="bs_btn"  mod-type="2" value="按钮03" /&gt;
+
+	</pre>
+
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;" mod-size="big">按钮01</a>
+		<input type="button" class="bs_btn" mod-size="big" value="按钮01.1" />
+	</div>
+
+	<pre class="brush:xml;">
+&lt;a class="bs_btn" href="javascript:;" mod-size="big"&gt;按钮01&lt;/a&gt;
+&lt;input type="button" class="bs_btn" mod-size="big" value="按钮01.1" /&gt;
+
+	</pre>
+
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;"  mod-type="1" mod-size="big">按钮02</a>
+		<input type="button" class="bs_btn"  mod-type="1" mod-size="big" value="按钮02" />
+	</div>
+
+	<pre class="brush:xml;">
+&lt;a class="bs_btn" href="javascript:;"  mod-type="1" mod-size="big"&gt;按钮02&lt;/a&gt;
+&lt;input type="button" class="bs_btn"  mod-type="1" mod-size="big" value="按钮02" /&gt;
+
+	</pre>
+
+	<div class="ins">
+		<a class="bs_btn" href="javascript:;"  mod-type="2" mod-size="big">按钮03</a>
+		<input type="button" class="bs_btn"  mod-type="2" mod-size="big" value="按钮03" />
+	</div>
+
+	<pre class="brush:xml;">
+&lt;a class="bs_btn" href="javascript:;"  mod-type="2" mod-size="big"&gt;按钮03&lt;/a&gt;
+&lt;input type="button" class="bs_btn"  mod-type="2" mod-size="big" value="按钮03" /&gt;	
+	</pre>
+
+	<!-- end! -->
+	
+
+	<h2 class="ins">Javascript写法</h2>
+	<pre class="brush:js;">
+//javascript
+mod.button(target,{size:"small",type:"submit"})；
+	</pre>
+
+	<h2 class="ins">mod.button(target,op) 参数说明</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>target</td>
+				<td>{object|string}</td>
+				<td>需要执行模块化的对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td>支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>size</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>按钮大小 small|big|不填 </td>
+							</tr>
+							<tr>
+								<td>type</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>按钮类型 submit|clear|1|2|3<br/>蓝色 submit|1<br/>绿色 2<br/>白色 clear|3</td>
+							</tr>
+						</tbody>
+						
+						
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+
+	<h2 class="ins">mod.button(target,op) 返回:</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>btn</td>
+				<td>{object}</td>
+				<td>按钮对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td>支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>btn.enable()</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>按钮变为 可点状态 此时 btn.disabled == false</td>
+							</tr>
+							<tr>
+								<td>btn.disable()</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>按钮变为 不可点状态 此时 btn.disabled == false</td>
+							</tr>
+							<tr>
+								<td>btn.disabled</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>按钮是否属于不可点状态</td>
+							</tr>
+						</tbody>
+						
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+</div>
+	
+
+	
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+
+

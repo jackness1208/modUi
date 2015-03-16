@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>表单控件</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+
+<div class="bs_mod01" mod-title="表单控件">
+
+	<p class="ins">表单控件的 提交操作会把 form表单里面 <strong class="blue">所有带有 name 属性</strong>的input、textarea、select 按照name的值提交到处理页面。</p>
+	
+	<h2 class="ins">HTML模板写法</h2>
+	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+
+	<div class="ins">
+		<div class="bs_mod01" mod-seted="false" mod-title="模板标题" mod-title-left="左侧文字" mod-title-right="右侧文字">
+			<form class="bs_form" mod-action="ajax/setForm.php" mod-method="get" mod-action-type="ajax" mod-action-param='{"status":1}' mod-action-callback="alert('提交成功')" mod-message-key="error">
+				<table class="bs_table_s0">
+					<tr>
+						<th>
+							<label for="keyword">关键字</label>
+						</th>
+						<td>
+							<input id="keyword" width="200" name="keyword" type="text" mod-required="true" mod-format="" mod-autocomplete="张三,李四,黄五,赵六" >
+						</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td>
+							<input type="button" value="提交" mod-type="submit" />
+							<input type="button" value="重置" mod-type="clear" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	<pre class="brush:xml;">
+&lt;form class="bs_form" mod-action="http://lib9.service.kugou.com/websearch/index.php" mod-method="get" mod-action-type="jsonp" mod-action-param='{"cmd":100, "keyword":"", "page":1, "pagesize":20 }' mod-action-callback="alert('提交成功')" mod-message-key="error"&gt;
+	&lt;table class="bs_table_s0"&gt;
+		&lt;tr&gt;
+			&lt;th&gt;
+				&lt;label for="keyword"&gt;关键字&lt;/label&gt;
+			&lt;/th&gt;
+			&lt;td&gt;
+				&lt;input id="keyword" width="200" name="keyword" type="text" mod-required="true" mod-format="" mod-autocomplete="张三,李四,黄五,赵六" &gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;th&gt;&lt;/th&gt;
+			&lt;td&gt;
+				&lt;input type="button" value="提交" mod-type="submit" /&gt;
+				&lt;input type="button" value="重置" mod-type="clear" /&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+&lt;/form&gt;		
+	</pre>
+	
+	<h2 class="ins">Javascript写法</h2>
+	<p class="ins">submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效，提交完成之后的操作 移交给 submitCallback(json) 函数并把服务器返回的信息全部传给 该函数。</p>
+	<div class="ins">
+		<div class="bs_mod01" mod-seted="false" mod-title="模板标题" mod-title-left="左侧文字" mod-title-right="右侧文字">
+			<form id="form1">
+				<table class="bs_table_s0">
+					<tr>
+						<th>
+							<label for="keyword">关键字</label>
+						</th>
+						<td>
+							<input id="keyword" width="200" name="keyword" type="text">
+						</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td>
+							<input type="button" value="提交" mod-type="submit" />
+							<input type="button" value="重置" mod-type="clear" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	<pre class="brush:xml;">
+&lt;!-- html --&gt;
+&lt;form id="form1"&gt;
+	&lt;table class="bs_table_s0"&gt;
+		&lt;tr&gt;
+			&lt;th&gt;
+				&lt;label for="keyword"&gt;关键字&lt;/label&gt;
+			&lt;/th&gt;
+			&lt;td&gt;
+				&lt;input id="keyword" width="200" name="keyword" type="text"&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;th&gt;&lt;/th&gt;
+			&lt;td&gt;
+				&lt;input type="button" value="提交" mod-type="submit" /&gt;
+				&lt;input type="button" value="重置" mod-type="clear" /&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+&lt;/form&gt;
+	</pre>
+	<pre class="brush:js;">
+//javascript
+mod.form("#form1",{
+	action:"http://lib9.service.kugou.com/websearch/index.php",
+	method:"get",
+	actionType:"jsonp",
+	actionParam:{"cmd":100, "keyword":"", "page":1, "pagesize":20},
+
+	actionCallback:function(){
+		alert("提交成功");
+	},
+	onsubmit:function(json){
+		json.name = "hello kugou";
+		if(json.keyword == "123"){
+			mod.dialog("error","不准输入 123");
+			return false;
+		}
+		return json;
+	},
+	submitCallback:function(json){
+		if(json.status == 1){
+			mod.dialog("success","提交成功");
+		} else {
+			mod.dialog("error",json.error);
+		}
+	},
+	messageKey:"error"
+});
+	</pre>
+
+	<h2 class="ins">mod.form(target,op) 参数说明</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>target</td>
+				<td>{object|string}</td>
+				<td>需要执行模块化的对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td>支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>action</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>提交表单的地址</td>
+							</tr>
+							<tr>
+								<td>method</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>提交的方式 GET|POST </td>
+							</tr>
+							<tr>
+								<td>actionType</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>提交的途径 ajax|jsonp|不填</td>
+							</tr>
+							<tr>
+								<td>target</td>
+								<td>{string|object}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>提交的目标对象 _blank|_self|某标签</td>
+							</tr>
+							<tr>
+								<td>targetConfig</td>
+								<td>{object}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>假如 target 为某标签时 将执行 表单渲染<br>属性同 mod.widget() 中option 一致</td>
+							</tr>
+							<tr>
+								<td>actionCallback</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									提交表单成功后执行的方法。<br>
+									submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效。
+								</td>
+							</tr>
+							<tr>
+								<td>messageKey</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>错误信息对应的json 属性 默认与Config一致</td>
+							</tr>
+							<tr>
+								<td>statusKey</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>状态信息对应的json 属性 默认与Config一致</td>
+							</tr>
+							<tr>
+								<td>onsubmit(data)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									提交前触发的事件
+									<table class="ins">
+										<tr>
+											<td>@param data</td>
+											<td>{object}</td>
+											<td>表单提交前要发送的数据</td>
+										</tr>
+										<tr>
+											<td>@return data</td>
+											<td>{object}</td>
+											<td>返回表单提交的数据，返回 false 则不继续提交表单</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+
+							<tr>
+								<td>submitCallback(json)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									表单提交后返回的 json数据；<strong class="blue">当设置了此方法后，actionCallback方法将失效</strong>
+									<table class="ins">
+										<tr>1
+											<td>@param json</td>
+											<td>{object}</td>
+											<td>表单提交后返回的 json数据</td>
+										</tr>
+										
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>onload <i class="bs_new_icon"></i></td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.33</strong></td>
+								<td>表格数据初始化后执行的方法</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+	
+</div>
+	
+
+	
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+<script>
+mod.form("#form1",{
+	action:"http://lib9.service.kugou.com/websearch/index.php",
+	method:"get",
+	actionType:"jsonp",
+	actionParam:{"cmd":100, "keyword":"", "page":1, "pagesize":20},
+
+	actionCallback:function(){
+		alert("提交成功");
+	},
+	onsubmit:function(json){
+		json.name = "hello kugou";
+		if(json.keyword == "123"){
+			mod.dialog("error","不准输入 123");
+			return false;
+		}
+		return json;
+	},
+	submitCallback:function(json){
+		if(json.status == 1){
+			mod.dialog("success","提交成功");
+		} else {
+			mod.dialog("error",json.error);
+		}
+	},
+	messageKey:"error"
+});
+</script>
+
+

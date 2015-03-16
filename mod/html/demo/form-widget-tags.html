@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>表单控件-词条控件</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="instro" mod-title="表单控件-词条控件">
+
+	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+
+
+	<!--  -->
+	<h3 class="ins">词条控件-通过输入来设置词条</h3>
+	<div class="ins">
+		<form class="bs_form">
+			<table class="bs_table_s0">
+				
+				<tr>
+					<th>
+						<label for="tags">标签设置</label>
+					</th>
+					<td>
+						<input id="tags" name="tags" mod-width="500" type="hidden" mod-required="true" mod-format="tags" mod-split="," mod-type="edit">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<h4 class="ins">HTML模板写法</h4>
+	
+	<pre class="brush:xml;">
+&lt;!-- html --&gt;
+&lt;form class="bs_form"&gt;
+	&lt;table class="bs_table_s0"&gt;
+		
+		&lt;tr&gt;
+			&lt;th&gt;
+				&lt;label for="tags"&gt;标签设置&lt;/label&gt;
+			&lt;/th&gt;
+			&lt;td&gt;
+				&lt;input id="tags" name="tags" mod-width="500" type="hidden" mod-required="true" mod-format="tags" mod-split="," mod-type="edit"&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+&lt;/form&gt;
+	</pre>
+	<!--/ -->
+
+
+
+	<h3 class="ins">javascript 写法</h3>
+	<div class="ins">
+		<table class="bs_table_s0">
+				
+			<tr>
+				<th>
+					<label for="tags1">标签设置</label>
+				</th>
+				<td>
+					<input id="tags1" name="tags" type="hidden">
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<pre class="brush:xml;">
+&lt;!-- html --&gt;
+&lt;table class="bs_table_s0"&gt;
+	&lt;tr&gt;
+		&lt;th&gt;
+			&lt;label for="tags1"&gt;标签设置&lt;/label&gt;
+		&lt;/th&gt;
+		&lt;td&gt;
+			&lt;input id="tags1" name="tags" type="hidden"&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+	</pre>
+	<pre class="brush:js;">
+//js
+mod.widget("#tags1",{
+	format:"tags",
+	required:true,
+	split:",",
+	width:500,
+	type:"edit"
+});
+	</pre>
+
+	<h3 class="ins">词条控件-通过选择来设置词条</h3>
+
+	<div class="ins">
+		<form class="bs_form">
+			<table class="bs_table_s0">
+				
+				<tr>
+					<th>
+						<label for="tags2">标签设置</label>
+					</th>
+					<td>
+						<input id="tags2" name="tags" mod-width="500" type="hidden" mod-required="true" mod-format="tags" mod-split="," mod-type="select" mod-onselect="$('#tags2')[0].add('hello kugou' + Math.random())">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<h4 class="ins">HTML模板写法</h4>
+	
+	<pre class="brush:xml;">
+&lt;!-- html --&gt;
+&lt;form class="bs_form"&gt;
+	&lt;table class="bs_table_s0"&gt;
+		
+		&lt;tr&gt;
+			&lt;th&gt;
+				&lt;label for="tags2"&gt;标签设置&lt;/label&gt;
+			&lt;/th&gt;
+			&lt;td&gt;
+				&lt;input id="tags2" name="tags" mod-width="500" type="hidden" mod-required="true" mod-format="tags" mod-split="," mod-type="select" mod-onselect="$('#tags2')[0].add('hello kugou' + Math.random())"&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+&lt;/form&gt;
+	</pre>
+
+	<h3 class="ins">javascript 写法</h3>
+	<div class="ins">
+		<table class="bs_table_s0">
+				
+			<tr>
+				<th>
+					<label for="tags3">标签设置</label>
+				</th>
+				<td>
+					<input id="tags3" name="tags" type="hidden">
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<pre class="brush:xml;">
+&lt;!-- html --&gt;
+&lt;table class="bs_table_s0"&gt;
+	&lt;tr&gt;
+		&lt;th&gt;
+			&lt;label for="tags3"&gt;标签设置&lt;/label&gt;
+		&lt;/th&gt;
+		&lt;td&gt;
+			&lt;input id="tags3" name="tags" type="hidden"&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+	</pre>
+	<pre class="brush:js;">
+//js
+mod.widget("#tags3",{
+	format:"tags",
+	required:true,
+	split:",",
+	width:500,
+	type:"select",
+	onselect:function(){
+		mod.dialog("selectTag",{
+			title:"标签选择",
+			content:[
+				'&lt;a class="right10" onclick="$(\'#tags3\')[0].add(this.innerHTML)"&gt;标签01&lt;/a&gt;',
+				'&lt;a class="right10" onclick="$(\'#tags3\')[0].add(this.innerHTML)"&gt;标签02&lt;/a&gt;',
+				'&lt;a class="right10" onclick="$(\'#tags3\')[0].add(this.innerHTML)"&gt;标签03&lt;/a&gt;'
+			].join("")
+		});
+	}
+});
+	</pre>
+	<!-- end! -->
+	
+	<h2 class="ins">mod.widget(target,op) 参数说明</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>target</td>
+				<td>{object|string}</td>
+				<td>需要执行模块化的对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td width="70">支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>format</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									格式化类型<br/>
+									
+									<strong class="blue">= input[type = hidden]</strong><br/>
+									标签控件 tags<br>
+								</td>
+							</tr>
+							<tr>
+								<td>required</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否为必填项 默认 false</td>
+							</tr>
+							<tr>
+								<td>type</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>类型。tags用参数：edit|select 通过输入来制定标签 or 通过选择来制定标签。默认为 edit</td>
+							</tr>
+							<tr>
+								<td>split</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>输出内容分隔用字符。tags 用参数。默认为 [,] 逗号</td>
+							</tr>
+							<tr>
+								<td>length</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>标签允许最多个数。tags 用参数。</td>
+							</tr>
+							<tr>
+								<td>onselect</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>点击选择按钮时回调的方法。type=select 用方法</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+
+	<h2 class="ins">mod.widget(target,op) 返回参数说明 <span class="f14">（target也会绑定同样方法）</span></h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td width="70">支持版本</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td width="160">target.add(txt)</td>
+				<td>{function}</td>
+				<td>
+					添加词条
+					<table>
+						<tr>
+							<td>txt</td>
+							<td>{string}</td>
+							<td><strong class="blue">&gt;= 1.0</strong></td>
+							<td>词条名称</td> 
+							
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>target.remove(txt)</td>
+				<td>{function}</td>
+				<td>
+					删除词条
+					<table>
+						<tr>
+							<td>txt</td>
+							<td>{string}</td>
+							<td><strong class="blue">&gt;= 1.28</strong></td>
+							<td>词条名称</td> 
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+	
+
+
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+<script>
+mod.widget("#tags1",{
+	format:"tags",
+	required:true,
+	split:",",
+	width:500,
+	type:"edit"
+});
+
+mod.widget("#tags3",{
+	format:"tags",
+	required:true,
+	split:",",
+	width:500,
+	type:"select",
+	onselect:function(){
+		mod.dialog("selectTag",{
+			title:"标签选择",
+			content:[
+				'<a class="right10" href="javascript:;" onclick="$(\'#tags3\')[0].add(this.innerHTML)">标签01</a>',
+				'<a class="right10" href="javascript:;" onclick="$(\'#tags3\')[0].add(this.innerHTML)">标签02</a>',
+				'<a class="right10" href="javascript:;" onclick="$(\'#tags3\')[0].add(this.innerHTML)">标签03</a>'
+			].join("")
+		});
+	}
+});
+</script>
+
+

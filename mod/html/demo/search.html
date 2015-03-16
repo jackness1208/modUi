@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>表单控件</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title='表单控件'>
+
+	<h2 class="ins">模块效果</h2>
+	<div class="ins">
+		<form id="form1" class="bottom10">
+			<table class="bs_table_s0">
+				<tr>
+					<th>
+						<label for="keyword">关键字</label>
+					</th>
+					<td>
+						<input id="keyword" width="200" name="keyword" type="text" value="123"  mod-format="" mod-autocomplete="张三,李四,黄五,赵六" >
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<input type="button" value="提交" mod-type="submit" />
+						<input type="button" value="重置" mod-type="clear" />
+					</td>
+				</tr>
+			</table>
+		</form>
+		<div id="searchResultGird"></div>
+	</div>
+	
+	
+	<h2 class="ins">HTML模板写法</h2>
+	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+	<p class="ins"><strong>当设置 <span class="blue">mod-seted="true"</span> 时将不会对其渲染。</strong></p>
+	<pre class="brush:xml;">
+&lt;form class="bs_form" mod-target="#searchResultGird" mod-target-config='{action:"http://lib9.service.kugou.com/websearch/index.php", actionParam:{"cmd":100, "keyword":"123", "page":1, "pagesize":20 }, actionType:"jsonp", method:"GET", dataKey:"data.songs", totalKey:"data.total"}' &gt;
+	&lt;table class="bs_table_s0"&gt;
+		&lt;tr&gt;
+			&lt;th&gt;
+				&lt;label for="keyword"&gt;关键字&lt;/label&gt;
+			&lt;/th&gt;
+			&lt;td&gt;
+				&lt;input id="keyword" width="200" name="keyword" type="text" mod-required="true" mod-format="" mod-autocomplete="张三,李四,黄五,赵六" &gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;th&gt;&lt;/th&gt;
+			&lt;td&gt;
+				&lt;input type="button" value="提交" mod-type="submit" /&gt;
+				&lt;input type="button" value="重置" mod-type="clear" /&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;			
+&lt;/form&gt;			
+	</pre>
+
+	<h2 class="ins">Javascript写法</h2>
+	<pre class="brush:js;">
+//javascript
+mod.form(target,{
+target:"#searchResultGird",
+	targetConfig:{
+		action:"http://lib9.service.kugou.com/websearch/index.php", 
+		actionParam:{
+			"cmd":100, 
+			"keyword":"123", 
+			"page":1, 
+			"pagesize":20 
+		}, 
+		actionType:"jsonp", 
+		method:"GET", 
+		dataKey:"data.songs", 
+		totalKey:"data.total"
+	}
+});
+	</pre>
+</div>
+	
+
+	
+
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+<script>
+
+mod.form("#form1",{
+	target:"#searchResultGird",
+	targetConfig:{
+		action:"http://lib9.service.kugou.com/websearch/index.php", 
+		actionParam:{
+			"cmd":100, 
+			"keyword":"123", 
+			"page":1, 
+			"pagesize":20 
+		}, 
+		actionType:"jsonp", 
+		method:"GET", 
+		dataKey:"data.songs", 
+		totalKey:"data.total"
+	},
+	search:true
+});
+
+</script>
+
+
+

@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>外框多级菜单</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title="带checkbox多级菜单">
+
+	<h2 class="ins">HTML模板写法</h2>
+	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+	
+	<h3 class="ins">模块效果</h3>
+	<div class="ins">
+		<div id="menu1" class="bs_menu" mod-show="true" mod-checkbox="true">
+			<ul>
+				<li><a mod-value="1">一级标题</a></li>
+				<li>
+					<a mod-value="">一级标题</a>
+					<ul>
+						<li><a mod-value="2-1">二级标题</a></li>
+						<li><a mod-value="2-2">二级标题</a></li>
+					</ul>
+				</li>
+				<li>
+					<a mod-value="">一级标题</a>
+					<ul>
+						<li><a mod-value="3-1">二级标题</a></li>
+						<li>
+							<a mod-value="">二级标题</a>
+							<ul>
+								<li><a mod-value="3-2-1">三级标题</a></li>
+								<li><a mod-value="3-2-2" mod-checked="true">三级标题</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<input type="button" class="top10" value="获取选中的数据" onclick="alert($('#menu1')[0].get('checked'))">
+	</div>
+	
+	
+	<h3 class="ins">HTML模板写法</h3>
+	<p class="ins">纯css样式控制，理论上无限极菜单</p>
+	<pre class="brush:xml;">
+&lt;div class="bs_menu" mod-show="true" mod-checkbox="true"&gt;
+	&lt;ul&gt;
+		&lt;li&gt;&lt;a mod-value="1"&gt;一级标题&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;
+			&lt;a mod-value=""&gt;一级标题&lt;/a&gt;
+			&lt;ul&gt;
+				&lt;li&gt;&lt;a mod-value="2-1"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+				&lt;li&gt;&lt;a mod-value="2-2"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/li&gt;
+		&lt;li&gt;
+			&lt;a mod-value=""&gt;一级标题&lt;/a&gt;
+			&lt;ul&gt;
+				&lt;li&gt;&lt;a mod-value="3-1"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+				&lt;li&gt;
+					&lt;a mod-value=""&gt;二级标题&lt;/a&gt;
+					&lt;ul&gt;
+						&lt;li&gt;&lt;a mod-value="3-2-1"&gt;三级标题&lt;/a&gt;&lt;/li&gt;
+						&lt;li&gt;&lt;a mod-value="3-2-2" mod-checked="true"&gt;三级标题&lt;/a&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+				&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;			
+	</pre>
+	
+	<h1 class="ins">多级菜单</h1>
+	
+	<h3 class="ins">模块效果</h3>
+	<div class="ins">
+		<div class="bs_menu" mod-show="true" mod-href-target="_blank">
+			<ul>
+				<li><a href="#">一级标题</a></li>
+				<li>
+					<a href="#">一级标题</a>
+					<ul>
+						<li><a href="#">二级标题</a></li>
+						<li><a href="#">二级标题</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">一级标题</a>
+					<ul>
+						<li><a href="#">二级标题</a></li>
+						<li>
+							<a href="#">二级标题</a>
+							<ul>
+								<li><a href="#">三级标题</a></li>
+								<li><a href="#">三级标题</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	
+	<h3 class="ins">HTML模板写法</h3>
+	<p class="ins">纯css样式控制，理论上无限极菜单</p>
+	<pre class="brush:xml;">
+&lt;div class="bs_menu"  mod-show="true"  mod-href-target="_blank" &gt;
+	&lt;ul&gt;
+		&lt;li&gt;&lt;a href="#"&gt;一级标题&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;
+			&lt;a href="#"&gt;一级标题&lt;/a&gt;
+			&lt;ul&gt;
+				&lt;li&gt;&lt;a href="#"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+				&lt;li&gt;&lt;a href="#"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/li&gt;
+		&lt;li&gt;
+			&lt;a href="#"&gt;一级标题&lt;/a&gt;
+			&lt;ul&gt;
+				&lt;li&gt;&lt;a href="#"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+				&lt;li&gt;
+					&lt;a href="#"&gt;二级标题&lt;/a&gt;
+					&lt;ul&gt;
+						&lt;li&gt;&lt;a href="#"&gt;三级标题&lt;/a&gt;&lt;/li&gt;
+						&lt;li&gt;&lt;a href="#"&gt;三级标题&lt;/a&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+				&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;			
+	</pre>
+
+	<h3 class="ins">mod.menu(target,op) 参数说明</h3>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			
+			<tr>
+				<td>target</td>
+				<td>{object|string}</td>
+				<td>需要执行模块化的对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td width="70">支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>checkbox</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.20</strong></td>
+								<td>显示checkbox，默认为false</td>
+							</tr>
+							<tr>
+								<td>icon</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.20</strong></td>
+								<td>显示图标。默认为 true</td>
+							</tr>
+							<tr>
+								<td>hrefTarget</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.20</strong></td>
+								<td>链接打开方式。默认为不填</td>
+							</tr>
+							<tr>
+								<td>show</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.20</strong></td>
+								<td>是否默认展示全部。默认为 false</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+
+	<h3 class="ins">mod.menu(type,op) 返回：</h3>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>menu</td>
+				<td>{object}</td>
+				<td>
+					菜单对象<br>
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td width="70">支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>menu.get()</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.20</strong></td>
+								<td>
+									获取数据, checkbox 存在时适用方法
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>type</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.20</strong></td>
+												<td>
+													"checked" - 获取选中的数据<br>
+													"unchecked" - 获取没选中的数据<br>
+													不填 - 获取所有数据
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>pop.current(href)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.20</strong></td>
+								<td>
+									设定选中的菜单。多级菜单适用方法
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>href</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.20</strong></td>
+												<td>
+													链接地址
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+
+

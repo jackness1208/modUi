@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>表单控件-异步校验(ajax check)</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title="表单控件-异步校验(ajax check)">
+
+	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+
+	
+	<h2 class="ins">HTML模板写法</h2>
+
+	<div class="ins">
+		<form class="bs_form">
+			<table class="bs_table_s0">
+				<tr>
+					<th>
+						<label for="company">异步校验</label>
+					</th>
+					<td>
+						<input id="company" name="company" type="text" mod-required="true" mod-method="get" mod-action-type="ajax" mod-action="ajax/setForm.php" mod-action-key="company">
+					</td>
+				</tr>
+				
+			</table>
+		</form>
+	</div>
+
+	
+	<pre class="brush:xml;">
+&lt;tr&gt;
+	&lt;th&gt;
+		&lt;label for="company"&gt;异步校验&lt;/label&gt;
+	&lt;/th&gt;
+	&lt;td&gt;
+		&lt;input id="company" name="company" type="text" mod-required="true" mod-method="get" mod-action-type="ajax" mod-action="ajax/setForm.php" mod-action-key="company"&gt;
+	&lt;/td&gt;
+&lt;/tr&gt;
+	</pre>
+
+	<h2 class="ins">javascript写法</h2>
+	
+	<div class="ins">
+		<table class="bs_table_s0">
+			<tr>
+				<th>
+					<label for="company1">异步校验</label>
+				</th>
+				<td>
+					<input id="company1" name="company1" type="text">
+				</td>
+			</tr>
+			
+		</table>
+		
+	</div>
+	<pre class="brush:xml;">
+&lt;!-- html --&gt;
+&lt;table class="bs_table_s0"&gt;
+	&lt;tr&gt;
+		&lt;th&gt;
+			&lt;label for="company1"&gt;异步校验&lt;/label&gt;
+		&lt;/th&gt;
+		&lt;td&gt;
+			&lt;input id="company1" name="company1" type="text"&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	
+&lt;/table&gt;	
+	</pre>
+	<pre class="brush:js;">
+//js
+mod.widget("#company1",{
+	required:true,
+	action:"ajax/setForm.php",
+	method:"get",
+	actionType:"ajax",
+	actionKey:"company",
+	onsubmit:function(json){
+		json.cmd = "nihaoma";
+		return json;
+	},
+	submitCallback:function(json){
+		if(json.status == "1"){
+			$("#company1")[0].srcBox.success();
+		} else {
+			mod.dialog("error",json.error);
+		}
+	}
+});
+	</pre>
+	<!--/异步检测 -->
+
+
+
+	<!-- end! -->
+	
+
+	<h2 class="ins">mod.widget(target,op) 参数说明</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>target</td>
+				<td>{object|string}</td>
+				<td>需要执行模块化的对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td>支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>	
+							
+							<tr>
+								<td>required</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否为必填项 默认 false</td>
+							</tr>
+							<tr>
+								<td>errorText</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>设置校验内容时错误的提示语</td>
+							</tr>
+							<tr>
+								<td>defaultText</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>设置控件默认的提示语</td>
+							</tr>
+							<tr>
+								<td>autocomplete</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>自动完成</td>
+							</tr>
+							<tr>
+								<td>action</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验的地址(不填则不用异步校验)</td>
+							</tr>
+							<tr>
+								<td>method</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验的方式 GET|POST</td>
+							</tr>
+							<tr>
+								<td>actionKey</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验时使用的 参数名 如 username:1</td>
+							</tr>
+							<tr>
+								<td>actionType</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验的途径 ajax|jsonp</td>
+							</tr>
+							<tr>
+								<td>actionCallback</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步校验成功后执行的方法</td>
+							</tr>
+							<tr>
+								<td>linked</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>关联( password2,date-interval 用参数)</td>
+							</tr>
+							<tr>
+								<td>size</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>字符长度(code 用参数)</td>
+							</tr>
+							
+							<tr>
+								<td>messageKey</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>错误信息对应的json 属性 默认与Config一致</td>
+							</tr>
+							<tr>
+								<td>statusKey</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>状态信息对应的json 属性 默认与Config一致</td>
+							</tr>
+
+							<tr>
+								<td>onsubmit(data)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									提交前触发的事件
+									<table class="ins">
+										<tr>
+											<td>@param data</td>
+											<td>{object}</td>
+											<td>异步校验前要发送的数据</td>
+										</tr>
+										<tr>
+											<td>@return data</td>
+											<td>{object}</td>
+											<td>返回表单提交的数据，返回 false 则不继续异步校验</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+
+							<tr>
+								<td>oncheck(value)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									校验成功后触发的自定义校验事件
+									<table class="ins">
+										<tr>
+											<td>@param value</td>
+											<td>{object}</td>
+											<td>需要校验的对象的值</td>
+										</tr>
+										<tr>
+											<td>@return r</td>
+											<td>{boolean|string}</td>
+											<td>若返回 true 则表示校验通过，若返回文字，则表示校验不通过，文字为错误信息。</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+
+							<tr>
+								<td>submitCallback(json)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									异步校验返回的 json数据；<strong class="blue">当设置了此方法后，actionCallback方法将失效</strong>
+									<table class="ins">
+										<tr>1
+											<td>@param json</td>
+											<td>{object}</td>
+											<td>异步校验后返回的 json数据</td>
+										</tr>
+										
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+</div>
+	
+
+
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+
+<script>
+
+
+mod.widget("#company1",{
+	required:true,
+	action:"ajax/setForm.php",
+	method:"get",
+	actionType:"ajax",
+	actionKey:"company",
+	onsubmit:function(json){
+		json.cmd = "nihaoma";
+		return json;
+	},
+	submitCallback:function(json){
+		if(json.status == "1"){
+			$("#company1")[0].srcBox.success();
+		} else {
+			mod.dialog("error",json.error);
+		}
+	}
+});
+
+</script>
+
+

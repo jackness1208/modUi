@@ -1,0 +1,1324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>表单控件</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title="表单控件">
+	<!-- 表单 - 正常列表形式 -->
+	<h2 class="ins">表单 - 正常列表形式</h2>
+	<h3 class="ins">模块效果</h3>
+	<div class="ins">
+		<div id="modTb"></div>
+		
+		
+		<div id="modTb02"></div>
+	</div>
+	
+	
+	<h3 class="ins">函数源码</h3>
+	<pre class="brush:js;">
+mod.grid("#modTb",{
+	action:"http://lib9.service.kugou.com/websearch/index.php",
+	actionParam:{
+		"cmd":100,
+		"keyword":"刘德华",
+		"page":1,
+		"pagesize":20
+	},
+	actionType:"jsonp",
+	method:"GET",
+	dataKey:"data.songs",
+	totalKey:"data.total",
+	drag:true,
+	//是否一行显示
+	nowrap:false,
+	layout:[
+		{
+			name:"歌手",
+			field:"singername"
+		},{
+			name:"歌曲",
+			field:"songname"
+		},{
+			name:"文件名",
+			field:"filename",
+			edit:{
+				type:"input",
+				check:function(val){
+					return val.trim() != ""?true:"不能为空";
+				}
+			}
+		},{
+			name:"hash",
+			field:"hash",
+			width:"200"
+		},{
+			name:"文件大小",
+			field:"filesize",
+			width:"100"
+		},{
+			name:"比特率",
+			field:"bitrate",
+			width:"80",
+			edit:{
+				type:"select",
+				options:[
+					{
+						text:"请选择",
+						value:""
+					},{
+						text:"128bit",
+						value:"128"
+					},{
+						text:"192bit",
+						value:"192"
+					},{
+						text:"320bit",
+						value:"320"
+					},{
+						text:"480bit",
+						value:"480"
+					},{
+						text:"640bit",
+						value:"640"
+					}
+				]
+			}
+		},{
+			name:"时长",
+			field:"timelength",
+			width:"100",
+			html:"{$timelength} 毫秒"
+		},{
+			name:"扩展名",
+			field:"extname",
+			width:"60"
+		
+		}
+	],
+	//表单头部脚步设置（堆放自定义按钮用）
+	hfConfig:{
+		html:[
+			'&lt;input class="bs_btn right10" type="button" mod-type="1" value="获取选中的数据" onclick="alert(JSON.stringify($(\'#modTb\')[0].get(\'checked\')))"&gt;',
+			'&lt;input class="bs_btn right10" type="button" mod-type="1" value="获取当前页数据" onclick="alert(JSON.stringify($(\'#modTb\')[0].get()))"&gt;'
+		].join(""),
+	},
+	//表单修改设置
+	edit:true,
+	editConfig:{
+		action:"http://kgedit2.kugou.com/novelAdmin/index.php?r=ajax/point&id={$hash}",
+		method:"get",
+		actionType:"ajax",
+		actionCallback:function(){
+			mod.dialog("success","修改成功");
+		},
+		onsubmit:function(){},
+		//错误信息对应的json 属性
+		messageKey:"error",
+
+		//状态信息对应的json 属性
+		statusKey:"status"
+	},
+	//删除操作设置
+	del:true,
+	delConfig:{
+		action:"http://kgedit2.kugou.com/novelAdmin/index.php?r=ajax/point&id={$hash}",
+		method:"get",
+		actionType:"ajax",
+		actionCallback:function(){
+			mod.dialog("删除成功");
+		},
+		onsubmit:function(){},
+		//错误信息对应的json 属性
+		messageKey:"error",
+
+		//状态信息对应的json 属性
+		statusKey:"status",
+		//批处理
+		batchConfig:{
+			enable:false,
+			
+		}
+	},
+	//添加操作设置
+	add:true,
+	addConfig:{
+		target:"#modTb02",
+		text:"添加到modTb02列表",
+		width:150,
+		index:"hash",
+		//批处理
+		batchConfig:{
+			enable:true
+		}
+	}
+});
+	</pre>
+	<!--/表单 - 正常列表形式 -->
+	<!-- 表单 - 模块组合形式 -->
+	<h2 class="ins">表单 - 模块组合形式</h2>
+	<h3 class="ins">模块效果</h3>
+	<div class="ins">
+		<div id="modTbGroup"></div>
+		
+		
+		<div id="modTbGroup02"></div>
+	</div>
+
+	<pre class="brush:js;"></pre>
+
+	<h3 class="ins">函数源码</h3>
+	<!--/表单 - 模块组合形式 -->
+
+	<h2 class="ins">获取选中的数据</h2>
+	<pre class="brush:js;">
+$('#modTb')[0].get('checked');
+	</pre>
+
+	<h2 class="ins">获取当前页数据</h2>
+	<pre class="brush:js;">
+$('#modTb')[0].get();
+	</pre>
+
+	<h2 class="ins">获取当前行的数据</h2>
+	<pre class="brush:js;">
+$('#modTb')[0].get($("tr")[0]);
+	</pre>
+
+	<h2 class="ins">添加到表单二</h2>
+	<pre class="brush:js;">
+$('#modTb02')[0].add($('#modTb')[0].get('checked'));
+	</pre>
+
+	<h2 class="ins">Javascript写法</h2>
+	<pre class="brush:js;">
+//javascript
+mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
+	</pre>
+
+	<h2 class="ins">mod.grid(target,op) 参数说明</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>target</td>
+				<td>{object|string}</td>
+				<td>需要执行模块化的对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td width="70">支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>title</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>表单名称</td>
+							</tr>
+							<tr>
+								<td>action</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步请求的地址</td>
+							</tr>
+							<tr>
+								<td>method</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步请求的方式 GET|POST </td>
+							</tr>
+							<tr>
+								<td>actionType</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步请求的途径 ajax|jsonp</td>
+							</tr>
+							<tr>
+								<td>actionParam</td>
+								<td>{object}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步请求的参数</td>
+							</tr>
+							<tr>
+								<td>actionCallback</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>异步请求成功后执行的方法</td>
+							</tr>
+							<tr>
+								<td>onload</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									表格数据请求成功后执行的方法
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>@param json</td>
+												<td>{object}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>接口返回的整条数据</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>page</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>当前页</td>
+							</tr>
+							<tr>
+								<td>pageStart</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>从第几页开始为第一页默认跟Config一致</td>
+							</tr>
+							<tr>
+								<td>pagesize</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>单页可展示的数据量</td>
+							</tr>
+							<tr>
+								<td>checkbox</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>列表中checkbox控件展示</td>
+							</tr>
+							<tr>
+								<td>drag</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>列表中可调整位置控件展示</td>
+							</tr>
+							<tr>
+								<td>index</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>列表中序号展示</td>
+							</tr>
+							<tr>
+								<td>scrolling</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否显示横向滚动条</td>
+							</tr>
+							<tr>
+								<td>layout</td>
+								<td>{Array}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									输出的格式。若不填则直接输出数据键值和内容。
+									
+									layout具体参数
+									<pre class="brush:js">
+
+										[
+											{
+												name:"",               //列显示的 标题
+												field:"",              //列标题对应数据的 键值
+												width:"",              //列宽度如: 10, 100%
+												html:"",               //列内容 支持简单模板变量形式
+												edit:{                 //编辑用属性设置
+													type:"",           //值为 select|input|textarea,
+													check:function(){} //校验函数
+													options:[          //slect用属性，用来定义 select 框中的选项
+														{
+															text: "",  //对应 option 中的 text 值
+															value: ""  //对应 option 中的 value 值
+														}
+													]
+
+												}
+											}
+										]
+									</pre>
+
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>name</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>列显示的 标题</td>
+											</tr>
+											<tr>
+												<td>field</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>列标题对应数据的 键值</td>
+											</tr>
+											<tr>
+												<td>width</td>
+												<td>{number|string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>列宽度如: 10, 100%</td>
+											</tr>
+											<tr>
+												<td>html</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													列内容 支持简单模板变量形式如&lt;a href="../do.php?id={$id}"&gt;{$name}&lt;/a&gt;<br>
+													if条件选择：<br>
+													{if $abc > 1}大于{else if $abc == 1}等于{else}小于{/if}<br>
+													js调用方法<br>
+													{js::fn($abc)}
+
+													<pre class="brush:js">
+													//$abc、fn 为变量
+													{$abc} //$abc 为变量
+													
+													
+													</pre>
+												</td>
+											</tr>
+											<tr>
+												<td>edit</td>
+												<td>{object}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													编辑用属性设置
+													<table class="ins">
+														<thead>
+															<tr>
+																<td>属性</td>
+																<td>类型</td>
+																<td width="70">支持版本</td>
+																<td>说明</td>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>type</td>
+																<td>{string}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>值为 select|input|textarea</td>
+															</tr>
+															<tr>
+																<td>check</td>
+																<td>{function}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>
+																	校验函数。check(val)
+																	<table class="ins">
+																		<tr>
+																			<td>@param val</td>
+																			<td>{string}</td>
+																			<td>其中 ，arguments[0] 为 输入元素的 value值。</td>
+																		</tr>
+																		<tr>
+																			<td>this</td>
+																			<td>{object}</td>
+																			<td>this 指向 type中对应的 输入元素</td>
+																		</tr>
+																		<tr>
+																			<td>@return</td>
+																			<td>{boolean|string}</td>
+																			<td>返回 true 表示 校验通过， 返回 文案 则 弹出错误提醒。</td>
+																		</tr>
+																	</table>
+																</td>
+															</tr>
+															<tr>
+																<td>options</td>
+																<td>{object}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>slect用属性，用来定义 select 框中的选项</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								
+								</td>
+							</tr>
+							<tr>
+								<td>edit</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否可对当前表单进行编辑操作</td>
+							</tr>
+							<tr>
+								<td>editConfig</td>
+								<td>{object}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									编辑操作设置。
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>action</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>异步请求的地址</td>
+											</tr>
+											<tr>
+												<td>method</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>异步请求的方式 GET|POST </td>
+											</tr>
+											<tr>
+												<td>actionType</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>异步请求的途径 ajax|jsonp</td>
+											</tr>
+											
+											<tr>
+												<td>actionCallback</td>
+												<td>{function}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													提交表单成功后执行的方法。<br>
+													submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效。
+												</td>
+											</tr>
+											<tr>
+												<td>onsubmit(data, alldata)</td>
+												<td>{function}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													提交前触发的事件
+													<table class="ins">
+														<thead>
+															<tr>
+																<td>属性</td>
+																<td>类型</td>
+																<td width="70">支持版本</td>
+																<td>说明</td>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>@param data</td>
+																<td>{object}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>表单提交前要发送的数据</td>
+															</tr>
+															<tr>
+																<td>@param alldata</td>
+																<td>{object}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>当前列的所有数据（包括没显示出来的）</td>
+															</tr>
+															<tr>
+																<td>@return data</td>
+																<td>{object}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>返回表单提交的数据，返回 false 则不继续提交表单</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+
+											<tr>
+												<td>submitCallback(json)</td>
+												<td>{function}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													表单提交后返回的 json数据；<strong class="blue">当设置了此方法后，actionCallback方法将失效</strong>
+													<table class="ins">
+														<thead>
+															<tr>
+																<td>属性</td>
+																<td>类型</td>
+																<td width="70">支持版本</td>
+																<td>说明</td>
+															</tr>
+														</thead>
+														<tr>1
+															<td>@param json</td>
+															<td>{object}</td>
+															<td><strong class="blue">&gt;= 1.0</strong></td>
+															<td>表单提交后返回的 json数据</td>
+														</tr>
+														
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td>messageKey</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>错误信息对应的json 属性 默认与Config一致</td>
+											</tr>
+											<tr>
+												<td>statusKey</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>状态信息对应的json 属性 默认与Config一致</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>del</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否可对当前表单进行删除操作</td>
+							</tr>
+							<tr>
+								<td>delConfig</td>
+								<td>{object}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									删除操作设置。
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>action</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>异步请求的地址</td>
+											</tr>
+											<tr>
+												<td>method</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>异步请求的方式 GET|POST </td>
+											</tr>
+											<tr>
+												<td>actionType</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>异步请求的途径 ajax|jsonp</td>
+											</tr>
+											
+											<tr>
+												<td>actionCallback</td>
+												<td>{function}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													提交表单成功后执行的方法。<br>
+													submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效。
+												</td>
+											</tr>
+											<tr>
+												<td>onsubmit(data, alldata)</td>
+												<td>{function}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													提交前触发的事件
+													<table class="ins">
+														<thead>
+															<tr>
+																<td>属性</td>
+																<td>类型</td>
+																<td width="70">支持版本</td>
+																<td>说明</td>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>@param data</td>
+																<td>{object}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>表单提交前要发送的数据</td>
+															</tr>
+															<tr>
+																<td>@param alldata</td>
+																<td>{object}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>当前列的所有数据（包括没显示出来的）</td>
+															</tr>
+															<tr>
+																<td>@return data</td>
+																<td>{object}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>返回表单提交的数据，返回 false 则不继续提交表单</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+
+											<tr>
+												<td>submitCallback(json)</td>
+												<td>{function}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													表单提交后返回的 json数据；<strong class="blue">当设置了此方法后，actionCallback方法将失效</strong>
+													<table class="ins">
+														<thead>
+															<tr>
+																<td>属性</td>
+																<td>类型</td>
+																<td width="70">支持版本</td>
+																<td>说明</td>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>@param json</td>
+																<td>{object}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>表单提交后返回的 json数据</td>
+															</tr>
+														</tbody>
+														
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td>messageKey</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>错误信息对应的json 属性 默认与Config一致</td>
+											</tr>
+											<tr>
+												<td>statusKey</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>状态信息对应的json 属性 默认与Config一致</td>
+											</tr>
+											<tr>
+												<td>batchConfig</td>
+												<td>{object}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													批量处理设置
+													<table class="inss">
+														<thead>
+															<tr>
+																<td>属性</td>
+																<td>类型</td>
+																<td width="70">支持版本</td>
+																<td>说明</td>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>enable</td>
+																<td>{boolean}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>是否激活批处理</td>
+															</tr>
+															<tr>
+																<td>action</td>
+																<td>{string}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>异步请求的地址</td>
+															</tr>
+															<tr>
+																<td>method</td>
+																<td>{string}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>异步请求的方式 GET|POST </td>
+															</tr>
+															<tr>
+																<td>actionType</td>
+																<td>{string}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>异步请求的途径 ajax|jsonp</td>
+															</tr>
+															
+															<tr>
+																<td>actionCallback</td>
+																<td>{function}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>
+																	提交表单成功后执行的方法。<br>
+																	submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效。
+																</td>
+															</tr>
+															<tr>
+																<td>onsubmit(data)</td>
+																<td>{function}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>
+																	提交前触发的事件
+																	<table class="ins">
+																		<thead>
+																			<tr>
+																				<td>属性</td>
+																				<td>类型</td>
+																				<td width="70">支持版本</td>
+																				<td>说明</td>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td>@param data</td>
+																				<td>{object}</td>
+																				<td><strong class="blue">&gt;= 1.0</strong></td>
+																				<td>表单提交前要发送的数据</td>
+																			</tr>
+																			<tr>
+																				<td>@return data</td>
+																				<td>{object}</td>
+																				<td><strong class="blue">&gt;= 1.0</strong></td>
+																				<td>返回表单提交的数据，返回 false 则不继续提交表单</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</td>
+															</tr>
+
+															<tr>
+																<td>submitCallback(json)</td>
+																<td>{function}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>
+																	表单提交后返回的 json数据；<strong class="blue">当设置了此方法后，actionCallback方法将失效</strong>
+																	<table class="ins">
+																		<thead>
+																			<tr>
+																				<td>属性</td>
+																				<td>类型</td>
+																				<td width="70">支持版本</td>
+																				<td>说明</td>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td>@param json</td>
+																				<td>{object}</td>
+																				<td><strong class="blue">&gt;= 1.0</strong></td>
+																				<td>表单提交后返回的 json数据</td>
+																			</tr>
+																		</tbody>
+																		
+																	</table>
+																</td>
+															</tr>
+															<tr>
+																<td>messageKey</td>
+																<td>{string}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>错误信息对应的json 属性 默认与Config一致</td>
+															</tr>
+															<tr>
+																<td>statusKey</td>
+																<td>{string}</td>
+																<td><strong class="blue">&gt;= 1.0</strong></td>
+																<td>状态信息对应的json 属性 默认与Config一致</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>add</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否可对当前表单进行添加操作</td>
+							</tr>
+							<tr>
+								<td>addConfig</td>
+								<td>{object}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									添加操作设置。
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>target</td>
+												<td>{string|object}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>要添加到哪个 grid组件</td>
+											</tr>
+											<tr>
+												<td>text</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>按钮文字设置</td>
+											</tr>
+											<tr>
+												<td>width</td>
+												<td>{number}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>按钮宽度设置</td>
+											</tr>
+											<tr>
+												<td>index</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>排重字段设置</td>
+											</tr>
+											<tr>
+												<td>batchConfig</td>
+												<td>{object}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>
+													批量处理设置
+													<table class="inss">
+														<tr>
+															<td>enable</td>
+															<td>{boolean}</td>
+															<td>是否激活批处理</td>
+														</tr>
+														
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>pageKey</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>当前页 对应的json 属性。默认与Config一致</td>
+							</tr>
+							<tr>
+								<td>dataKey</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>数据 对应的json 属性。默认与Config一致</td>
+							</tr>
+							<tr>
+								<td>messageKey</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>错误信息对应的json 属性。默认与Config一致</td>
+							</tr>
+							<tr>
+								<td>data</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>数据。当填写有数据并且 action 不填时，直接输出数据，并不作分页处理</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+
+	<h2 class="ins">mod.grid(target,op) 返回：</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>grid</td>
+				<td>{object}</td>
+				<td>
+					表单对象<br>
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td width="70">支持版本</td>
+
+								<td>说明</td>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr>
+								<td>grid.total</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>数据总数</td>
+							</tr>
+							<tr>
+								<td>grid.page</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>数据总数</td>
+							</tr>
+							<tr>
+								<td>grid.pagesize</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>数据总数</td>
+							</tr>
+							<tr>
+								<td>grid.get(type)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									获取数据
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>type</td>
+												<td>{string}</td>
+												<td>
+													"checked" - 当前页选中的数据<br>
+													tr - 当前行的数据<br>
+													不填 - 当前页的数据
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							
+							<tr>
+								<td>grid.add(data,callback,index)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									添加数据（重复数据不会添加）
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>data</td>
+												<td>{array|object}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>数据源</td>
+											</tr>
+											<tr>
+												<td>callback</td>
+												<td>{function}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>数据添加成功后的回调方法</td>
+											</tr>
+											<tr>
+												<td>index</td>
+												<td>{string}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>判断内容是否重复的键值。<br>如果不填则整条数据都一样才算重复</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>grid.remove(source,callback)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									移除数据
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>source</td>
+												<td>{element|object}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>数据源 | 列表中的 tr 元素</td>
+											</tr>
+											<tr>
+												<td>callback</td>
+												<td>{function}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>数据添加成功后的回调方法</td>
+											</tr>
+										</tbody>
+										
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>grid.pageTo(num)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									表单翻页(从0开始)
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>num</td>
+												<td>{number}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>要加载的页数</td>
+											</tr>
+											
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>grid.reload(data)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									刷新当前页面
+									<table class="ins">
+										<thead>
+											<tr>
+												<td>属性</td>
+												<td>类型</td>
+												<td width="70">支持版本</td>
+
+												<td>说明</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>data</td>
+												<td>{Array}</td>
+												<td><strong class="blue">&gt;= 1.0</strong></td>
+												<td>当表格并非异步获取数据时，若填上 data 参数，表格数据将以此参数为准进行再次渲染</td>
+											</tr>
+											
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+<script>
+mod.grid("#modTb",{
+	action:"http://lib9.service.kugou.com/websearch/index.php",
+	actionParam:{
+		"cmd":100,
+		"keyword":"刘德华",
+		"page":1,
+		"pagesize":20
+	},
+	actionType:"jsonp",
+	method:"GET",
+	dataKey:"data.songs",
+	totalKey:"data.total",
+	drag:true,
+	//是否一行显示
+	nowrap:false,
+	layout:[
+		{
+			name:"歌手",
+			field:"singername"
+		},{
+			name:"歌曲",
+			field:"songname"
+		},{
+			name:"文件名",
+			field:"filename",
+			edit:{
+				type:"input",
+				check:function(val){
+					return val.trim() != ""?true:"不能为空";
+				}
+			}
+		},{
+			name:"hash",
+			field:"hash",
+			width:"200"
+		},{
+			name:"文件大小",
+			field:"filesize",
+			width:"100"
+		},{
+			name:"比特率",
+			field:"bitrate",
+			width:"80",
+			edit:{
+				type:"select",
+				options:[
+					{
+						text:"请选择",
+						value:""
+					},{
+						text:"128bit",
+						value:"128"
+					},{
+						text:"192bit",
+						value:"192"
+					},{
+						text:"320bit",
+						value:"320"
+					},{
+						text:"480bit",
+						value:"480"
+					},{
+						text:"640bit",
+						value:"640"
+					}
+				]
+			}
+		},{
+			name:"时长",
+			field:"timelength",
+			width:"100",
+			html:"{$timelength} 毫秒"
+		},{
+			name:"扩展名",
+			field:"extname",
+			width:"60"
+		
+		}
+	],
+	//表单头部脚步设置（堆放自定义按钮用）
+	hfConfig:{
+		html:[
+			'<input class="bs_btn right10" type="button" mod-type="1" value="获取选中的数据" onclick="alert(JSON.stringify($(\'#modTb\')[0].get(\'checked\')))">',
+			'<input class="bs_btn right10" type="button" mod-type="1" value="获取当前页数据" onclick="alert(JSON.stringify($(\'#modTb\')[0].get()))">'
+		].join("")
+	},
+	//表单修改设置
+	edit:true,
+	editConfig:{
+		action:"http://kgedit2.kugou.com/novelAdmin/index.php?r=ajax/point&id={$hash}",
+		method:"get",
+		actionType:"ajax",
+		actionCallback:function(){
+			mod.dialog("success","修改成功");
+		},
+		onsubmit:function(){},
+		//错误信息对应的json 属性
+		messageKey:"error",
+
+		//状态信息对应的json 属性
+		statusKey:"status"
+	},
+	//删除操作设置
+	del:true,
+	delConfig:{
+		action:"http://kgedit2.kugou.com/novelAdmin/index.php?r=ajax/point&id={$hash}",
+		method:"get",
+		actionType:"ajax",
+		actionCallback:function(){
+			mod.dialog("删除成功");
+		},
+		onsubmit:function(){},
+		//错误信息对应的json 属性
+		messageKey:"error",
+
+		//状态信息对应的json 属性
+		statusKey:"status",
+		//批处理
+		batchConfig:{
+			enable:false
+			
+		}
+	},
+	//添加操作设置
+	add:true,
+	addConfig:{
+		target:"#modTb02",
+		text:"添加到modTb02列表",
+		width:150,
+		index:"hash",
+		//批处理
+		batchConfig:{
+			enable:true
+		}
+	}
+});
+
+mod.grid("#modTb02");
+</script>
+
+
+

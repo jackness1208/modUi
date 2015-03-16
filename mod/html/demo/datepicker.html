@@ -1,0 +1,414 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>日历控件-说明</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<style type="text/css">
+.body_area{ padding:40px; background:#fff; border:1px solid #ccc; -webkit-box-shadow:0 0 5px rgba(0,0,0,0.2); -moz-box-shadow:0 0 5px rgba(0,0,0,0.2); box-shadow:0 0 5px rgba(0,0,0,0.2);}
+.inputbox{ display:inline-block; *display:inline; *zoom:1; margin:20px 0; padding:20px; border:1px solid #ccc; -webkit-box-shadow:0 0 5px rgba(0,0,0,0.2); -moz-box-shadow:0 0 5px rgba(0,0,0,0.2); box-shadow:0 0 5px rgba(0,0,0,0.2);}
+.inputbox .ipt{ vertical-align:middle;}
+.inputbox .btn{ vertical-align:middle; height:24px; margin-right:5px;}
+.inputbox label{ margin-right:5px;}
+.my_table{ font-size:14px; margin-bottom:20px; margin-top:10px; border-collapse:collapse;}
+.my_table td{border:1px solid #ccc; padding:5px;}
+.my_table thead td{ font-weight:bold;}
+</style>
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+<div class="bs_mod01" mod-title="日历控件说明文档" mod-title-left='组件地址：<a href="../../js/jns_calendar_v.1.js">js/jns_calendar_v.1.js</a>'>
+	
+	<h2 class="ins">调用方法</h2>
+	<h3 class="ins">单一日历-日期选择：</h3>
+	<pre class="brush:js;">
+		jnsCalendar("#txtbox01",{
+			type:"date",
+			format:"YYYY-MM-DD",
+			vDistance:20,
+			dateRangeStart:"2012-1-1",
+			dateRangeEnd:"2119-1-1",
+			callback:function(date){alert(date)}
+		}).init();
+	</pre>
+	<h4 class="ins">demo:</h4>
+	<p><span class="inputbox"><label for="txtbox01">日期：</label><input type="input" id="txtbox01" name="" value="" class="ipt"></span></p>
+	
+	<h3 class="ins">单一日历-日期时间选择：</h3>
+	<pre class="brush:js;">
+		jnsCalendar("#txtbox02",{
+			type:"dateTime",
+			format:"YYYY-MM-DD hh:mm:ss",
+			vDistance:20,
+			dateRangeStart:"2012-1-1",
+			dateRangeEnd:"2119-1-1",
+			callback:function(date){alert(date)}
+		}).init();
+	</pre>
+	<h4 class="ins">demo:</h4>
+	<p><span class="inputbox"><label for="txtbox02">日期：</label><input type="input" id="txtbox02" name="" value="" class="ipt"></span></p>
+	
+	<h3 class="ins">双日历-日期区间选择：</h3>
+	<pre class="brush:js;">
+		jnsCalendar("#txtbox03,#txtbox04",{
+			type:"intervalTime",
+			format:"YYYY-MM-DD",
+			vDistance:20,
+			dateRangeStart:"2012-1-1",
+			dateRangeEnd:"2119-1-1",
+			startDateInput:"#txtbox03",
+			endDateInput:"#txtbox04",
+			selectSameDate:true,
+			callback:function(date,date2){alert(date); alert(date2)}
+		}).init();
+	</pre>
+	<h4 class="ins">demo:</h4>
+	<div class="inputbox">
+		<p><label for="txtbox03">开始日期：</label><input type="input" id="txtbox03" name="" value="" class="ipt"></p>
+		<p><label for="txtbox04">结束日期：</label><input type="input" id="txtbox04" name="" value="" class="ipt"></p>
+	</div>
+
+	<h2 class="ins">组件参数</h2>
+	<h3 class="ins">jnsCalendar(target,option)</h3>
+	<table class="my_table">
+		<thead>
+			<tr><td width="150">参数</td><td>说明</td></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td valign="top">target</td>
+				<td>{string|object}<br>目标对象 </td>
+			</tr>
+			<tr>
+				<td valign="top">option</td>
+				<td>{object}<br>参数接口 </td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4 class="ins">option接口内参数</h4>
+	<table class="my_table">
+		<thead>
+			<tr><td width="150">参数</td><td>说明</td></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td valign="top">type</td>
+				<td>{string}<br>日历类型<br/>date:日期选择 <br/>dateTime:日期时间选择<br/>intervalTime:日期区域选择 几号 - 几号之间<br/>默认为:"date"</td>
+			</tr>
+			<tr>
+				<td valign="top">format</td>
+				<td>{string}<br>显示格式 <br/>参数：<br/>YYYY 年<br/>MM   月<br/>DD   日<br/>hh   时<br/>mm   分<br/>ss   秒<br/>默认值为:"YYYY-MM-DD"<br/></td>
+			</tr>
+			<tr>
+				<td valign="top">callback</td>
+				<td>{function}<br>选择完成后调用的方法 <br/>如果是 date|dateTime类型的，返回 对应的时间<br/>如果是 intervalTime类型的，返回 2个参数 分别是开始时间和结束时间<br/>默认值为function(){}</td>
+			</tr>
+			<tr>
+				<td valign="top">onclean</td>
+				<td>{function}<br>执行清除操作后调用的方法 <br/>如果是 date|dateTime类型的，返回 对应的时间<br/>如果是 intervalTime类型的，返回 2个参数 分别是开始时间和结束时间<br/>默认值为function(){}</td>
+			</tr>
+			<tr>
+				<td valign="top">vDistance</td>
+				<td>{number}<br>日历控件距离目标对象的垂直距离 <br/>默认值为：20<br/></td>
+			</tr>
+			<tr>
+				<td valign="top">startDateInput</td>
+				<td>{string|object}<br>适用于intervalTime类型控件，开始日期的input对象，读取时将直接读该对象的 value 值 <br/>默认值为：null<br/></td>
+			</tr>
+			<tr>
+				<td valign="top">endDateInput</td>
+				<td>{string|object}<br>适用于intervalTime类型控件，结束日期的input对象，读取时将直接读该对象的 value 值 <br/>默认值为：null<br/></td>
+			</tr>
+			<tr>
+				<td valign="top">selectSameDate</td>
+				<td>{boolean}<br>适用于intervalTime类型控件，允许选择同一天 <br/>默认值为：true<br/></td>
+			</tr>
+			<tr>
+				<td valign="top">dateRangeStart</td>
+				<td>{Date|string}<br>日期选择的范围-下限 <br/>默认值为：null<br/></td>
+			</tr>
+			
+			<tr>
+				<td valign="top">dateRangeEnd</td>
+				<td>{Date|string}<br>日期选择的范围-上限 <br/>默认值为：null<br/></td>
+			</tr>
+			
+		</tbody>
+	</table>
+	
+	<h3 class="ins">jnsCalendar()提供方法：</h3>
+	<table class="my_table">
+		<thead>
+			<tr><td width="150">参数</td><td>说明</td></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>setOption(op)</td>
+				<td>参数设置</td>
+			</tr>
+			<tr>
+				<td>show(target)</td>
+				<td>日历控件显示，target为 需要控件出现的区域</td>
+			</tr>
+			<tr>
+				<td>hide()</td>
+				<td>日历控件隐藏</td>
+			</tr>
+			<tr>
+				<td>getDate()</td>
+				<td>获取控件中选中的日期<br>如果option.type=="intervalTime" 的话 返回 一个长度为2的数组 [date1,date2]，里面放着 选中日期的开始与结束；<br/>否则返回选中的日期 date</td>
+			</tr>
+			<tr>
+				<td>init()</td>
+				<td>日历控件初始化</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2 class="ins">应用实例</h2>
+	<h3 class="ins">无需时间限制的普通日历控件</h3>
+
+	<h4 class="ins">日期选择</h4>
+	<p><span class="inputbox"><label for="txtbox05">日期：</label><input type="input" id="txtbox05" name="" value="" class="ipt"></span></p>
+	
+	<pre class="brush:js;">
+	jnsCalendar("#txtbox05",{type:"date",format:"YYYY-MM-DD"}).init();
+	</pre>
+
+
+	<h4 class="ins">日期时间选择</h4>
+	<p><span class="inputbox"><label for="txtbox06">日期：</label><input type="input" id="txtbox06" name="" value="" class="ipt"></span></p>
+	
+	<pre class="brush:js;">
+	jnsCalendar("#txtbox06",{type:"dateTime",format:"YYYY-MM-DD"}).init();
+	</pre>
+
+
+	<h4 class="ins">日期区间选择</h4>
+	<div class="inputbox">
+		<p><label for="txtbox07">开始日期：</label><input type="input" id="txtbox07" name="" value="" class="ipt"></p>
+		<p><label for="txtbox08">结束日期：</label><input type="input" id="txtbox08" name="" value="" class="ipt"></p>
+	</div>
+	
+	<pre class="brush:js;">
+	jnsCalendar("#txtbox07,#txtbox08",{
+		type:"intervalTime",
+		format:"YYYY-MM-DD",
+		startDateInput:"#txtbox07",
+		endDateInput:"#txtbox08"
+	}).init();
+	</pre>
+
+
+	<h3 class="ins">日历控件-限制用户必须选择大于某个日期</h3>
+	<p><span class="inputbox"><label for="txtbox09">日期：</label><input type="input" id="txtbox09" name="" value="" class="ipt"></span></p>
+	
+	<pre class="brush:js;">
+	jnsCalendar("#txtbox09",{type:"date",format:"YYYY-MM-DD",dateRangeStart:"2013-2-25"}).init();
+	</pre>
+
+
+	<h3 class="ins">日历控件-限制用户必须选择小于某个日期</h3>
+	<p><span class="inputbox"><label for="txtbox10">日期：</label><input type="input" id="txtbox10" name="" value="" class="ipt"></span></p>
+	<pre class="brush:js;">
+	jnsCalendar("#txtbox10",{type:"date",format:"YYYY-MM-DD",dateRangeEnd:"2013-2-25"}).init();
+	</pre>
+
+	<h3 class="ins">区间选择-不允许选择同一天</h3>
+	<div class="inputbox">
+		<p><label for="txtbox11">开始日期：</label><input type="input" id="txtbox11" name="" value="" class="ipt"></p>
+		<p><label for="txtbox12">结束日期：</label><input type="input" id="txtbox12" name="" value="" class="ipt"></p>
+	</div>
+
+	<pre class="brush:js;">
+	jnsCalendar("#txtbox11,#txtbox12",{
+		type:"intervalTime",
+		format:"YYYY-MM-DD",
+		startDateInput:"#txtbox11",
+		endDateInput:"#txtbox12",
+		selectSameDate:false
+	}).init();
+	</pre>
+
+	<h3 class="ins">日历控件-通过按钮触发，然后选中之后再显示到某个元素上面</h3>
+
+	<h4 class="ins">日期选择</h4>
+	<div class="inputbox">
+		<p><input type="button" class="btn" id="btn13" name="" value="日期选择"><input type="input" id="txtbox13" name="" value="" class="ipt" readonly="true"/></p>
+	</div>
+
+
+	<pre class="brush:js;">
+	jnsCalendar("#btn13",{
+		type:"date",
+		format:"YYYY-MM-DD",
+		callback:function(date){
+			document.getElementById("txtbox13").value = date.getFullYear() + "-" + (date.getMonth() + 1) + date.getDate();
+		},
+		onclean:function(date){
+			document.getElementById("txtbox13").value = "";
+		}
+	}).init();	
+	</pre>
+
+
+	<h4 class="ins">范围选择</h4>
+	<div class="inputbox">
+		<p><input type="button" class="btn" id="btn14" name="" value="日期范围选择"><input type="input" id="txtbox14" name="" value="" class="ipt" readonly="true"/></p>
+	</div>
+
+	<pre class="brush:js;">
+	jnsCalendar("#btn14",{
+		type:"intervalTime",
+		format:"YYYY-MM-DD",
+		callback:function(date1,date2){
+			document.getElementById("txtbox14").value = date1.getFullYear() + "-" + (date1.getMonth() + 1) + "-" + date1.getDate() + " 至 " + date2.getFullYear() + "-" + (date2.getMonth() + 1) + "-" + date2.getDate();
+		},
+		onclean:function(date1,date2){
+			document.getElementById("txtbox14").value = "";
+		}
+	}).init();	
+	</pre>
+
+	<h3 class="ins">日历控件-通过函数调用控件</h3>
+	<div class="inputbox">
+		<p><input type="button" class="btn" id="btn15" name="" value="日期范围选择"><input type="input" id="txtbox15" name="" value="" class="ipt" readonly="true"/></p>
+	</div>
+
+	<pre class="brush:js;">
+	var myCld = jnsCalendar("",{
+		type:"intervalTime",
+		format:"YYYY-MM-DD",
+		callback:function(date1,date2){
+			document.getElementById("txtbox15").value = date1.getFullYear() + "-" + (date1.getMonth() + 1) + "-" + date1.getDate() + " 至 " + date2.getFullYear() + "-" + (date2.getMonth() + 1) + "-" + date2.getDate();
+		},
+		onclean:function(date1,date2){
+			document.getElementById("txtbox15").value = "";
+		}
+	}).init();
+	document.getElementById("btn15").onclick = function(){
+		myCld.show(this);
+	};
+	</pre>
+</div>
+
+</body>
+
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+<script type="text/javascript">
+jnsCalendar("#txtbox01",{
+	type:"date",
+	format:"YYYY-MM-DD",
+	vDistance:20,
+	dateRangeStart:"2012-1-1",
+	dateRangeEnd:"2119-1-1",
+	appendTarget:'.bs_inset_frame',
+	callback:function(date){alert(date)}
+}).init();
+
+jnsCalendar("#txtbox02",{
+	type:"dateTime",
+	format:"YYYY-MM-DD hh:mm:ss",
+	vDistance:20,
+	dateRangeStart:"2012-1-1",
+	dateRangeEnd:"2119-1-1",
+	appendTarget:'.bs_inset_frame',
+	callback:function(date){alert(date)}
+}).init();
+
+jnsCalendar("#txtbox03,#txtbox04",{
+	type:"intervalTime",
+	format:"YYYY-MM-DD",
+	vDistance:20,
+	dateRangeStart:"2012-1-1",
+	dateRangeEnd:"2119-1-1",
+	startDateInput:"#txtbox03",
+	endDateInput:"#txtbox04",
+	selectSameDate:true,
+	appendTarget:'.bs_inset_frame',
+	callback:function(date,date2){alert(date); alert(date2)}
+}).init();
+
+jnsCalendar("#txtbox05",{
+	type:"date",
+	format:"YYYY-MM-DD",
+	appendTarget:'.bs_inset_frame'
+}).init();
+
+jnsCalendar("#txtbox06",{
+	type:"dateTime",
+	format:"YYYY-MM-DD",
+	appendTarget:'.bs_inset_frame'
+}).init();
+
+jnsCalendar("#txtbox07,#txtbox08",{
+	type:"intervalTime",
+	format:"YYYY-MM-DD",
+	startDateInput:"#txtbox07",
+	endDateInput:"#txtbox08"
+}).init();
+
+jnsCalendar("#txtbox09",{
+	type:"date",
+	format:"YYYY-MM-DD",
+	dateRangeStart:"2013-2-25",
+	appendTarget:'.bs_inset_frame'
+}).init();
+jnsCalendar("#txtbox10",{
+	type:"date",
+	format:"YYYY-MM-DD",
+	dateRangeEnd:"2013-2-25"
+}).init();
+
+jnsCalendar("#txtbox11,#txtbox12",{
+	type:"intervalTime",
+	format:"YYYY-MM-DD",
+	startDateInput:"#txtbox11",
+	endDateInput:"#txtbox12",
+	selectSameDate:false,
+	appendTarget:'.bs_inset_frame'
+}).init();
+
+jnsCalendar("#btn13",{
+	type:"date",
+	format:"YYYY-MM-DD",
+	callback:function(date){
+		document.getElementById("txtbox13").value = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	},
+	onclean:function(date){
+		document.getElementById("txtbox13").value = "";
+	},
+	appendTarget:'.bs_inset_frame'
+}).init();
+
+jnsCalendar("#btn14",{
+	type:"intervalTime",
+	format:"YYYY-MM-DD",
+	callback:function(date1,date2){
+		document.getElementById("txtbox14").value = date1.getFullYear() + "-" + (date1.getMonth() + 1) + "-" + date1.getDate() + " 至 " + date2.getFullYear() + "-" + (date2.getMonth() + 1) + "-" + date2.getDate();
+	},
+	onclean:function(date1,date2){
+		document.getElementById("txtbox14").value = "";
+	},
+	appendTarget:'.bs_inset_frame'
+}).init();
+
+var myCld = jnsCalendar("",{
+	type:"intervalTime",
+	format:"YYYY-MM-DD",
+	callback:function(date1,date2){
+		document.getElementById("txtbox15").value = date1.getFullYear() + "-" + (date1.getMonth() + 1) + "-" + date1.getDate() + " 至 " + date2.getFullYear() + "-" + (date2.getMonth() + 1) + "-" + date2.getDate();
+	},
+	onclean:function(date1,date2){
+		document.getElementById("txtbox15").value = "";
+	},
+	appendTarget:'.bs_inset_frame'
+}).init();
+
+document.getElementById("btn15").onclick = function(){
+	myCld.show(this);
+};
+</script>

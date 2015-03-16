@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>登录</title>
+<link rel="stylesheet" href="../css/base.css?201407161047">
+
+
+</head>
+
+<body class="login_body">
+<div class="bs_logo"></div>
+<div class="login_box">
+	<h3 class="tl">login</h3>
+	<form class="bs_form" mod-method="get" mod-action="demo/ajax/setForm.php?status=1" mod-action-type="ajax" mod-action-callback="alert('登录成功了！')">
+	<table class="bs_table_s0">
+		<tr>
+			<th><label for="username">用户名：</label></th>
+			<td><input type="text" name="username" id="username" mod-required="true"></td>
+		</tr>
+		<tr>
+			<th><label for="password">密　码：</label></th>
+			<td><input type="password" name="password" id="password" mod-required="true"></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><input type="button" value="登录" mod-type="submit" mod-size="big" /></td>
+		</tr>
+	</table>
+	</form>
+</div>
+
+<script type="text/javascript" src="../js/bs_config.js?201407161047"></script>
+
+</body>
+</html>

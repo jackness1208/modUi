@@ -1,0 +1,23 @@
+.instro{font:12px/1.5 "\5b8b\4f53",sans-serif; color:#474747; padding:0; background:#fff; border:1px solid #ccc; -webkit-box-shadow:0 0 5px rgba(0,0,0,0.1); -moz-box-shadow:0 0 5px rgba(0,0,0,0.1); box-shadow:0 0 5px rgba(0,0,0,0.1); zoom:1; border-radius:5px;}
+/*h1.ins{ font-size:24px; color:#f60; font-family: Microsoft Yahei,simsun,sans-serif; margin:0.8em 0;}*/
+
+.instro_hd{ border-top:1px solid #fff; border-radius:5px 5px 0 0; padding:7px 10px 0; zoom:1; background: #eeeeee; background: -moz-linear-gradient(top,  #eeeeee 0%, #e5e5e5 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#e5e5e5)); background: -webkit-linear-gradient(top,  #eeeeee 0%,#e5e5e5 100%); background: -o-linear-gradient(top,  #eeeeee 0%,#e5e5e5 100%); background: -ms-linear-gradient(top,  #eeeeee 0%,#e5e5e5 100%); background: linear-gradient(to bottom,  #eeeeee 0%,#e5e5e5 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#e5e5e5',GradientType=0 );}
+.instro_hd:after{content:"."; display:block; height:0; overflow:hidden; clear:both; }
+
+
+.instro_hd h1.ins{position: relative; padding-left: 20px; float: left; font-size: 18px; margin-right: 10px; font-family: Microsoft Yahei,simsun,sans-serif; font-weight: normal; cursor: pointer; padding-bottom: 4px; padding-top: 3px;}
+
+.instro_bd{padding: 20px; border-radius: 0 0 5px 5px; overflow: hidden;}
+h1.ins{}
+h2.ins{ font-size:20px; font-family: Microsoft Yahei,simsun,sans-serif; margin:0.8em 0;}
+h3.ins{ padding-left:10px; margin:5px 0; border-left:3px solid #474747; line-height:1; font-size:18px; font-weight:normal; font-family: Microsoft Yahei,simsun,sans-serif; margin:0.8em 0;}
+h4.ins{ font-size:16px; font-weight:normal; font-family: Microsoft Yahei,simsun,sans-serif; margin:0.8em 0;}
+dl.ins{ margin-bottom:20px;}
+p.ins{ margin-bottom:0.8em; font-size:14px;}
+div.ins{ margin:10px 0; padding:10px; background:#f5f5f5;}
+dt.ins{ font-size:14px; font-weight:bold; list-style:none; margin-bottom:5px;}
+dd.ins{ font-size:14px; list-style:none; margin-bottom:5px;}
+table.ins{ font-size:14px; margin-bottom:10px; margin-top:10px; border-collapse:collapse;}
+table.ins td{border:1px solid #ccc; padding:5px; vertical-align:top;}
+table.ins thead td{ font-weight:bold;}
+

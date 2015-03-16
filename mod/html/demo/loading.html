@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>异步请求处理</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201402271051"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title="异步请求处理 - mod.loading">
+	
+	<div class="ins">
+		<a href="javascript:;" onclick="ajaxHandle()" class="bs_btn">提交操作</a>
+	</div>
+
+	<h3 class="ins">javascript写法</h3>
+	<pre class="brush:xml;">
+&lt;a href="javascript:;" onclick="ajaxHandle()" class="bs_btn"&gt;提交操作&lt;/a&gt;	
+	</pre>
+
+	<pre class="brush:js;">
+function ajaxHandle(){
+	mod.loading.init(function(){
+		mod.dialog("error","超时了 妈蛋！")
+	},5000);
+	$.get("http://lib9.service.kugou.com/websearch/index.php","",function(){
+		if(mod.loading.isTimeout){
+			return;
+		}
+		mod.loading.clear();
+		mod.dialog("success","请求成功");
+	});
+}
+	</pre>
+	<h2 class="ins">mod.loading 参数说明</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td width="70">支持版本</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>mod.loading.init(timeoutCallback,delayTime,loadingText)</td>
+				<td>{function}</td>
+				<td><strong class="blue">&gt;= 1.27</strong></td>
+				<td>
+					菊花初始化
+					<table class="ins">
+						<tbody>
+							<thead>
+								<tr>
+									<td>属性</td>
+									<td>类型</td>
+									<td width="70">支持版本</td>
+
+									<td>说明</td>
+								</tr>
+							</thead>
+							<tr>
+								<td>timeoutCallback</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.27</strong></td>
+								<td>
+									超时回调函数
+								</td>
+							</tr>
+							<tr>
+								<td>delayTime</td>
+								<td>{number}</td>
+								<td><strong class="blue">&gt;= 1.27</strong></td>
+								<td>
+									超时时间设置 默认为 5000 毫秒
+								</td>
+								
+							</tr>
+							<tr>
+								<td>loadingText <i class="bs_new_icon"></i></td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.32</strong></td>
+								<td>
+									菊花出现时显示的文案
+								</td>
+								
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>mod.loading.isTimeout</td>
+				<td>{boolean}</td>
+				<td><strong class="blue">&gt;= 1.27</strong></td>
+				<td>
+					判断是否已经超时。
+				</td>
+			</tr>
+			<tr>
+				<td>mod.loading.clear()</td>
+				<td>{function}</td>
+				<td><strong class="blue">&gt;= 1.27</strong></td>
+				<td>
+					清除菊花
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+</div>
+	
+
+
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201402271051"></script>
+<script>
+function ajaxHandle(){
+	mod.loading.init(function(){
+		mod.dialog("error","超时了 妈蛋！")
+	},5000);
+	$.get("http://lib9.service.kugou.com/websearch/index.php","",function(){
+		if(mod.loading.isTimeout){
+			return;
+		}
+		mod.loading.clear();
+		mod.dialog("success","请求成功");
+	});
+}
+</script>

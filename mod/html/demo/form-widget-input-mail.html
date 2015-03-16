@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>表单控件-输入类(input,textarea) 邮箱校验</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title="表单控件-输入类(input,textarea) 邮箱校验">
+
+	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+
+	
+
+	<!-- 邮箱 -->
+	<h2 class="ins">邮箱</h2>
+
+	<div class="ins">
+		<form class="bs_form">
+			<table class="bs_table_s0">
+				<tr>
+					<th>
+						<label for="mail">邮箱</label>
+					</th>
+					<td>
+						<input id="mail" name="mail" type="text" mod-required="true" mod-format="email">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<h3 class="ins">HTML模板写法</h3>
+	<pre class="brush:xml;">
+&lt;tr&gt;
+	&lt;th&gt;
+		&lt;label for="mail"&gt;邮箱&lt;/label&gt;
+	&lt;/th&gt;
+	&lt;td&gt;
+		&lt;input id="mail" name="mail" type="text" mod-required="true" mod-format="email"&gt;
+	&lt;/td&gt;
+&lt;/tr&gt;	
+	</pre>
+
+	<h3 class="ins">javascript写法</h3>
+	<div class="ins">
+		<table class="bs_table_s0">
+			<tr>
+				<th>
+					<label for="mail1">邮箱</label>
+				</th>
+				<td>
+					<input name="mail" id="mail1" type="text">
+				</td>
+			</tr>
+		</table>
+	</div>
+	<pre class="brush:xml;">
+&lt;!-- html --&gt;
+&lt;table class="bs_table_s0"&gt;
+	&lt;tr&gt;
+		&lt;th&gt;
+			&lt;label for="mail"&gt;邮箱&lt;/label&gt;
+		&lt;/th&gt;
+		&lt;td&gt;
+			&lt;input name="mail" id="mail1" type="text"&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+	</pre>
+
+	<pre class="brush:js;">
+//js
+mod.widget("#mail1",{
+	required:true,
+	format:"email"
+});		
+	</pre>
+	<!--/邮箱 -->
+
+	<!-- end! -->
+	<h2 class="ins">mod.widget(target,op) 参数说明</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>target</td>
+				<td>{object|string}</td>
+				<td>需要执行模块化的对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td>支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>format</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>
+									邮箱校验 email<br>
+								</td>
+							</tr>
+							<tr>
+								<td>required</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否为必填项 默认 false</td>
+							</tr>
+							<tr>
+								<td>errorText</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>设置校验内容时错误的提示语</td>
+							</tr>
+							<tr>
+								<td>defaultText</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>设置控件默认的提示语</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+</div>
+	
+
+
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+
+<script>
+
+mod.widget("#mail1",{
+	required:true,
+	format:"email"
+});
+</script>
+
+

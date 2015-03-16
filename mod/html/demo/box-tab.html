@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>基础控件-选项卡</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="instro">
+	<div class="instro_hd">
+		<h1 class="ins">基础控件-选项卡</h1>
+	</div>
+	<div class="instro_bd">
+		<h2 class="ins">选项卡</h2>
+		<h3 class="ins">模块效果</h3>
+		<div class="ins">
+			<div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-onchange="document.getElementById(this.getAttribute('href').split('#').pop()).innerHTML += '{' + arguments[0] + '变！}'">
+				<ul>
+					<li><a href="#tabs01">标签01</a></li>
+					<li><a href="#tabs02">标签02</a></li>
+					<li><a href="#tabs03">标签03</a></li>
+				</ul>
+				<div id="tabs01">内容01</div>
+				<div id="tabs02">内容02</div>
+				<div id="tabs03">内容03</div>
+			</div>
+		</div>
+		
+		
+		<h3 class="ins">HTML模板写法</h3>
+		<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+		<pre class="brush:xml;">
+	&lt;!-- html --&gt;
+	&lt;div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-onchange="document.getElementById(this.getAttribute("href").split("#").pop()).innerHTML += '{' + arguments[0] + '变！}'"&gt;
+		&lt;ul&gt;
+			&lt;li&gt;&lt;a href="#tabs01"&gt;标签01&lt;/a&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;a href="#tabs02"&gt;标签02&lt;/a&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;a href="#tabs03"&gt;标签03&lt;/a&gt;&lt;/li&gt;
+		&lt;/ul&gt;
+		&lt;div id="tabs01"&gt;内容01&lt;/div&gt;
+		&lt;div id="tabs02"&gt;内容02&lt;/div&gt;
+		&lt;div id="tabs03"&gt;内容03&lt;/div&gt;
+	&lt;/div&gt;</pre>
+
+
+		<h2 class="ins">Javascript写法</h2>
+		<div class="ins">
+			<div id="tabbox">
+				<ul>
+					<li><a href="#tabs04">标签01</a></li>
+					<li><a href="#tabs05">标签02</a></li>
+					<li><a href="#tabs06">标签03</a></li>
+				</ul>
+				<div id="tabs04">内容01</div>
+				<div id="tabs05">内容02</div>
+				<div id="tabs06">内容03</div>
+			</div>
+		</div>
+		<pre class="brush:xml;">
+	&lt;!-- html --&gt;
+	&lt;div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字"&gt;
+	&lt;ul&gt;
+		&lt;li&gt;&lt;a href="#tabs04"&gt;标签01&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a href="#tabs05"&gt;标签02&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a href="#tabs06"&gt;标签03&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;div id="tabs04"&gt;内容04&lt;/div&gt;
+	&lt;div id="tabs05"&gt;内容05&lt;/div&gt;
+	&lt;div id="tabs06"&gt;内容06&lt;/div&gt;
+	&lt;/div&gt;		
+		</pre>
+		<pre class="brush:js;">
+	//javascript
+	mod.tab("#tabbox",{
+		title:"一级tab模板",
+		titleLeft:"左侧文字",
+		titleRight:"右侧文字",
+		onchange:function(index){
+			document.getElementById(this.getAttribute("href").replace("#","")).innerHTML += "{" + index + "变！}";
+		}
+	});</pre>
+
+		<h2 class="ins">选项卡-自动轮播</h2>
+		<h3 class="ins">模块效果</h3>
+		<div class="ins">
+			<div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-auto-play="true" mod-timeout="3000" mod-onchange="document.getElementById(this.getAttribute('href').split('#').pop()).innerHTML += '{' + arguments[0] + '变！}'">
+				<ul>
+					<li><a href="#tabs07">标签01</a></li>
+					<li><a href="#tabs08">标签02</a></li>
+					<li><a href="#tabs09">标签03</a></li>
+				</ul>
+				<div id="tabs07">内容01</div>
+				<div id="tabs08">内容02</div>
+				<div id="tabs09">内容03</div>
+			</div>
+		</div>
+		
+		
+		<h3 class="ins">HTML模板写法</h3>
+		<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+		<pre class="brush:xml;">
+	&lt;!-- html --&gt;
+	&lt;div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-auto-play="true" mod-timeout="3000" mod-onchange="document.getElementById(this.getAttribute("href").split("#").pop()).innerHTML += '{' + arguments[0] + '变！}'"&gt;
+		&lt;ul&gt;
+			&lt;li&gt;&lt;a href="#tabs07"&gt;标签01&lt;/a&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;a href="#tabs08"&gt;标签02&lt;/a&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;a href="#tabs09"&gt;标签03&lt;/a&gt;&lt;/li&gt;
+		&lt;/ul&gt;
+		&lt;div id="tabs07"&gt;内容01&lt;/div&gt;
+		&lt;div id="tabs08"&gt;内容02&lt;/div&gt;
+		&lt;div id="tabs09"&gt;内容03&lt;/div&gt;
+	&lt;/div&gt;</pre>
+
+
+		<h2 class="ins">Javascript写法</h2>
+		<div class="ins">
+			<div id="tabbox2">
+				<ul>
+					<li><a href="#tabs10">标签01</a></li>
+					<li><a href="#tabs11">标签02</a></li>
+					<li><a href="#tabs12">标签03</a></li>
+				</ul>
+				<div id="tabs10">内容01</div>
+				<div id="tabs11">内容02</div>
+				<div id="tabs12">内容03</div>
+			</div>
+		</div>
+		<pre class="brush:xml;">
+	&lt;!-- html --&gt;
+	&lt;div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字"&gt;
+	&lt;ul&gt;
+		&lt;li&gt;&lt;a href="#tabs10"&gt;标签01&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a href="#tabs11"&gt;标签02&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a href="#tabs12"&gt;标签03&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;div id="tabs10"&gt;内容04&lt;/div&gt;
+	&lt;div id="tabs11"&gt;内容05&lt;/div&gt;
+	&lt;div id="tabs12"&gt;内容06&lt;/div&gt;
+	&lt;/div&gt;		
+		</pre>
+		<pre class="brush:js;">
+	//javascript
+	mod.tab("#tabbox2",{
+		title:"一级tab模板",
+		titleLeft:"左侧文字",
+		titleRight:"右侧文字",
+		autoPlay:true,
+		timeout:3000,
+		onchange:function(index){
+			document.getElementById(this.getAttribute("href").replace("#","")).innerHTML += "{" + index + "变！}";
+		}
+	});</pre>
+
+		<h2 class="ins">mod.tab(target,op) 参数说明</h2>
+		<table class="ins">
+			<thead>
+				<tr>
+					<td width="100">属性</td>
+					<td width="100">类型</td>
+					<td>说明</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>target</td>
+					<td>{object|string}</td>
+					<td>需要执行模块化的对象</td>
+				</tr>
+				<tr>
+					<td>op</td>
+					<td>{object}</td>
+					<td>
+						参数设置
+						<table class="ins">
+							<thead>
+								<tr>
+									<td>属性</td>
+									<td>类型</td>
+									<td>支持版本</td>
+									<td>说明</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>title</td>
+									<td>{string}</td>
+									<td><strong class="blue">&gt;= 1.0</strong></td>
+									<td>模块标题</td>
+								</tr>
+								<tr>
+									<td>titleLeft</td>
+									<td>{string}</td>
+									<td><strong class="blue">&gt;= 1.0</strong></td>
+									<td>模块标题左侧 html内容 </td>
+								</tr>
+								<tr>
+									<td>titleRight</td>
+									<td>{string}</td>
+									<td><strong class="blue">&gt;= 1.0</strong></td>
+									<td>模块标题右侧 html内容 </td>
+								</tr>
+								<tr>
+									<td>index  <i class="bs_new_icon"></i></td>
+									<td>{number}</td>
+									<td><strong class="blue">&gt;= 1.0</strong></td>
+									<td>tab初始位置</td>
+								</tr>
+								
+								<tr>
+									<td>timeout  <i class="bs_new_icon"></i></td>
+									<td>{number}</td>
+									<td><strong class="blue">&gt;= 1.0</strong></td>
+									<td>切换停留时间</td>
+								</tr>
+								<tr>
+									<td>onchange(index)</td>
+									<td>{function}</td>
+									<td><strong class="blue">&gt;= 1.0</strong></td>
+									<td>tab发生改变时回调的函数。this指向 触发的 a对象， index为当前tab的 位置。 </td>
+								</tr>
+								<tr>
+									<td>autoPlay  <i class="bs_new_icon"></i></td>
+									<td>{boolean}</td>
+									<td><strong class="blue">&gt;= 1.21</strong></td>
+									<td>是否自动切换</td>
+								</tr>
+								<tr>
+									<td>hide  <i class="bs_new_icon"></i></td>
+									<td>{boolean}</td>
+									<td><strong class="blue">&gt;= 1.25</strong></td>
+									<td>模块初始化时是否处于收起状态。默认为false</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				
+			</tbody>
+		</table>
+
+		<h2 class="ins">mod.tab(target,op) 返回： <i class="bs_new_icon"></i></h2>
+		<table class="ins">
+			<thead>
+				<tr>
+					<td width="100">属性</td>
+					<td width="100">类型</td>
+					<td>说明</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>tab</td>
+					<td>{object}</td>
+					<td>
+						tab对象<br>
+						<table class="ins">
+							<thead>
+								<tr>
+									<td>属性</td>
+									<td>类型</td>
+									<td>支持版本</td>
+									<td>说明</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>tab.index</td>
+									<td>{number}</td>
+									<td><strong class="blue">&gt;= 1.0</strong></td>
+									<td>
+										目前在第几个tab
+									</td>
+								</tr>
+								<tr>
+									<td>tab.current(index)</td>
+									<td>{function}</td>
+									<td><strong class="blue">&gt;= 1.21</strong></td>
+									<td>
+										切换到第几个tab
+										<table class="ins">
+											<tr>
+												<td>index</td>
+												<td>number</td>
+												<td>
+													tab 序号
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								
+								<tr>
+									<td>tab.next()</td>
+									<td>{function}</td>
+									<td><strong class="blue">&gt;= 1.21</strong></td>
+									<td>
+										切换到下一个tab
+									</td>
+								</tr>
+								<tr>
+									<td>tab.prev()</td>
+									<td>{function}</td>
+									<td><strong class="blue">&gt;= 1.21</strong></td>
+									<td>
+										切换到上一个tab
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				
+			</tbody>
+		</table>
+
+		<h2 class="ins">嵌套样式</h2>
+		<p class="ins">假如模块是嵌套在 区域控件之内，样式为：</p>
+		<div class="ins">
+			<div class="bs_mod01">
+				<div class="bs_tab" mod-seted="false" mod-title="二级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字">
+					<ul>
+						<li><a href="#tabs13">标签01</a></li>
+						<li><a href="#tabs14">标签02</a></li>
+						<li><a href="#tabs15">标签03</a></li>
+					</ul>
+					<div id="tabs13">内容01</div>
+					<div id="tabs14">内容02</div>
+					<div id="tabs15">内容03</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+</div>
+	
+
+	
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+<script>
+mod.tab("#tabbox",{
+	title:"一级tab模板",
+	titleLeft:"左侧文字",
+	titleRight:"右侧文字",
+	onchange:function(index){
+		document.getElementById(this.getAttribute("href").split("#").pop()).innerHTML += "{" + index + "变！}";
+	}
+});
+
+mod.tab("#tabbox2",{
+	title:"一级tab模板",
+	titleLeft:"左侧文字",
+	titleRight:"右侧文字",
+	autoPlay:true,
+	timeout:3000,
+	onchange:function(index){
+		document.getElementById(this.getAttribute("href").split("#").pop()).innerHTML += "{" + index + "变！}";
+	}
+});
+</script>
+
+

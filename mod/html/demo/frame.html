@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>主体界面</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title="主体界面" mod-title-left='文件地址：<a href="../frame.html" target="_blank">html/frame.html</a>'>
+	<!-- 整体预览 -->
+	<h2 class="ins">模块介绍：</h2>
+	<p class="ins">分为 head 头部区域、nav 面包屑区域、main 内页区域、side 菜单区域 4部分区域。<br></p>
+
+	<iframe src="../frame.html" width="900" height="600" frameborder="0"></iframe>
+	
+	<h3 class="ins">页面源代码：</h3>
+	<pre class="brush:xml;">
+&lt;!doctype html&gt;
+&lt;html lang="en" class="bs_outhtml"&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;ModUi Admin&lt;/title&gt;
+&lt;link rel="stylesheet" href="../css/base.css?201407161047"&gt;
+&lt;/head&gt;
+&lt;body class="bs_outbody"&gt;
+&lt;!-- head --&gt;
+&lt;div class="bs_head"&gt;
+	&lt;h1 class="bs_logo"&gt;modUi For Admin&lt;/h1&gt;
+	&lt;div class="bs_head_ctrl"&gt;
+		你好，admin&lt;br/&gt;
+		&lt;a href="#"&gt;退出登录&lt;/a&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+&lt;!--/head --&gt;
+
+&lt;!-- nav --&gt;
+&lt;div class="bs_nav"&gt;当前位置:&lt;span id="nav" class="bs_nav_cnt"&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;!--/nav --&gt;
+
+&lt;!-- body --&gt;
+&lt;div class="bs_bodyarea" id="bodyArea"&gt;
+	&lt;div class="bs_main"&gt;
+		&lt;div class="bs_main_cnt" id="main"&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div class="bs_side"&gt;
+		&lt;div class="bs_menu"&gt;
+			&lt;ul&gt;
+				&lt;li&gt;&lt;a href="page.html"&gt;一级标题&lt;/a&gt;&lt;/li&gt;
+				&lt;li&gt;
+					&lt;a href="javascript:;"&gt;一级&lt;/a&gt;
+					&lt;ul&gt;
+						&lt;li&gt;&lt;a href="#"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+				&lt;/li&gt;
+				
+				&lt;li&gt;
+					&lt;a href="javascript:;"&gt;一级&lt;/a&gt;
+					&lt;ul&gt;
+						&lt;li&gt;
+							&lt;a href="javascript:;"&gt;二级&lt;/a&gt;
+							&lt;ul&gt;
+								&lt;li&gt;&lt;a href="#"&gt;三级标题&lt;/a&gt;&lt;/li&gt;
+							&lt;/ul&gt;
+						&lt;/li&gt;
+						
+					&lt;/ul&gt;
+				&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div class="bs_side_switch" id="switch"&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
+	&lt;div class="clear"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;!--/body --&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;script type="text/javascript" src="../js/bs_config.js?201407161047"&gt;&lt;/script&gt;
+	</pre>
+	<p class="ins">下面介绍项目中可进行定义的区域。</p>
+	<!--/整体预览 -->
+	
+	<!-- head 头部区域 -->
+	<h3 class="ins">head 头部区域</h3>
+	<p class="ins">这个区域中可定义的主要是 后台logo，<strong class="blue">png24格式</strong></p>
+
+	<div class="ins" style="background:#474747"><img src="../../images/bs_logo.png" width="275" height="50" alt=""></div>
+	
+	<h4 class="ins">文件地址</h4>
+	<p class="ins"><a href="../../images/bs_logo.png" target="_blank">images/bs_logo.png</a></p>
+	
+	<h4 class="ins">psd源文件</h4>
+	<p class="ins">psd源文件<a href="../../psd/bs_logo.psd" target="_blank">psd/bs_logo.psd</a></p>
+	<!--/head 头部区域 -->
+
+	<!-- nav 面包屑区域 -->
+	<h3 class="ins">nav 面包屑区域</h3>
+	<p class="ins"><strong class="gray">非自定义区域</strong>，由后台 <strong class="blue">根据内页 title标签</strong> 自动生成，支持多层级。</p>
+	<pre class="brush:xml;">
+&lt;!-- nav --&gt;
+&lt;div class="bs_nav"&gt;当前位置:&lt;span id="nav" class="bs_nav_cnt"&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;!--/nav --&gt;
+	</pre>
+
+
+	<!--/nav 面包屑区域 -->
+	<!-- side 菜单区域 -->
+	<h3 class="ins">side 菜单区域</h3>
+
+	<p class="ins"><strong class="blue">可自定义区域</strong>，用于设置后台导航菜单。</p>
+	
+	<h4 class="ins">模块效果</h4>
+	<div class="ins" style="width:190px">
+		<div class="bs_menu">
+
+			<ul>
+				<li><a href="#">一级标题</a></li>
+				<li>
+					<a href="#">一级标题</a>
+					<ul>
+						<li><a href="#">二级标题</a></li>
+						<li><a href="#">二级标题</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">一级标题</a>
+					<ul>
+						<li><a href="#">二级标题</a></li>
+						<li>
+							<a href="#">二级标题</a>
+							<ul>
+								<li><a href="#">三级标题</a></li>
+								<li><a href="#">三级标题</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<pre class="brush:xml;">
+&lt;div class="bs_menu"&gt;
+	&lt;ul&gt;
+		&lt;li&gt;&lt;a href="#"&gt;一级标题&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;
+			&lt;a href="#"&gt;一级标题&lt;/a&gt;
+			&lt;ul&gt;
+				&lt;li&gt;&lt;a href="#"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+				&lt;li&gt;&lt;a href="#"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/li&gt;
+		&lt;li&gt;
+			&lt;a href="#"&gt;一级标题&lt;/a&gt;
+			&lt;ul&gt;
+				&lt;li&gt;&lt;a href="#"&gt;二级标题&lt;/a&gt;&lt;/li&gt;
+				&lt;li&gt;
+					&lt;a href="#"&gt;二级标题&lt;/a&gt;
+					&lt;ul&gt;
+						&lt;li&gt;&lt;a href="#"&gt;三级标题&lt;/a&gt;&lt;/li&gt;
+						&lt;li&gt;&lt;a href="#"&gt;三级标题&lt;/a&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+				&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+	</pre>
+	<!--/side 菜单区域 -->
+	<!-- main 内页区域 -->
+	<h3 class="ins">main 内页区域</h3>
+	<p class="ins">这套后台属于 iframe 嵌套类型， 右侧main区域 为iframe 内嵌页区域。</p>
+	<p class="ins">demo：<a href="../page.html" target="_blank">html/page.html</a></p>
+		
+	<h4 class="ins">内页基本结构</h4>
+	<pre class="brush:xml;">
+&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;内页模板&lt;/title&gt;
+&lt;link rel="stylesheet" href="../css/base.css?201502261750"&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="bs_mod01" mod-title="内页模板"&gt;
+	内页的内容
+&lt;/div&gt;
+&lt;script type="text/javascript" src="../js/bs_config.js?201502261750"&gt;&lt;/script&gt;
+&lt;script&gt;
+// 初始化方法放这里
+// insetPageInit();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+	</pre>
+
+	<!--/main 内页区域 -->	
+
+</div>
+
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+
+

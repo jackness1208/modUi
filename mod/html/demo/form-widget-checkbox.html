@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>表单控件-选择类(checkbox、radio)</title>
+<link rel="stylesheet" href="../../css/base.css?20140109">
+<script type="text/javascript" src="temp/init.js?201407161047"></script>
+
+</head>
+<body>
+
+<div class="bs_mod01" mod-title="表单控件-选择类(checkbox、radio)">
+	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
+	
+	<!-- 单选框 -->
+	<h2 class="ins">单选框</h2>
+	<div class="ins">
+		<form class="bs_form">
+			<table class="bs_table_s0">
+				<tr>
+					<th>
+						<label>单选框</label>
+					</th>
+					<td>
+						<input name="rdo01" type="radio" value="0" mod-title="单选01" />
+						<input name="rdo01" type="radio" value="1" mod-title="单选02" />
+						<input name="rdo01" type="radio" value="2" mod-title="单选03" />
+						<input name="rdo01" type="radio" value="3" mod-title="单选04" />
+						<input name="rdo01" type="radio" value="4" mod-title="单选05" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<h4 class="ins">HTML模板写法</h4>
+	<pre class="brush:xml;">
+&lt;tr&gt;
+	&lt;th&gt;
+		&lt;label&gt;单选框&lt;/label&gt;
+	&lt;/th&gt;
+	&lt;td&gt;
+		&lt;input name="rdo01" type="radio" value="0" mod-title="单选01" /&gt;
+		&lt;input name="rdo01" type="radio" value="1" mod-title="单选02" /&gt;
+		&lt;input name="rdo01" type="radio" value="2" mod-title="单选03" /&gt;
+		&lt;input name="rdo01" type="radio" value="3" mod-title="单选04" /&gt;
+		&lt;input name="rdo01" type="radio" value="4" mod-title="单选05" /&gt;
+	&lt;/td&gt;
+&lt;/tr&gt;
+	</pre>
+	<!--/单选框 -->
+
+	<!-- 单选框(带图片) -->
+	<h2 class="ins">单选框(带图片)</h2>
+	<div class="ins">
+		<form class="bs_form">
+			<table class="bs_table_s0">
+				<tr>
+					<th>
+						<label>单选框(带图片)</label>
+					</th>
+					<td>
+						<input name="rdo02" type="radio" value="0" mod-title="单选01" mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+						<input name="rdo02" type="radio" value="1" mod-title="单选02"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+						<input name="rdo02" type="radio" value="2" mod-title="单选03"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+						<input name="rdo02" type="radio" value="3" mod-title="单选04"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+						<input name="rdo02" type="radio" value="4" mod-title="单选05"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<h4 class="ins">HTML模板写法</h4>
+	<pre class="brush:xml;">
+&lt;tr&gt;
+	&lt;th&gt;
+		&lt;label&gt;单选框(带图片)&lt;/label&gt;
+	&lt;/th&gt;
+	&lt;td&gt;
+		&lt;input name="rdo02" type="radio" value="0" mod-title="单选01" mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+		&lt;input name="rdo02" type="radio" value="1" mod-title="单选02"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+		&lt;input name="rdo02" type="radio" value="2" mod-title="单选03"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+		&lt;input name="rdo02" type="radio" value="3" mod-title="单选04"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+		&lt;input name="rdo02" type="radio" value="4" mod-title="单选05"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+	&lt;/td&gt;
+&lt;/tr&gt;
+	</pre>
+	<!--/单选框(带图片) -->
+
+	<!-- 复选框 -->
+	<h2 class="ins">复选框</h2>
+	<div class="ins">
+		<form class="bs_form">
+			<table class="bs_table_s0">
+				<tr>
+					<th>
+						<label>复选框</label>
+					</th>
+					<td>
+
+						<input name="chk01" type="checkbox" value="0" mod-title="单选01" checked />
+						<input name="chk01" type="checkbox" value="1" mod-title="单选02" />
+						<input name="chk01" type="checkbox" value="2" mod-title="单选03" />
+						<input name="chk01" type="checkbox" value="3" mod-title="单选04" />
+						<input name="chk01" type="checkbox" value="4" mod-title="单选05" />
+						<input name="chk01" type="checkbox" value="" mod-title="其他" mod-format="other"  />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<h4 class="ins">HTML模板写法</h4>
+	<pre class="brush:xml;">
+&lt;tr&gt;
+	&lt;th&gt;
+		&lt;label&gt;复选框&lt;/label&gt;
+	&lt;/th&gt;
+	&lt;td&gt;
+
+		&lt;input name="chk01" type="checkbox" value="0" mod-title="单选01" checked /&gt;
+		&lt;input name="chk01" type="checkbox" value="1" mod-title="单选02" /&gt;
+		&lt;input name="chk01" type="checkbox" value="2" mod-title="单选03" /&gt;
+		&lt;input name="chk01" type="checkbox" value="3" mod-title="单选04" /&gt;
+		&lt;input name="chk01" type="checkbox" value="4" mod-title="单选05" /&gt;
+		&lt;input name="chk01" type="checkbox" value="" mod-title="其他" mod-format="other"  /&gt;
+	&lt;/td&gt;
+&lt;/tr&gt;
+	</pre>
+	<!--/复选框 -->
+
+	<!-- 复选框(带图片) -->
+	<h2 class="ins">复选框(带图片)</h2>
+	<div class="ins">
+		<form class="bs_form">
+			<table class="bs_table_s0">
+				<tr>
+					<th>
+						<label>复选框(带图片)</label>
+					</th>
+					<td>
+						<input name="chk02" type="checkbox" value="0" mod-title="单选01" mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+						<input name="chk02" type="checkbox" value="1" mod-title="单选02"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+						<input name="chk02" type="checkbox" value="2" mod-title="单选03"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+						<input name="chk02" type="checkbox" value="3" mod-title="单选04"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+						<input name="chk02" type="checkbox" value="4" mod-title="单选05"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<h4 class="ins">HTML模板写法</h4>
+	<pre class="brush:xml;">
+&lt;tr&gt;
+	&lt;th&gt;
+		&lt;label&gt;复选框(带图片)&lt;/label&gt;
+	&lt;/th&gt;
+	&lt;td&gt;
+		&lt;input name="chk02" type="checkbox" value="0" mod-title="单选01" mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+		&lt;input name="chk02" type="checkbox" value="1" mod-title="单选02"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+		&lt;input name="chk02" type="checkbox" value="2" mod-title="单选03"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+		&lt;input name="chk02" type="checkbox" value="3" mod-title="单选04"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+		&lt;input name="chk02" type="checkbox" value="4" mod-title="单选05"  mod-img="http://imge.kugou.com/stdmusic/100/20140306/20140306103148773940.jpg" mod-img-width="100" mod-img-height="100" /&gt;
+	&lt;/td&gt;
+&lt;/tr&gt;
+	</pre>
+	<!--/复选框(带图片) -->
+
+	<!-- end ! -->
+	
+
+	
+	<h2 class="ins">Javascript写法</h2>
+	<div class="ins">
+		<input name="chk01" class="chk1" type="checkbox" value="0" mod-title="单选01" checked />
+		<input name="chk01" class="chk1" type="checkbox" value="1" mod-title="单选02" />
+		<input name="chk01" class="chk1" type="checkbox" value="2" mod-title="单选03" />
+		<input name="chk01" class="chk1" type="checkbox" value="3" mod-title="单选04" />
+		<input name="chk01" class="chk1" type="checkbox" value="4" mod-title="单选05" />
+		<input name="chk01" class="chk1" type="checkbox" value="" mod-title="其他" mod-format="other"  />
+	</div>
+	<pre class="brush:js;">
+//javascript
+mod.widget(".chk1");
+	</pre>
+
+	<h2 class="ins">mod-widget(target,op) 参数说明</h2>
+	<table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>target</td>
+				<td>{object|string}</td>
+				<td>需要执行模块化的对象</td>
+			</tr>
+			<tr>
+				<td>op</td>
+				<td>{object}</td>
+				<td>
+					参数设置
+					<table class="ins">
+						<thead>
+							<tr>
+								<td>属性</td>
+								<td>类型</td>
+								<td>支持版本</td>
+								<td>说明</td>
+							</tr>
+						</thead>
+						<tbody>
+							
+							<tr>
+								<td>required</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>是否为必填项 默认 false</td>
+							</tr>
+							<tr>
+								<td>errorText</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>设置校验内容时错误的提示语</td>
+							</tr>
+							<tr>
+								<td>defaultText</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>设置控件默认的提示语</td>
+							</tr>
+							
+							<tr>
+								<td>title</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>模块名称(checkbox,radio 用参数)</td>
+							</tr>
+							<tr>
+								<td>img</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>图片地址(checkbox,radio 用参数)</td>
+							</tr>
+							<tr>
+								<td>title</td>
+								<td>{string}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>模块名称(checkbox,radio 用参数)</td>
+							</tr>
+							<tr>
+								<td>imgWidth</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>图片宽度，默认 100(checkbox,radio 用参数)</td>
+							</tr>
+							<tr>
+								<td>imgHeight</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+								<td>图片高度，默认 100(checkbox,radio 用参数)</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+</div>
+	
+
+
+</body>
+</html>
+<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+<script>
+mod.widget(".chk1");
+</script>
+
