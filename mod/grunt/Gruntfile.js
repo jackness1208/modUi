@@ -31,7 +31,7 @@ module.exports = function(grunt) {
                 
             }
         };
-
+    
 
     // 项目配置
     grunt.initConfig(initHandle({
@@ -61,13 +61,13 @@ module.exports = function(grunt) {
             grunt.task.run(['uglify']);
 
         }
-    }
+    });
+
     grunt.registerTask('default', function() {
 
         var myConfig = grunt.config.get(),
             helpArr = [],
             fAttr, fargu;
-        
         helpArr.push('# ==============');
 
         for(var key in myConfig){
@@ -89,7 +89,6 @@ module.exports = function(grunt) {
         helpArr.push('# 参数列表 - 同uglify一致');
 
         console.log(helpArr.join("\n"))
-        
 
 
     });

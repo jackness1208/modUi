@@ -263,10 +263,24 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 								<td>异步请求的参数</td>
 							</tr>
 							<tr>
-								<td>actionCallback</td>
+								<td>actionCallback(json, param)</td>
 								<td>{function}</td>
 								<td><strong class="blue">&gt;= 1.0</strong></td>
-								<td>异步请求成功后执行的方法</td>
+								<td>
+                                    异步请求成功后执行的方法
+                                    <table class="ins">
+										<tr>
+											<td>@param json</td>
+											<td>{object}</td>
+                                            <td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@param param</td>
+											<td>{object}</td>
+                                            <td>提交表单时提交的数据</td>
+										</tr>
+									</table>
+                                </td>
 							</tr>
 							<tr>
 								<td>onload</td>
@@ -518,12 +532,24 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 											</tr>
 											
 											<tr>
-												<td>actionCallback</td>
+												<td>actionCallback(json, param)</td>
 												<td>{function}</td>
 												<td><strong class="blue">&gt;= 1.0</strong></td>
 												<td>
 													提交表单成功后执行的方法。<br>
 													submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效。
+                                                    <table class="ins">
+                                                        <tr>
+                                                            <td>@param json</td>
+                                                            <td>{object}</td>
+                                                            <td>服务器返回的数据</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@param param</td>
+                                                            <td>{object}</td>
+                                                            <td>提交表单时提交的数据</td>
+                                                        </tr>
+                                                    </table>
 												</td>
 											</tr>
 											<tr>
@@ -566,28 +592,23 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 											</tr>
 
 											<tr>
-												<td>submitCallback(json)</td>
+												<td>submitCallback(json, param)</td>
 												<td>{function}</td>
 												<td><strong class="blue">&gt;= 1.0</strong></td>
 												<td>
 													表单提交后返回的 json数据；<strong class="blue">当设置了此方法后，actionCallback方法将失效</strong>
-													<table class="ins">
-														<thead>
-															<tr>
-																<td>属性</td>
-																<td>类型</td>
-																<td width="70">支持版本</td>
-																<td>说明</td>
-															</tr>
-														</thead>
-														<tr>1
-															<td>@param json</td>
-															<td>{object}</td>
-															<td><strong class="blue">&gt;= 1.0</strong></td>
-															<td>表单提交后返回的 json数据</td>
-														</tr>
-														
-													</table>
+												    <table class="ins">
+                                                        <tr>
+                                                            <td>@param json</td>
+                                                            <td>{object}</td>
+                                                            <td>服务器返回的数据</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@param param</td>
+                                                            <td>{object}</td>
+                                                            <td>提交表单时提交的数据</td>
+                                                        </tr>
+                                                    </table>	
 												</td>
 											</tr>
 											<tr>
@@ -602,6 +623,32 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 												<td><strong class="blue">&gt;= 1.0</strong></td>
 												<td>状态信息对应的json 属性 默认与Config一致</td>
 											</tr>
+                                            <tr>
+                                                <td>onresponse(json)</td>
+                                                <td>{function}</td>
+                                                <td><strong class="blue">&gt;= 1.4.3</strong></td>
+                                                <td>
+                                                    提交表单返回后的预处理函数
+                                                    <table class="ins">
+                                                        <tr>
+                                                            <td>@param data</td>
+                                                            <td>{object}</td>
+                                                            <td>服务器返回的数据</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@return data</td>
+                                                            <td>{object}</td>
+                                                            <td>处理后的数据</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>successCode</td>
+                                                <td>{string|number}</td>
+                                                <td><strong class="blue">&gt;= 1.4.3</strong></td>
+                                                <td>成功返回状态码属性 successCode， 默认值为 bs_config.js 中的设定值 config.ajax.successCode</td>
+                                            </tr>
 										</tbody>
 									</table>
 								</td>
@@ -648,12 +695,24 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 											</tr>
 											
 											<tr>
-												<td>actionCallback</td>
+												<td>actionCallback(json, param)</td>
 												<td>{function}</td>
 												<td><strong class="blue">&gt;= 1.0</strong></td>
 												<td>
 													提交表单成功后执行的方法。<br>
 													submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效。
+                                                    <table class="ins">
+                                                        <tr>
+                                                            <td>@param json</td>
+                                                            <td>{object}</td>
+                                                            <td>服务器返回的数据</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@param param</td>
+                                                            <td>{object}</td>
+                                                            <td>提交表单时提交的数据</td>
+                                                        </tr>
+                                                    </table>
 												</td>
 											</tr>
 											<tr>
@@ -690,36 +749,30 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 																<td><strong class="blue">&gt;= 1.0</strong></td>
 																<td>返回表单提交的数据，返回 false 则不继续提交表单</td>
 															</tr>
+                                                            
 														</tbody>
 													</table>
 												</td>
 											</tr>
-
+                                        
 											<tr>
-												<td>submitCallback(json)</td>
+												<td>submitCallback(json, param)</td>
 												<td>{function}</td>
 												<td><strong class="blue">&gt;= 1.0</strong></td>
 												<td>
 													表单提交后返回的 json数据；<strong class="blue">当设置了此方法后，actionCallback方法将失效</strong>
 													<table class="ins">
-														<thead>
-															<tr>
-																<td>属性</td>
-																<td>类型</td>
-																<td width="70">支持版本</td>
-																<td>说明</td>
-															</tr>
-														</thead>
-														<tbody>
-															<tr>
-																<td>@param json</td>
-																<td>{object}</td>
-																<td><strong class="blue">&gt;= 1.0</strong></td>
-																<td>表单提交后返回的 json数据</td>
-															</tr>
-														</tbody>
-														
-													</table>
+                                                        <tr>
+                                                            <td>@param json</td>
+                                                            <td>{object}</td>
+                                                            <td>服务器返回的数据</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@param param</td>
+                                                            <td>{object}</td>
+                                                            <td>提交表单时提交的数据</td>
+                                                        </tr>
+                                                    </table>
 												</td>
 											</tr>
 											<tr>
@@ -776,12 +829,24 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 															</tr>
 															
 															<tr>
-																<td>actionCallback</td>
+                                                                <td>actionCallback(json, param)</td>
 																<td>{function}</td>
 																<td><strong class="blue">&gt;= 1.0</strong></td>
 																<td>
 																	提交表单成功后执行的方法。<br>
 																	submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效。
+                                                                    <table class="ins">
+                                                                        <tr>
+                                                                            <td>@param json</td>
+                                                                            <td>{object}</td>
+                                                                            <td>服务器返回的数据</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>@param param</td>
+                                                                            <td>{object}</td>
+                                                                            <td>提交表单时提交的数据</td>
+                                                                        </tr>
+                                                                    </table>
 																</td>
 															</tr>
 															<tr>
@@ -818,30 +883,23 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 															</tr>
 
 															<tr>
-																<td>submitCallback(json)</td>
+																<td>submitCallback(json, param)</td>
 																<td>{function}</td>
 																<td><strong class="blue">&gt;= 1.0</strong></td>
 																<td>
 																	表单提交后返回的 json数据；<strong class="blue">当设置了此方法后，actionCallback方法将失效</strong>
 																	<table class="ins">
-																		<thead>
-																			<tr>
-																				<td>属性</td>
-																				<td>类型</td>
-																				<td width="70">支持版本</td>
-																				<td>说明</td>
-																			</tr>
-																		</thead>
-																		<tbody>
-																			<tr>
-																				<td>@param json</td>
-																				<td>{object}</td>
-																				<td><strong class="blue">&gt;= 1.0</strong></td>
-																				<td>表单提交后返回的 json数据</td>
-																			</tr>
-																		</tbody>
-																		
-																	</table>
+                                                                        <tr>
+                                                                            <td>@param json</td>
+                                                                            <td>{object}</td>
+                                                                            <td>服务器返回的数据</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>@param param</td>
+                                                                            <td>{object}</td>
+                                                                            <td>提交表单时提交的数据</td>
+                                                                        </tr>
+                                                                    </table>
 																</td>
 															</tr>
 															<tr>
@@ -856,6 +914,32 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 																<td><strong class="blue">&gt;= 1.0</strong></td>
 																<td>状态信息对应的json 属性 默认与Config一致</td>
 															</tr>
+                                                            <tr>
+                                                                <td>onresponse(json)</td>
+                                                                <td>{function}</td>
+                                                                <td><strong class="blue">&gt;= 1.4.3</strong></td>
+                                                                <td>
+                                                                    提交表单返回后的预处理函数
+                                                                    <table class="ins">
+                                                                        <tr>
+                                                                            <td>@param data</td>
+                                                                            <td>{object}</td>
+                                                                            <td>服务器返回的数据</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>@return data</td>
+                                                                            <td>{object}</td>
+                                                                            <td>处理后的数据</td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>successCode</td>
+                                                                <td>{string|number}</td>
+                                                                <td><strong class="blue">&gt;= 1.4.3</strong></td>
+                                                                <td>成功返回状态码属性 successCode， 默认值为 bs_config.js 中的设定值 config.ajax.successCode</td>
+                                                            </tr>
 														</tbody>
 													</table>
 												</td>
@@ -954,6 +1038,32 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 								<td><strong class="blue">&gt;= 1.0</strong></td>
 								<td>数据。当填写有数据并且 action 不填时，直接输出数据，并不作分页处理</td>
 							</tr>
+                            <tr>
+								<td>onresponse(json)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>
+									提交表单返回后的预处理函数
+									<table class="ins">
+										<tr>
+											<td>@param data</td>
+											<td>{object}</td>
+											<td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@return data</td>
+											<td>{object}</td>
+											<td>处理后的数据</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+                            <tr>
+                                <td>successCode</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>成功返回状态码属性 successCode， 默认值为 bs_config.js 中的设定值 config.ajax.successCode</td>
+							</tr>
 						</tbody>
 					</table>
 				</td>
@@ -1027,7 +1137,8 @@ mod.grid("#modTb",{action:"http://lib9.service.kugou.com/websearch/index.php"})
 										<tbody>
 											<tr>
 												<td>type</td>
-												<td>{string}</td>
+                                                <td>{string}</td>
+                                                <td>&gt;=1.0</td>
 												<td>
 													"checked" - 当前页选中的数据<br>
 													tr - 当前行的数据<br>

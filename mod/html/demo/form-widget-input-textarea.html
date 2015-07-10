@@ -183,10 +183,24 @@ mod.widget("#textarea1",{format:"",required:true});
 								<td>异步校验的途径 ajax|jsonp</td>
 							</tr>
 							<tr>
-								<td>actionCallback</td>
+								<td>actionCallback(json, param)</td>
 								<td>{function}</td>
 								<td><strong class="blue">&gt;= 1.0</strong></td>
-								<td>异步校验成功后执行的方法</td>
+								<td>
+                                    异步校验成功后执行的方法
+                                    <table class="ins">
+										<tr>
+											<td>@param json</td>
+											<td>{object}</td>
+                                            <td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@param param</td>
+											<td>{object}</td>
+                                            <td>提交表单时提交的数据</td>
+										</tr>
+									</table>
+                                </td>
 							</tr>
 							<tr>
 								<td>linked</td>
@@ -212,6 +226,32 @@ mod.widget("#textarea1",{format:"",required:true});
 								<td>{string|number}</td>
 								<td><strong class="blue">&gt;= 1.0</strong></td>
 								<td>状态信息对应的json 属性 默认与Config一致</td>
+							</tr>
+                            <tr>
+								<td>onresponse(json)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>
+									提交表单返回后的预处理函数
+									<table class="ins">
+										<tr>
+											<td>@param data</td>
+											<td>{object}</td>
+											<td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@return data</td>
+											<td>{object}</td>
+											<td>处理后的数据</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+                            <tr>
+                                <td>successCode</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>成功返回状态码属性 successCode， 默认值为 bs_config.js 中的设定值 config.ajax.successCode</td>
 							</tr>
 						</tbody>
 					</table>

@@ -20,7 +20,7 @@
 			
 			<tr>
 				<th>
-					<label id="city">城市选择</label>
+					<label for="city">城市选择</label>
 				</th>
 				<td>
 					<select id="city" name="city" mod-format="city"><option value="广州市">广州市</option></select>
@@ -470,7 +470,47 @@ mod.widget(target,{format:"select"});
 								<td>actionCallback <i class="bs_icon_new"></i></td>
 								<td>{function}</td>
 								<td><strong class="blue">&gt;= 1.37</strong></td>
-								<td>异步获取数据后回调方法</td>
+								<td>
+                                    异步获取数据后回调方法
+                                    <table class="ins">
+										<tr>
+											<td>@param json</td>
+											<td>{object}</td>
+                                            <td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@param param</td>
+											<td>{object}</td>
+                                            <td>提交表单时提交的数据</td>
+										</tr>
+									</table>
+                                </td>
+							</tr>
+                            <tr>
+								<td>onresponse(json)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>
+									提交表单返回后的预处理函数
+									<table class="ins">
+										<tr>
+											<td>@param data</td>
+											<td>{object}</td>
+											<td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@return data</td>
+											<td>{object}</td>
+											<td>处理后的数据</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+                            <tr>
+                                <td>successCode</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>成功返回状态码属性 successCode， 默认值为 bs_config.js 中的设定值 config.ajax.successCode</td>
 							</tr>
 						</tbody>
 					</table>

@@ -18,7 +18,6 @@
 	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
 
 	<div class="ins">
-		<div class="bs_mod01" mod-seted="false" mod-title="模板标题" mod-title-left="左侧文字" mod-title-right="右侧文字">
 			<form class="bs_form" mod-action="ajax/setForm.php" mod-method="get" mod-action-type="ajax" mod-action-param='{"status":1}' mod-action-callback="alert('提交成功')" mod-message-key="error">
 				<table class="bs_table_s0">
 					<tr>
@@ -38,7 +37,6 @@
 					</tr>
 				</table>
 			</form>
-		</div>
 	</div>
 	<pre class="brush:xml;">
 &lt;form class="bs_form" mod-action="http://lib9.service.kugou.com/websearch/index.php" mod-method="get" mod-action-type="jsonp" mod-action-param='{"cmd":100, "keyword":"", "page":1, "pagesize":20 }' mod-action-callback="alert('提交成功')" mod-message-key="error"&gt;
@@ -65,27 +63,25 @@
 	<h2 class="ins">Javascript写法</h2>
 	<p class="ins">submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效，提交完成之后的操作 移交给 submitCallback(json) 函数并把服务器返回的信息全部传给 该函数。</p>
 	<div class="ins">
-		<div class="bs_mod01" mod-seted="false" mod-title="模板标题" mod-title-left="左侧文字" mod-title-right="右侧文字">
-			<form id="form1">
-				<table class="bs_table_s0">
-					<tr>
-						<th>
-							<label for="keyword">关键字</label>
-						</th>
-						<td>
-							<input id="keyword" width="200" name="keyword" type="text">
-						</td>
-					</tr>
-					<tr>
-						<th></th>
-						<td>
-							<input type="button" value="提交" mod-type="submit" />
-							<input type="button" value="重置" mod-type="clear" />
-						</td>
-					</tr>
-				</table>
-			</form>
-		</div>
+        <form id="form1">
+            <table class="bs_table_s0">
+                <tr>
+                    <th>
+                        <label for="keyword">关键字</label>
+                    </th>
+                    <td>
+                        <input id="keyword" width="200" name="keyword" type="text">
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <input type="button" value="提交" mod-type="submit" />
+                        <input type="button" value="重置" mod-type="clear" />
+                    </td>
+                </tr>
+            </table>
+        </form>
 	</div>
 	<pre class="brush:xml;">
 &lt;!-- html --&gt;
@@ -162,9 +158,9 @@ mod.form("#form1",{
 					<table class="ins">
 						<thead>
 							<tr>
-								<td>属性</td>
+								<td width="200">属性</td>
 								<td>类型</td>
-								<td>支持版本</td>
+                                <td width="60">支持版本</td>
 								<td>说明</td>
 							</tr>
 						</thead>
@@ -200,12 +196,24 @@ mod.form("#form1",{
 								<td>假如 target 为某标签时 将执行 表单渲染<br>属性同 mod.widget() 中option 一致</td>
 							</tr>
 							<tr>
-								<td>actionCallback</td>
+								<td>actionCallback(json, param)</td>
 								<td>{function}</td>
 								<td><strong class="blue">&gt;= 1.0</strong></td>
 								<td>
 									提交表单成功后执行的方法。<br>
 									submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效。
+                                    <table class="ins">
+										<tr>
+											<td>@param json</td>
+											<td>{object}</td>
+                                            <td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@param param</td>
+											<td>{object}</td>
+                                            <td>提交表单时提交的数据</td>
+										</tr>
+									</table>
 								</td>
 							</tr>
 							<tr>
@@ -242,26 +250,56 @@ mod.form("#form1",{
 							</tr>
 
 							<tr>
-								<td>submitCallback(json)</td>
+								<td>submitCallback(json, param)</td>
 								<td>{function}</td>
 								<td><strong class="blue">&gt;= 1.0</strong></td>
 								<td>
 									表单提交后返回的 json数据；<strong class="blue">当设置了此方法后，actionCallback方法将失效</strong>
 									<table class="ins">
-										<tr>1
+										<tr>
 											<td>@param json</td>
 											<td>{object}</td>
-											<td>表单提交后返回的 json数据</td>
+                                            <td>服务器返回的数据</td>
 										</tr>
-										
+										<tr>
+											<td>@param param</td>
+											<td>{object}</td>
+                                            <td>提交表单时提交的数据</td>
+										</tr>
 									</table>
 								</td>
 							</tr>
 							<tr>
-								<td>onload <i class="bs_new_icon"></i></td>
+								<td>onload</td>
 								<td>{function}</td>
 								<td><strong class="blue">&gt;= 1.33</strong></td>
 								<td>表格数据初始化后执行的方法</td>
+							</tr>
+                            <tr>
+								<td>onresponse(json)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>
+									提交表单返回后的预处理函数
+									<table class="ins">
+										<tr>
+											<td>@param data</td>
+											<td>{object}</td>
+											<td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@return data</td>
+											<td>{object}</td>
+											<td>处理后的数据</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+                            <tr>
+                                <td>successCode</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>成功返回状态码属性 successCode， 默认值为 bs_config.js 中的设定值 config.ajax.successCode</td>
 							</tr>
 						</tbody>
 					</table>

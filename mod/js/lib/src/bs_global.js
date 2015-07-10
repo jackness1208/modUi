@@ -1,9 +1,9 @@
 /**
- * $Copyright: $
- * $Creator: jackNEss Lau $
- * $Author: liudaojie $
- * $Date: $
- * $Version: $
+ * $Copyright: 2015, jackness.org $
+ * $Creator: jackness Lau $
+ * $Author: jackness Lau $
+ * $Date: Sun Mar 22 2015 22:58:08 GMT+0800 (CST) $
+ * $Version: 1.42 $
  */
 !function(global,undefined){
 
@@ -2023,6 +2023,7 @@ moduleBuild.prototype = {
 	 *                  - statusKey      [string]        状态信息对应的json 属性 默认与Config一致
 	 *                  - onsubmit       [function]      提交前触发的事件.返回表单提交的数据，返回 false 则不继续提交表单
 	 *                  - submitCallback [function]      表单提交后返回的 json数据；设置了此方法后，actionCallback方法将失效
+	 *                  - onresponse     [function]      数据返回后触发的事件，用于对返回的内容进行格式化
 	 */
 	form: function(target,op) {
 		var me = this,
@@ -2040,6 +2041,7 @@ moduleBuild.prototype = {
 				onsubmit:function(){},
 
 				submitCallback:function(){},
+				onresponse:function(){},
 
 				onload:function(){},
 
@@ -2050,8 +2052,10 @@ moduleBuild.prototype = {
 
 				//状态信息对应的json 属性
 				statusKey:global.Config.ajax.key.status,
-
-				reset:false
+                //成功返回的状态码
+                successCode: global.Config.ajax.successCode,
+				
+                reset:false
 			},
 			key;
 
@@ -2133,7 +2137,7 @@ moduleBuild.prototype = {
 						attr.targetConfig = [attr.targetConfig];
 					}
 					sendHandle = function(param){
-						!isNaNFn(attr.onsubmit) && (param = attr.onsubmit(param));
+                        !isNaNFn(attr.onsubmit) && (param = attr.onsubmit(param));
 						if(!param){
 							return;	
 						}
@@ -2144,7 +2148,11 @@ moduleBuild.prototype = {
 								nowPage;
 
 							attr.search?(
-								nowPage = request.hash(this.replace("#","") + "Cur") || 0,
+								option.reset?(
+                                    nowPage = 0
+                                ):(
+                                    nowPage = request.hash(this.replace("#","") + "Cur") || 0
+                                ),
 								attr.search = false
 							):(
 								nowPage = 0
@@ -2161,7 +2169,6 @@ moduleBuild.prototype = {
 							}
 
 							fConfig.page = nowPage;
-							
 							
 							$(this + "").each(function(){
 								me.grid(this,fConfig,true);
@@ -2197,7 +2204,7 @@ moduleBuild.prototype = {
 								},attr.timeout);
 								submitBtn.disable();
 								param._ = new Date().getTime();
-
+                                
 								$.ajax({
 									"url":attr.action,
 									"data":param,
@@ -2205,9 +2212,13 @@ moduleBuild.prototype = {
 										if(mod.loading.isTimeout){return;} 
 										mod.loading.clear();
 										submitBtn.enable();
+                                        
+                                        if(!isNaNFn(attr.onresponse)){
+                                            json = attr.onresponse(json);
+                                        }
 
 										if(!isNaNFn(attr.submitCallback)){
-											attr.submitCallback(json);
+											attr.submitCallback(json, param);
 											return;
 										}
 
@@ -2215,8 +2226,10 @@ moduleBuild.prototype = {
 											status: getObjByKey(json,attr.statusKey),
 											msg: getObjByKey(json,attr.messageKey)
 										};
+                                        
+                                        
 
-										if(myAttr.status == 1){
+                                        if(myAttr.status == attr.successCode){
 											attr.actionCallback && attr.actionCallback(json,param);
 										} else {
 											bsPopup("error",myAttr.msg);
@@ -2331,6 +2344,7 @@ moduleBuild.prototype = {
 	 *                  - actionType     [string]        异步校验的途径 ajax|jsonp
 	 *                  - actionCallback [function]      异步校验成功后执行的方法
 	 *                  - submitCallback [function]      异步校验返回结果后执行的方法（覆盖 actionCallback）
+	 *                  - onresponse     [function]      数据返回后触发的事件，用于对返回的内容进行格式化
 	 *                  - onsubmit       [function]      异步校验提交前的处理函数
 	 *
 	 *
@@ -2385,6 +2399,7 @@ moduleBuild.prototype = {
 
 				onsubmit:function(){},
 				submitCallback:function(){},
+                onresponse: function(){},
 
 				//日历控件用参数：开始日期，结束日期
 				dateStart:undefined,
@@ -2423,7 +2438,10 @@ moduleBuild.prototype = {
 				messageKey:global.Config.ajax.key.message,
 
 				//状态信息对应的json 属性
-				statusKey:global.Config.ajax.key.status
+				statusKey:global.Config.ajax.key.status,
+                
+                //成功返回的状态码
+                successCode: global.Config.ajax.successCode
 			},
 			
 			ajaxCheck = function(input,callback){
@@ -2455,16 +2473,20 @@ moduleBuild.prototype = {
 							return;
 						}
 						input.srcBox.loading.clear();
+                        
+                        if(!isNaNFn(attr.onresponse)){
+                            json = attr.onresponse(json);
+                        }
 
 						if(!isNaNFn(attr.submitCallback)){
-							attr.submitCallback(json);
+							attr.submitCallback(json, param);
 						}
 
 						var myAttr = {
 							status: getObjByKey(json,attr.statusKey),
 							msg: getObjByKey(json,attr.messageKey)
 						};
-						if(myAttr.status == 1){
+                        if(myAttr.status == attr.successCode){
 							input.isOk = true;
 							input.oValue = input.value;
 
@@ -2764,9 +2786,6 @@ moduleBuild.prototype = {
 											pack.upload(that,attr); 
 											break;
 
-										case "multi-song-upload": 
-											pack.multiSongUpload(that,attr); 
-											break;
 
 										case "tags": 
 											pack.tags(that,attr); 
@@ -2862,7 +2881,7 @@ moduleBuild.prototype = {
 					that.extCheck = !isNaNFn(attr.oncheck)? function(){
 						var r = attr.oncheck(that.value);
 
-						if(r === undefined || true){
+						if(r === undefined || r === true){
 							return true;
 
 						} else {
@@ -2914,7 +2933,7 @@ moduleBuild.prototype = {
 
 				//上传组件
 				upload:function(elm,attr){
-					var that = elm,
+                    var that = elm,
 						now = new Date().getTime(),
 						myIndex = $(that).parent().children().index(that),
 						myPartName = attr.format.replace("-",""),
@@ -2961,19 +2980,25 @@ moduleBuild.prototype = {
 					
 					global[flashCallbackName] = function(jsonstr){
 
-						var json = JSON.parse(jsonstr),
-							myAttr = {
+						var json = JSON.parse(jsonstr);
+                        
+                        if(!isNaNFn(attr.onresponse)){
+                            json = attr.onresponse(json);
+                        }
+
+						var myAttr = {
 								status: getObjByKey(json,attr.statusKey),
 								data: getObjByKey(json,attr.dataKey),
 								msg: getObjByKey(json,attr.messageKey)
 							};
+                        
 
 						if(!isNaNFn(attr.submitCallback)){
 							attr.submitCallback(json);
 							return;
 						}
 
-						if(myAttr.status == 1){
+						if(myAttr.status == attr.successCode){
 							attr.actionCallback && attr.actionCallback(myAttr.data);
 						} else {
 							that.value = "";
@@ -3001,65 +3026,6 @@ moduleBuild.prototype = {
 					};
 					that.srcBox.srcItems.push(that);
 				},
-
-				//多个歌曲上传(物理上应该是要改的，接口什么的都没)
-				multiSongUpload:function(elm,attr){
-					var that = elm,
-						myIndex = $(that).parent().children().index(that),
-						flashArea,
-						now = new Date().getTime(),
-						flashCallbackName;
-
-					if(myIndex - 1 >= 0 && that.parentNode.children[myIndex - 1].className == "bs_flash_multisong"){
-						flashArea = that.parentNode;
-
-					} else {
-						flashArea = document.createElement("div");
-						flashArea.id = that.name + "multiSongUpload" + now;
-						flashArea.className = "bs_flash_multisong";
-						flashCallbackName = flashArea.id + "Callback";
-						that.parentNode.insertBefore(flashArea,that);
-					}
-
-					
-					that.style.display = "none";
-
-					flashArea.innerHTML = flash.init(flashArea.id,{flashUrl:global.Config.domain + global.Config.swf.multiSongUpload + "?skin="+ global.Config.domain + global.Config.swf.multiSongUploadSkin,width:605,height:308});
-					
-
-					//..
-
-					!that.defaultText && (that.defaultText = "请上传");
-					!that.errorText && (that.errorText = "不能为空");
-					
-
-					that.myReg = makeFunction(attr.format);
-					that.localCheck = function(){
-						that.value = that.value.trim();
-						if(that.value === ""){
-							that.srcBox.error(that.defaultText);
-							return false;
-
-						}
-
-						if(that.myReg instanceof RegExp){
-							
-							if(that.value.match(that.myReg)){
-								return that.extCheck();
-							} else {
-								that.srcBox.error(that.errorText);
-								return false;
-							}
-
-						}
-
-						return that.extCheck();
-					};
-					that.srcBox.srcItems.push(that);
-
-					
-				},
-
 				//标签控件
 				tags:function(elm,attr){
 					var that = elm,
@@ -3518,7 +3484,7 @@ moduleBuild.prototype = {
 												};
 
 
-												if(myAttr.status == 1){
+                                                if(myAttr.status == attr.successCode){
 													drawbox.myAutos = myAttr.data;
 
 												} else {
@@ -3970,7 +3936,7 @@ moduleBuild.prototype = {
 											data: getObjByKey(json,attr.dataKey),
 											msg: getObjByKey(json,attr.messageKey)
 										};
-										if(myAttr.status == 1){
+										if(myAttr.status == attr.successCode){
 											that.reset();
 											var fo;
 											for(var i = 0, len = myAttr.data.length; i < len; i++){
@@ -3999,7 +3965,7 @@ moduleBuild.prototype = {
 											that.linked && (that.ajaxData[that.linked.value] = undefined);
 										}
 
-										attr.actionCallback && attr.actionCallback();
+										attr.actionCallback && attr.actionCallback(json, param);
 										attr.defaultValue && !function(){
 											for(i = 0, len = that.options.length; i < len; i++){
 												fs = that.options[i];
@@ -4028,38 +3994,48 @@ moduleBuild.prototype = {
 					switch(attr.format){
 
 						case "city":
-							selectElm = document.createElement("select");
-							selectElm.className = "bs_selectbox";
-							that.parentNode.insertBefore(selectElm,that);
+                            var citiesInit = function(){///{
+                                    selectElm = document.createElement("select");
+                                    selectElm.className = "bs_selectbox";
+                                    that.parentNode.insertBefore(selectElm,that);
 
-							for(key in global.Config.cities){
-								if(global.Config.cities.hasOwnProperty(key)){
-									selectElm.options.add(new Option(key||"请选择",key));
-								}
-							}
+                                    for(key in global.Config.data.cities){
+                                        if(global.Config.data.cities.hasOwnProperty(key)){
+                                            selectElm.options.add(new Option(key||"请选择",key));
+                                        }
+                                    }
 
-							onchangeHandle = function(){
-								that.innerHTML = "";
-								for(var i = 0, fs, len = global.Config.cities[this.value].length; i < len; i++){
-									fs = global.Config.cities[this.value][i];
-									that.options.add(new Option(fs,fs));
-								}
-							};
+                                    onchangeHandle = function(){
+                                        that.innerHTML = "";
+                                        for(var i = 0, fs, len = global.Config.data.cities[this.value].length; i < len; i++){
+                                            fs = global.Config.data.cities[this.value][i];
+                                            that.options.add(new Option(fs,fs));
+                                        }
+                                    };
 
-							$(selectElm).change(onchangeHandle);
-							
+                                    $(selectElm).change(onchangeHandle);
+                                    
 
-							if(myValue){
-								for(key in global.Config.cities){
-									if(global.Config.cities.hasOwnProperty(key) && new RegExp("[,]*"+ myValue +"[,]*","g").test(global.Config.cities[key].join(","))){
-										selectElm.value = key;
-										onchangeHandle.call(selectElm);
-										that.value = myValue;
-										break;
-									}
-								}
-							}
-							
+                                    if(myValue){
+                                        for(key in global.Config.data.cities){
+                                            if(global.Config.data.cities.hasOwnProperty(key) && new RegExp("[,]*"+ myValue +"[,]*","g").test(global.Config.data.cities[key].join(","))){
+                                                selectElm.value = key;
+                                                onchangeHandle.call(selectElm);
+                                                that.value = myValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                };///}
+                            if(!global.Config.data.cities){
+                                global.jcLoader({
+                                    url: global.Config.domain + 'js/data/cities.js',
+                                    type: 'js'
+                                }, citiesInit);
+                            } else {
+                                citiesInit();
+                            }
+						
 							break;
 
 						default:
@@ -4722,8 +4698,10 @@ moduleBuild.prototype = {
 				actionParam:{},
 				actionCallback:function(){},
 				onload:function(){},
-
-				//当前页(r/w)
+				onsubmit:function(){},
+                onresponse:function(){},
+				
+                //当前页(r/w)
 				page:0,
 				//从第几页开始为第一页
 				pageStart:global.Config.ajax.key.pageStart,
@@ -4761,8 +4739,11 @@ moduleBuild.prototype = {
 
 				//状态信息对应的json 属性
 				statusKey:global.Config.ajax.key.status,
-
-				//异步请求最大超时时间 0 为 跟 Config 默认
+                
+                //成功返回的状态码
+                successCode: global.Config.ajax.successCode,
+			
+                //异步请求最大超时时间 0 为 跟 Config 默认
 				timeout:0,
 
 				//是否可编辑
@@ -4776,11 +4757,15 @@ moduleBuild.prototype = {
 					actionCallback:function(){},
 					onsubmit:function(){},
 					submitCallback:function(){},
+					onresponse:function(){},
 					//错误信息对应的json 属性
 					messageKey:global.Config.ajax.key.message,
 
 					//状态信息对应的json 属性
-					statusKey:global.Config.ajax.key.status
+					statusKey:global.Config.ajax.key.status,
+                    
+                    //成功返回的状态码
+                    successCode: global.Config.ajax.successCode
 				},
 
 				//是否可删除
@@ -4794,11 +4779,15 @@ moduleBuild.prototype = {
 					actionCallback:function(){},
 					onsubmit:function(){},
 					submitCallback:function(){},
+					onresponse:function(){},
 					//错误信息对应的json 属性
 					messageKey:global.Config.ajax.key.message,
 
 					//状态信息对应的json 属性
 					statusKey:global.Config.ajax.key.status,
+                    
+                    //成功返回的状态码
+                    successCode: global.Config.ajax.successCode,
 
 					batchConfig:{
 						enable:false,
@@ -4808,11 +4797,15 @@ moduleBuild.prototype = {
 						actionCallback:function(){},
 						onsubmit:function(){},
 						submitCallback:function(){},
+						onresponse:function(){},
 						//错误信息对应的json 属性
 						messageKey:global.Config.ajax.key.message,
 
 						//状态信息对应的json 属性
-						statusKey:global.Config.ajax.key.status
+						statusKey:global.Config.ajax.key.status,
+                        
+                        //成功返回的状态码
+                        successCode: global.Config.ajax.successCode
 					}
 				},
 
@@ -5206,6 +5199,7 @@ moduleBuild.prototype = {
 				data.length > 0 && theadInit(data[0]);
 				
 				target.checkall2.checked = false;
+				target.checkall.checked = false;
 				
 				
 				//tr列表
@@ -5281,9 +5275,12 @@ moduleBuild.prototype = {
 				} else {
 					ftr.chk.onclick = function(e){
 						stopBubble(e);
-						target.checkall.check();
-						target.checkall2.check();
-						this.checked?$(this).parent().parent().addClass("cur"):$(this).parent().parent().removeClass("cur");
+                        var that = this;
+                        setTimeout(function(){
+                            target.checkall.check();
+                            target.checkall2.check();
+                            that.checked?$(that).parent().parent().addClass("cur"):$(that).parent().parent().removeClass("cur");
+                        }, 1)	
 					};
 
 					ftr.onclick = function(e){
@@ -5362,13 +5359,17 @@ moduleBuild.prototype = {
 									}
 									
 									mod.loading.clear();
+                                    
+                                    if(!isNaNFn(she.myAttr.onresponse)){
+                                        json = she.myAttr.onresponse(json);
+                                    }
 
 									var attr = {
 										status: getObjByKey(json,she.myAttr.statusKey),
 										msg: getObjByKey(json,she.myAttr.messageKey)
 									};
 
-									if(attr.status == 1){
+									if(attr.status == attr.successCode){
 										$(ftr).find(".view_item").css("display","");
 										$(ftr).find(".edit_item").css("display","none");
 
@@ -5390,14 +5391,14 @@ moduleBuild.prototype = {
 									}
 
 									if(!isNaNFn(she.myAttr.submitCallback)){
-										she.myAttr.submitCallback(json);
+										she.myAttr.submitCallback(json, param);
 										return;
 									} 
 
 									
 
 
-									if(attr.status == 1){
+									if(attr.status == she.myAttr.successCode){
 										mod.dialog("success",{content:"操作成功",timeout:global.Config.popup.autoHide});
 										she.myAttr.actionCallback && she.myAttr.actionCallback(json,param);
 
@@ -5412,7 +5413,11 @@ moduleBuild.prototype = {
 								"type":she.myAttr.method || "GET"
 							});
 						}:function(json){
-							var param = {};
+							if(!isNaNFn(she.myAttr.onresponse)){
+                                json = she.myAttr.onresponse(json);
+                            }
+
+                            var param = {};
 							for(i = 0, len = ftr.checkItems.length; i < len; i++){
 								fs = ftr.checkItems[i];
 								param[fs.key] = fs.edit.value;
@@ -5432,12 +5437,12 @@ moduleBuild.prototype = {
 							}
 
 							if(!isNaNFn(she.myAttr.submitCallback)){
-								she.myAttr.submitCallback(json);
+								she.myAttr.submitCallback(json, param);
 								return;
 							}
 
 							mod.dialog("success",{content:"操作成功",timeout:global.Config.popup.autoHide});
-							she.actionCallback && she.actionCallback(json);
+							she.actionCallback && she.actionCallback(json, param);
 						},
 
 						checkErrorHandle = function(target,msg){
@@ -5508,7 +5513,9 @@ moduleBuild.prototype = {
 									}
 									
 									mod.loading.clear();
-
+                                    if(!isNaNFn(she.myAttr.onresponse)){
+                                        json = she.myAttr.onresponse(json);
+                                    }
 
 									var attr = {
 										status: getObjByKey(json,she.myAttr.statusKey),
@@ -5517,12 +5524,12 @@ moduleBuild.prototype = {
 									};
 
 									if(!isNaNFn(she.myAttr.submitCallback)){
-										she.myAttr.submitCallback(json);
+										she.myAttr.submitCallback(json, param);
 										return;
 									}
 
 
-									if(attr.status == 1){
+									if(attr.status == attr.successCode){
 										target.remove(ftr,function(data){
 											mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:global.Config.popup.autoHide});
 											she.myAttr.actionCallback && she.myAttr.actionCallback(json,param);
@@ -5882,7 +5889,15 @@ moduleBuild.prototype = {
 
 				fParam[option.pageKey] += option.pageStart;
 				fParam._ = new Date().getTime();
-				$.ajax({
+				
+                if(!isNaNFn(option.onsubmit)){
+                    fParam = option.onsubmit(fParam);
+                }
+                if(!fParam){
+                    return;
+                }
+
+                $.ajax({
 					"url":option.action,
 					"data":fParam,
 					"success":function(json){
@@ -5891,16 +5906,18 @@ moduleBuild.prototype = {
 						}
 						
 						mod.loading.clear();
-
+                        if(!isNaNFn(option.onresponse)){
+                            json = option.onresponse(json);
+                        }
 						var attr = {
 							status: getObjByKey(json,option.statusKey),
 							total: getObjByKey(json,option.totalKey) || 0,
 							data: getObjByKey(json,option.dataKey) || [],
 							msg: getObjByKey(json,option.messageKey)
 						};
+                        
 
-
-						if(attr.status == 1){
+                        if(attr.status == option.successCode){
 							typeof attr.total == "undefined" && (attr.total = attr.data.length);
 							//搜索结果输出
 							target.totalNum.innerHTML = attr.total;
@@ -5916,7 +5933,7 @@ moduleBuild.prototype = {
 							}
 
 							option.onload.call(target,json);
-							option.actionCallback.call(target,json);
+							option.actionCallback.call(target,json, fParam);
 
 						} else {
 							bsPopup("error","数据加载失败:" + attr.msg );
@@ -6220,7 +6237,10 @@ moduleBuild.prototype = {
 							}
 							
 							mod.loading.clear();
-
+                            
+                            if(!isNaNFn(myAttr.onresponse)){
+                                json = myAttr.onresponse(json);
+                            }
 
 							var attr = {
 								status: getObjByKey(json,myAttr.statusKey),
@@ -6229,12 +6249,12 @@ moduleBuild.prototype = {
 							};
 
 							if(!isNaNFn(myAttr.submitCallback)){
-								myAttr.submitCallback(json);
+								myAttr.submitCallback(json, param);
 								return;
 							}
 
 
-							if(attr.status == 1){
+							if(attr.status == myAttr.successCode){
 								target.remove(ftrs,function(data){
 									mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:global.Config.popup.autoHide});
 									myAttr.actionCallback && myAttr.actionCallback(json,param);
@@ -6393,12 +6413,15 @@ moduleBuild.prototype = {
 		//赋值
 		option = modAssignment(option,op);
 
+
+
 		//重构
 		$tar.each(function() {
 
 			var she = this,
 				myClass = "",
 				attr = modAssignment(option,she);
+
 
 
 			if(isEqual(she.opAttr,attr) && !option.reset){
@@ -6442,8 +6465,8 @@ moduleBuild.prototype = {
 				} else if(myLi.className.indexOf("bs_box") != -1){
 					box = myLi;
 					myLi = myLi.parentNode;
-					swh = $(box).find("bs_swh")[0];
-					chk = $(box).find("bs_chk")[0];
+					swh = $(box).find(".bs_swh")[0];
+					chk = $(box).find(".bs_chk")[0];
 
 				} else {
 					return;
@@ -6458,7 +6481,7 @@ moduleBuild.prototype = {
 				$(myLi).find("ul").length !== 0 ? $(box).addClass("bs_withsub"): $(box).removeClass("bs_withsub");
 
 				if(attr.checkbox){
-					$(me).attr("mod-checked")? $(chk).addClass("bs_chk_checked"): $(chk).removeClass("bs_chk_checked");
+					$(me).attr("mod-checked")? $(chk).parent().addClass("bs_chk_checked"): $(chk).parent().removeClass("bs_chk_checked");
 
 					me.href = "javascript:;";
 					me.target = "";
@@ -6494,7 +6517,7 @@ moduleBuild.prototype = {
 					);
 				};
 
-				attr.show && $(swh).trigger("click");
+				attr.show && swh.parentNode.className.indexOf("bs_show") == -1 && $(swh).trigger("click");
 			});
 
 			if(attr.checkbox){
@@ -6537,6 +6560,7 @@ moduleBuild.prototype = {
 						};
 
 						chk.onclick = function(){
+
 							var me = this;
 							if(me.parentNode.className.indexOf("bs_chk_checked") != -1){
 								$(me).parent().removeClass("bs_chk_checked");
@@ -6680,7 +6704,6 @@ moduleBuild.prototype = {
 				attr.defaultValue = attr.defaultValue.split(',');
 			}
 			if(attr.checkbox && isArray(attr.defaultValue)){
-
 				// 等于默认值的 勾上
 				$(she).find(".bs_chk").each(function(){
 					if(attr.defaultValue.indexOf(this.value) != -1){

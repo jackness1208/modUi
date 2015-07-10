@@ -10,6 +10,7 @@
 <body>
 
 <div class="bs_mod01" mod-title="表单控件-图片上传">
+    <p class="ins">flash 上传控件中 是通过 Request Payload 方式传递，传递 键值为 Filedata</p>
 	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
 
 
@@ -200,6 +201,32 @@ mod.widget("#imgUpload1",{
 								<td>{string}</td>
 								<td><strong class="blue">&gt;= 1.40</strong></td>
 								<td>上传文件类型。默认为 jpg,png<br/>多个类型之间用逗号隔开</td>
+                            </tr>
+                            <tr>
+								<td>onresponse(json)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>
+									提交表单返回后的预处理函数
+									<table class="ins">
+										<tr>
+											<td>@param data</td>
+											<td>{object}</td>
+											<td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@return data</td>
+											<td>{object}</td>
+											<td>处理后的数据</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+                            <tr>
+                                <td>successCode</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>成功返回状态码属性 successCode， 默认值为 bs_config.js 中的设定值 config.ajax.successCode</td>
 							</tr>
 						</tbody>
 					</table>

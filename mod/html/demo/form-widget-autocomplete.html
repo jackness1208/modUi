@@ -258,9 +258,9 @@ mod.widget("#ac031",{
 					<table class="ins">
 						<thead>
 							<tr>
-								<td>属性</td>
+								<td width="200">属性</td>
 								<td>类型</td>
-								<td>支持版本</td>
+								<td width="60">支持版本</td>
 								<td>说明</td>
 							</tr>
 						</thead>
@@ -345,7 +345,7 @@ mod.widget("#ac031",{
 							</tr>
 
 							<tr>
-								<td>onsubmit(data)</td>
+                                <td>onsubmit(data)</td>
 								<td>{function}</td>
 								<td><strong class="blue">&gt;= 1.0</strong></td>
 								<td>
@@ -364,11 +364,38 @@ mod.widget("#ac031",{
 									</table>
 								</td>
 							</tr>
+                            
 							<tr>
 								<td>actionDelay</td>
 								<td>{number}</td>
 								<td><strong class="blue">&gt;= 1.38</strong></td>
 								<td>异步请求时，延迟执行时间，默认为 50 ms</td>
+							</tr>
+                            <tr>
+								<td>onresponse(json)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>
+									提交表单返回后的预处理函数
+									<table class="ins">
+										<tr>
+											<td>@param data</td>
+											<td>{object}</td>
+											<td>服务器返回的数据</td>
+										</tr>
+										<tr>
+											<td>@return data</td>
+											<td>{object}</td>
+											<td>处理后的数据</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+                            <tr>
+                                <td>successCode</td>
+								<td>{string|number}</td>
+								<td><strong class="blue">&gt;= 1.4.3</strong></td>
+								<td>成功返回状态码属性 successCode， 默认值为 bs_config.js 中的设定值 config.ajax.successCode</td>
 							</tr>
 						</tbody>
 					</table>
