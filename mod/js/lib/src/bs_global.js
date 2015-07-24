@@ -4458,6 +4458,7 @@ moduleBuild.prototype = {
 					
 
 					that.myReg = makeFunction(attr.format,"reg");
+                    
 					that.localCheck = function(){
 						that.value = that.value.trim();
 						if(that.value === ""){
@@ -4475,7 +4476,18 @@ moduleBuild.prototype = {
 								return false;
 							}
 
-						}
+                        } else if(that.myReg instanceof Function){
+                            var r = that.myReg(that.value)
+                            switch(r){
+                                case undefined:
+                                case true:
+                                    return that.extCheck();
+
+                                default:
+                                    that.srcBox.error(r);
+                                    return false;
+                            }
+                        }
 
 						return that.extCheck();
 					};
@@ -4845,7 +4857,7 @@ moduleBuild.prototype = {
 					onload:function(){}
 				}
 			},
-			build = function(tagName,data){
+			build = function(tagName,data){///{
 				if(!data){
 					return;
 				}
@@ -5014,8 +5026,8 @@ moduleBuild.prototype = {
 				}
 
 				return r;
-			},
-			theadInit = function(data){
+			},///}
+			theadInit = function(data){///{
 				//头部构建
 				var ftr = target.thead.children[0];
 				if(ftr.children.length === 0){
@@ -5181,8 +5193,8 @@ moduleBuild.prototype = {
 					});
 
 				}
-			},
-			tableRebuild = function(data){
+			},///}
+			tableRebuild = function(data){///{
 				var fment = document.createDocumentFragment(),
 					i, len, key, fs, fth, ftd, ftd2, ftr;
 
@@ -5207,8 +5219,10 @@ moduleBuild.prototype = {
 					addRow(data[i],i);
 				}
 
-				target.resize();
-			},
+                setTimeout(function(){
+                    target.resize();
+                },0);
+			},///}
 
 			findTr = function(elm){
 				if(!elm || elm.nodeType != 1){
@@ -5223,7 +5237,7 @@ moduleBuild.prototype = {
 				return ftr.tagName == "TR"? ftr : null;
 			},
 
-			addRow = function(data,index){
+			addRow = function(data,index){///{
 				var ftd, ftd2, ftd3, ftr, ftds,i,len,fs;
 
 				theadInit(data);
@@ -5665,7 +5679,7 @@ moduleBuild.prototype = {
 				mod.button($(ftr).find(".bs_btn"));
 
 				return ftr;
-			},
+			},///}
 			hashchangeHandle = function(){
 				
 				var hashPage = request.hash(target.id + "Cur");
@@ -5679,13 +5693,13 @@ moduleBuild.prototype = {
 				return false;
 				
 			},
-			nodataHandle = function(){
+			nodataHandle = function(){///{
 				target.srcCnt.style.width = "auto";
 				//$(target.srcTable).hide();
 				$(target.srcMsg).show().removeClass("bs_tablebox_loading").addClass("bs_tablebox_nodata").children().html('<i></i>噢，没有数据喔！');
 				target.checkall2.checked = false;
 				target.checkall && (target.checkall.checked = false);
-			},
+			},///}
 			havedataHandle = function(){
 				$(target.srcTable).show();
 				target.srcBox.style.height = "auto";
@@ -5703,7 +5717,7 @@ moduleBuild.prototype = {
 				$(target.srcMsg).show().addClass("bs_tablebox_loading").removeClass("bs_tablebox_nodata").children().html(msg);
 				target.resize();
 			},
-			resizeHandle = function(){
+			resizeHandle = function(){///{
 				
 				//width
 				if(option.nowrap){
@@ -5767,7 +5781,7 @@ moduleBuild.prototype = {
 				
 				//msgbox
 				target.srcMsg.style.height = target.srcCnt.offsetHeight + "px";
-			},
+			},///}
 
 			indexReset = function(){
 				var ftrs = target.tbody.getElementsByTagName("tr"),
@@ -5781,7 +5795,7 @@ moduleBuild.prototype = {
 			},
 
 			//checkall 检查是否全选事件
-			checkallCheckHandle = function(){
+			checkallCheckHandle = function(){///{
 				var checked = true,
 					chks = myExt.getItems();
 
@@ -5793,7 +5807,7 @@ moduleBuild.prototype = {
 				}
 
 				this.checked = checked;
-			};
+			};///}
 
 		
 		//赋值
@@ -6093,10 +6107,9 @@ moduleBuild.prototype = {
 				//数据处理
 				target.total += fdatas.length;
 				target.totalNum.innerHTML = target.total;
-
-				target.resize();
-
-				mod.dialog("success",{content:"共 " + fdatas.length + " 条记录添加到 <strong class='blue'>" + (option.title|| target.id) + "</strong> 列表",timeout:global.Config.popup.autoHide});
+                target.resize();
+				
+                mod.dialog("success",{content:"共 " + fdatas.length + " 条记录添加到 <strong class='blue'>" + (option.title|| target.id) + "</strong> 列表",timeout:global.Config.popup.autoHide});
 
 				typeof callback == "function" && callback(fdatas);
 			},

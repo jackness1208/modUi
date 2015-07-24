@@ -301,7 +301,26 @@ mod.widget(target,{format:"mobile"});
 								<td><strong class="blue">&gt;= 1.0</strong></td>
 								<td>关联</td>
 							</tr>
-							
+                            <tr>
+                                <td>oncheck(value)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.0</strong></td>
+                                <td>
+                                    表单校验
+									<table class="ins">
+										<tr>
+											<td>@param value</td>
+											<td>{object}</td>
+											<td>文本框内容</td>
+										</tr>
+										<tr>
+											<td>@return data</td>
+											<td>{object}</td>
+											<td>如果返回 true 或者 undefined 则表示成功，返回其他则当做是错误提示内容</td>
+										</tr>
+									</table>
+                                </td>
+							</tr>						
 						</tbody>
 					</table>
 				</td>
