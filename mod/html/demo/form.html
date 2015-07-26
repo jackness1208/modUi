@@ -300,7 +300,22 @@ mod.form("#form1",{
 								<td>{string|number}</td>
 								<td><strong class="blue">&gt;= 1.4.3</strong></td>
 								<td>成功返回状态码属性 successCode， 默认值为 bs_config.js 中的设定值 config.ajax.successCode</td>
-							</tr>
+                            </tr>
+                            <tr>
+                                <td>onerror(arr)</td>
+								<td>{function}</td>
+								<td><strong class="blue">&gt;= 1.4.5</strong></td>
+                                <td>
+                                    提交表单时如发现表单有错误内容，回调此方法。
+                                    <table class="ins">
+										<tr>
+											<td>@param arr</td>
+											<td>{Array}</td>
+                                            <td>有错误的表单元素集合</td>
+										</tr>
+									</table>
+                                </td>
+                            </tr>
 						</tbody>
 					</table>
 				</td>

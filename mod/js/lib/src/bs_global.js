@@ -2039,6 +2039,7 @@ moduleBuild.prototype = {
 				actionCallback:function(){},
 
 				onsubmit:function(){},
+				onerror:function(){},
 
 				submitCallback:function(){},
 				onresponse:function(){},
@@ -2074,23 +2075,24 @@ moduleBuild.prototype = {
                     
                     for(i = 0, len = padding; i < len; i++){
                         fs = that.checkElms[i];
-                        if(fs.isOk === true){
+                        if(fs.srcBox.isOk === true){
                             padding--;
-                        } else if(fs.isOk === false){
+                        } else if(fs.srcBox.isOk === false){
                             padding--;
-                            errArr.push(fs.srcItems[0]);
+                            errArr.push(fs);
 
                         } else {
                             return;
                         }
-                    }
 
+                        
+                    }
                     if(errArr.length){
-                        option.onerror(errArr);
+                        attr.onerror(errArr);
                         return;
                     }
                     // 数据处理
-					for(i = 0, len = that.checkElms.length;; i < len; i++){
+					for(i = 0, len = that.checkElms.length; i < len; i++){
 						fs = that.checkElms[i];
 						myName = fs.name;
 						
@@ -2472,18 +2474,21 @@ moduleBuild.prototype = {
 				!isNaNFn(attr.onsubmit) && (param = attr.onsubmit(param));
 
 				if(!param){
-                    callback && callback(input.isOk, input);
-					return;
+					input.isOk = false;
+					return false;
 				}
 
-				if(!attr.action || (input.oValue == input.value && input.isOk) || /img-upload|song-upload|file-upload|multi-song-upload/.test(attr.format)){
+				if(!attr.action || /img-upload|song-upload|file-upload|multi-song-upload/.test(attr.format)){
 					attr.actionCallback && attr.actionCallback(null,param);
 					input.isOk = true;
-                    callback && callback(input.isOk, input);
 					return true;
 				}
 
-				input.isOk = false;
+                if((input.oValue == input.value)){
+                    return input.isOk;
+                }
+
+				input.isOk = undefined;
 				input.srcBox.loading.init();
 				param._ = new Date().getTime();
 				$.ajax({
@@ -2491,7 +2496,7 @@ moduleBuild.prototype = {
 					"data":param,
 					"success":function(json){
 						if(input.srcBox.loading.isTimeout){
-
+                            input.isOk = false;
                             callback && callback(input.isOk, input);
 							return;
 						}
@@ -2502,7 +2507,7 @@ moduleBuild.prototype = {
                         }
 
 						if(!isNaNFn(attr.submitCallback)){
-							attr.submitCallback(json, param);
+							attr.submitCallback(json, param, input);
                             callback && callback(input.isOk, input);
                             return;
 						}
@@ -2516,11 +2521,14 @@ moduleBuild.prototype = {
 							input.oValue = input.value;
 
 							attr.actionCallback(json,param);
+
                             callback && callback(input.isOk, input);
 
 						} else {
 							input.srcBox.error(myAttr.msg);
 							input.isOk = false;
+							input.oValue = input.value;
+
                             callback && callback(input.isOk, input);
 						}
 					},
@@ -2740,9 +2748,8 @@ moduleBuild.prototype = {
 					} else {
 						box.check = function(callback){
 							var i,len,fs,
-								isRequired = false;
-							callback = callback || box.markCallback;
-							box.markCallback = null;
+								isRequired = false,
+                                ajaxResult;
 							
 							for(i = 0, len = box.srcItems.length; i < len; i++){
 								fs = box.srcItems[i];
@@ -2753,14 +2760,30 @@ moduleBuild.prototype = {
 									isRequired = true;
 								}
 								if(fs.localCheck()){
-									if(!ajaxCheck(fs,box.check)){
-										box.isOk = undefined;
-										box.markCallback = callback;
-										return;
+                                    ajaxResult = ajaxCheck(fs,function(pass, fs){
+                                        box.check();
+                                        // if(pass){
+                                        //     box.check();
+                                        // } else {
+                                        //     box.isOk = false;
+                                        //     callback && callback(box.isOk, fs);
+                                        // }
+                                    });
+                                    
+                                    switch(ajaxResult){
+                                        case true:
+                                            continue;
+                                            break;
 
-									} else {
-										continue;
-									}
+                                        case false:
+                                            box.isOk = false;
+                                            callback && callback(box.isOk, box.srcItems[0]);
+                                            return;
+                                        
+                                        case undefined:
+                                        default:
+                                            return;
+                                    }
 									
 								} else {
 									box.isOk = false;

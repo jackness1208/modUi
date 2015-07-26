@@ -20,7 +20,7 @@
 						<label for="keyword">关键字</label>
 					</th>
 					<td>
-						<input id="keyword" width="200" name="keyword" type="text" value="123"  mod-format="" mod-autocomplete="张三,李四,黄五,赵六" >
+						<input id="keyword" width="200" name="keyword" type="text" value="123" mod-required="true"  mod-format="" mod-autocomplete="张三,李四,黄五,赵六" >
 					</td>
 				</tr>
 				<tr>
@@ -78,7 +78,11 @@ target:"#searchResultGird",
 		method:"GET", 
 		dataKey:"data.songs", 
 		totalKey:"data.total"
-	}
+	},
+    onerror: function(arrs){
+        alert('err!')
+        console.log(arrs);
+    }
 });
 	</pre>
 </div>
@@ -106,7 +110,12 @@ mod.form("#form1",{
 		dataKey:"data.songs", 
 		totalKey:"data.total"
 	},
-	search:true
+	search:true,
+    onerror: function(arrs){
+        alert('err!')
+        console.log(arrs);
+    }
+
 });
 
 </script>
