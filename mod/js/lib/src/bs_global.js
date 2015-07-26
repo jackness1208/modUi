@@ -2068,13 +2068,32 @@ moduleBuild.prototype = {
 			var that = this,
 				attr = modAssignment(option,that),
 				postHandle = function(){
-					var i,len,fs,j,jlen,myName;
-					for(i = 0, len = that.checkElms.length; i < len; i++){
+					var i,len,fs,j,jlen,myName,
+                        padding = that.checkElms.length,
+                        errArr = [];
+                    
+                    for(i = 0, len = padding; i < len; i++){
+                        fs = that.checkElms[i];
+                        if(fs.isOk === true){
+                            padding--;
+                        } else if(fs.isOk === false){
+                            padding--;
+                            errArr.push(fs.srcItems[0]);
+
+                        } else {
+                            return;
+                        }
+                    }
+
+                    if(errArr.length){
+                        option.onerror(errArr);
+                        return;
+                    }
+                    // 数据处理
+					for(i = 0, len = that.checkElms.length;; i < len; i++){
 						fs = that.checkElms[i];
 						myName = fs.name;
-						if(!fs.srcBox.isOk){
-							return;
-						}
+						
 						if(fs.tagName == "INPUT" && /radio|checkbox/.test(fs.type)){
 							option.actionParam[myName] = [];
 							for(j = 0, jlen = that[myName].length; j < jlen; j++){
@@ -2453,12 +2472,14 @@ moduleBuild.prototype = {
 				!isNaNFn(attr.onsubmit) && (param = attr.onsubmit(param));
 
 				if(!param){
+                    callback && callback(input.isOk, input);
 					return;
 				}
 
 				if(!attr.action || (input.oValue == input.value && input.isOk) || /img-upload|song-upload|file-upload|multi-song-upload/.test(attr.format)){
 					attr.actionCallback && attr.actionCallback(null,param);
 					input.isOk = true;
+                    callback && callback(input.isOk, input);
 					return true;
 				}
 
@@ -2470,6 +2491,8 @@ moduleBuild.prototype = {
 					"data":param,
 					"success":function(json){
 						if(input.srcBox.loading.isTimeout){
+
+                            callback && callback(input.isOk, input);
 							return;
 						}
 						input.srcBox.loading.clear();
@@ -2480,6 +2503,8 @@ moduleBuild.prototype = {
 
 						if(!isNaNFn(attr.submitCallback)){
 							attr.submitCallback(json, param);
+                            callback && callback(input.isOk, input);
+                            return;
 						}
 
 						var myAttr = {
@@ -2491,11 +2516,12 @@ moduleBuild.prototype = {
 							input.oValue = input.value;
 
 							attr.actionCallback(json,param);
-							typeof callback == "function" && callback();
+                            callback && callback(input.isOk, input);
 
 						} else {
 							input.srcBox.error(myAttr.msg);
 							input.isOk = false;
+                            callback && callback(input.isOk, input);
 						}
 					},
 					"dataType":attr.actionType == "jsonp"?"jsonp":"json",
@@ -2694,16 +2720,18 @@ moduleBuild.prototype = {
 							if(!attr.required){
 								this.notice();
 								this.isOk = true;
-								typeof callback == "function" && callback();
+								typeof callback == "function" && callback(this.isOk, this.srcItems[0]);
 								return true;
 
 							} else if(isCheck){
 								this.success();
 								this.isOk = true;
-								typeof callback == "function" && callback();
-								return false;
+								typeof callback == "function" && callback(this.isOk, this.srcItems[0]);
+								return true;
 							} else {
 								this.srcItems[0] && this.error(this.srcItems[0].errorText);
+								this.isOk = false;
+								typeof callback == "function" && callback(this.isOk, this.srcItems[0]);
 								return false;
 							}
 							
@@ -2726,7 +2754,7 @@ moduleBuild.prototype = {
 								}
 								if(fs.localCheck()){
 									if(!ajaxCheck(fs,box.check)){
-										box.isOk = false;
+										box.isOk = undefined;
 										box.markCallback = callback;
 										return;
 
@@ -2736,12 +2764,13 @@ moduleBuild.prototype = {
 									
 								} else {
 									box.isOk = false;
+                                    callback && callback(box.isOk, box.srcItems[0]);
 									return;
 								}
 							}
 							!isRequired? box.notice() : box.success();
 							box.isOk = true;
-							typeof callback == "function" && callback();
+							typeof callback == "function" && callback(box.isOk, box.srcItems[0]);
 							return true;
 						};
 					}
