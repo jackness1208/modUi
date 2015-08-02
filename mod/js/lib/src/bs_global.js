@@ -2754,7 +2754,7 @@ moduleBuild.prototype = {
 							for(i = 0, len = box.srcItems.length; i < len; i++){
 								fs = box.srcItems[i];
 								
-								if(!fs.required){
+								if(!fs.required && !fs.value.trim()){
 									continue;
 								} else {
 									isRequired = true;
