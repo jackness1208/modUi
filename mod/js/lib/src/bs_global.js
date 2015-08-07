@@ -2303,9 +2303,26 @@ moduleBuild.prototype = {
 				});
 
 				$(clearBtn).bind("click",function(){
-					that.reset();
+					that.clean();
 				});
 			}
+
+            that.clean = function(){
+                that.checkElms = [];
+				//form标签特有属性
+				elms = that.elements;
+				for(i = 0, len = elms.length; i < len; i++){
+					fs = elms[i];
+					!/button|submit/.test(fs.type) && fs.name && fs.srcBox && that.checkElms.push(fs);
+				}
+				
+				
+				for(i = 0, len = that.checkElms.length; i < len; i++){
+					that.checkElms[i].srcBox.reset();
+				}
+
+                that.reset();
+            };
 			
 			attr.search && that.check();
 
@@ -2636,6 +2653,13 @@ moduleBuild.prototype = {
 
 					};
 
+                    box.reset = function(){
+                        box.clear();
+                        box.tips.hide();
+                        box.tips.cnt.innerHTML = "";
+                        box.tips.status = "notice";
+                    };
+
 
 					box.srcItems = [];
 
@@ -2657,6 +2681,7 @@ moduleBuild.prototype = {
 						box.tips.status = "error";
 						box.tips.show(2000);
 					};
+
 
 					box.notice = function(txt){
 						txt = txt || "";
@@ -2801,7 +2826,7 @@ moduleBuild.prototype = {
 					
 				}
 
-				
+				!box.frontName && (box.frontName = 'bs' + Math.round(Math.random() * 10000000000));
 
 				return box;
 			},
@@ -3440,7 +3465,10 @@ moduleBuild.prototype = {
 
 
 					}
-					!that.id && (that.id = that.name + "chk" + that.srcBox.index++);
+
+                    if(!that.id){
+                        that.id = that.srcBox.frontName + that.name + "chk" + that.srcBox.index++
+                    }
 					checkbox.htmlFor = that.id;
 
 					if(myType == "checkbox"){

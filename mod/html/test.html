@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>内页模板</title>
+<link rel="stylesheet" href="../css/base.css?201502261750">
+
+</head>
+<body>
+<div class="bs_mod01" mod-title="内页模板">
+	内页的内容
+</div>
+<script type="text/javascript" src="../js/bs_config.js?201502261750"></script>
+<script>
+// 初始化方法放这里
+// insetPageInit();
+mod.dialog('hehe', {
+    title:'123',
+    content:[
+        '<form id="heheForm">',
+        '<table>',
+        '<tr>',
+            '<td>单选</td>',
+            '<td>',
+                '<input type="checkbox" value="1" name="heheChk" mod-title="选项1" />',
+                '<input type="checkbox" value="2" name="heheChk" mod-title="选项2" />',
+                '<input type="checkbox" value="3" name="heheChk" mod-title="选项3" />',
+            '</td>',
+        '</tr>',
+        '<tr>',
+            '<td></td>',
+            '<td>',
+            '</td>',
+        '</tr>',
+        '</table>',
+        '</form>'
+    ].join(''),
+    onload: function(){
+        mod.form('#heheForm');
+    }
+});
+</script>
+</body>
+</html>
