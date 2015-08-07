@@ -1,4 +1,5 @@
-var fs = require('fs');
+var fs = require('fs'),
+    readline = require('readline');
 
 var fn = {
     /**
@@ -14,7 +15,7 @@ var fn = {
               output: process.stdout,
               terminal: false
             });
-        rl.question('[?] ' + color.yellow(questionStr) + color.gray( " ("+ defaultValue +")" ), function(answer){
+        rl.question('[?] ' + questionStr +  " ("+ defaultValue +")", function(answer){
             if(answer == ""){
                 answer = defaultValue;
             }
@@ -115,34 +116,46 @@ var fn = {
         };
 
         
+    },
+    /**
+     * 路径格式化
+     * @param  {String} path 需要格式化的路径文本
+     * @return {String} 格式化后的路径文本
+     */
+    formatPath: function(path){
+        return path? path.replace(/\\/g,"/"): '';
     }
 };
 
 //执行
-//
-fn.question('输入你要生成的版本号','1.0.0', function(val){
-    var myVal = val,
+var defaultValue = '1.4.7';
+
+fn.question('输入你要生成的版本号',defaultValue, function(val){
+    var myVer = val,
         now = new Date();
 
     new fn.promise().then(function(next){
-        var checkPath = __dirname + '/js/';
+        var checkPath = fn.formatPath(__dirname + '/mod/js/');
         fn.getPaths(checkPath, function(err, files){
-            files.forEach(function(item){
-                item = checkPath + item;
-            });
+            for(var i = 0, len = files.length; i < len; i++){
+                files[i] = checkPath + files[i];
+            }
+            
             next(files);
         });
     }).then(function(filesPrev, next){
-        var checkPath = __dirname + '/css/';
-        fn.getPaths(__dirname + '/css/', function(err, files){
-            files.forEach(function(item){
-                item = checkPath + item;
-                });
+        var checkPath = fn.formatPath(__dirname + '/mod/css/');
+        fn.getPaths(checkPath, function(err, files){
+            for(var i = 0, len = files.length; i < len; i++){
+                files[i] = checkPath + files[i];
+            }
+
             next(filesPrev.concat(files));
         });
 
     }).then(function(files, next){
-        var render = function(content){
+        var render = function(data){
+                data = String(data);
                 data = data.replace(
                     /\$Date:[^$]*\$/ig,
                     '$Date: ' + now + ' $'
@@ -159,6 +172,7 @@ fn.question('输入你要生成的版本号','1.0.0', function(val){
                     /\$Author:[^$]*\$/ig,
                     '$Author: jackness Lau $'
                 );
+                return data;
             };
         files.forEach(function(item){
             fs.writeFileSync(item, render(fs.readFileSync(item)));
@@ -166,6 +180,13 @@ fn.question('输入你要生成的版本号','1.0.0', function(val){
 
         next();
 
+    }).then(function(next){
+        var render = function(data){
+            return String(data).replace(defaultValue, myVer);
+        };
+        var myPath = fn.formatPath(__dirname + '/pack.js');
+        fs.writeFileSync(myPath, fs.readFileSync(myPath));
+        next();
     }).then(function(next){
         console.log([
             '-----------------',

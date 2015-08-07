@@ -1,8 +1,8 @@
 /**
  * Copyright 2015, jackness.org
  * Creator: jackNEss Lau
- * $Author: liudaojie $
- * $Date: 2014-12-05 11:07:01 +0800 (Fri, 05 Dec 2014) $
+ * $Author: jackness Lau $
+ * $Date: Fri Aug 07 2015 19:12:19 GMT+0800 (中国标准时间) $
  * version:1.28
  */
 var jnsCalendar = function(){
