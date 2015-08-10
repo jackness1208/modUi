@@ -6,8 +6,25 @@ module.exports = function(grunt) {
         "uglify": {
             "mod": {
                 "options": {
-                    "banner": "/*! builded "+ new Date() +" */\r\n",
-                    "sourceMapRoot": "../"
+                    "banner": "/*! builded <%= grunt.template.today() %> */\r\n",
+                    "sourceMapRoot": "../../",
+                    // 是否生成 sourceMap
+                    sourceMap: true,
+                    // 生成 map文件的地址
+                    sourceMapName: function(path){
+                        var f = path.split("/"),
+                            filename = f.pop(),
+                            nav = f.join("/") + "/";
+
+                        return nav + "map/" +  filename.replace('.js','.map');
+                    },
+                    // 用于定义 map文件地址 并放在压缩文件底部， url相对于 压缩文件
+                    sourceMappingURL: function(path){
+                        var f = path.split("/"),
+                            filename = f.pop(),
+                            nav = f.join("/") + "/";
+                        return "map/" +  filename.replace('.js','.map');
+                    }
                 },
                 "files": {
                     "mod/js/lib/dist/bs_global.min.js": [
@@ -18,12 +35,12 @@ module.exports = function(grunt) {
                     ]
                 }
             }
-        }
+        },
         
         "watch": {
             "mod": {
                 "tasks": [
-                    "default"
+                    "build"
                 ],
                 "files": [
                     [

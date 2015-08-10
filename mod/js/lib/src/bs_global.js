@@ -1,8 +1,8 @@
 /**
  * $Copyright: 2015, jackness.org $
- * $Creator: jackness Lau $
- * $Author: jackness Lau $
- * $Date: Fri Aug 07 2015 19:13:41 GMT+0800 (中国标准时间) $
+ * $Creator: Jackness Lau $
+ * $Author: Jackness Lau $
+ * $Date: Mon Aug 10 2015 11:59:49 GMT+0800 (中国标准时间) $
  * $Version: 1.4.7 $
  */
 !function(global,undefined){

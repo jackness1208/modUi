@@ -1,5 +1,7 @@
 var fs = require('fs'),
-    readline = require('readline');
+    readline = require('readline'),
+    http = require('http');
+
 
 var fn = {
     /**
@@ -183,10 +185,10 @@ new fn.Promise().then(function(next){
             data = String(data);
             data = data.replace(
                 /\$Date:[^$]*\$/ig,
-                '$Date: ' + info.now + ' $'
+                '$Date: ' + info.date + ' $'
             ).replace(
                 /\$Version:[^$]*\$/ig
-                ,'$Version: ' + date.version + ' $'
+                ,'$Version: ' + info.version + ' $'
             ).replace(
                 /\$Copyright:[^$]*\$/ig,
                 '$Copyright: ' + info.date.getFullYear() + ', jackness.org $'
@@ -208,13 +210,33 @@ new fn.Promise().then(function(next){
 // 修改 package.json 版本号
 }).then(function(info, next){
     var pkgPath = fn.formatPath(__dirname + '/../package.json')
-        pkg = require(pkgPath);
+        pkg = JSON.parse(fs.readFileSync(pkgPath).toString());
 
     pkg.version = info.version;
 
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 4));
     next();
 
+// 从网上拉一份 最新的 log.html 文件
+}).then(function(next){
+    var logPath = fn.formatPath(__dirname + '/../mod/html/demo/log.html');
+    http.get('http://mod.jackness.org/mod/html/demo/log.html', function(result){
+        var chunks = [],
+            size = 0;
+
+        result.on('data', function(chunk){
+            size += chunk.length;
+            chunks.push(chunk);
+
+        });
+
+        result.on('end', function(){
+            var myBuffer = Buffer.concat(chunks, size),
+                r;
+            fs.writeFileSync(logPath, myBuffer);
+            next();
+        });
+    });
 // 处理完成
 }).then(function(next){
     console.log([
