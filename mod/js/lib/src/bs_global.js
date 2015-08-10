@@ -6,7 +6,7 @@
  * $Version: 1.4.7 $
  */
 !function(global,undefined){
-
+ 
 if(global.mod){
 	return;
 }
