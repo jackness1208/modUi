@@ -24,7 +24,7 @@
 						<label for="company">异步校验</label>
 					</th>
 					<td>
-						<input id="company" name="company" type="text" mod-required="true" mod-method="get" mod-action-type="ajax" mod-action="ajax/setForm.php" mod-action-key="company">
+						<input id="company" name="company" type="text" mod-required="true" mod-method="get" mod-action-type="jsonp" mod-action="http://mod.jackness.org/api/checkDemo" mod-action-key="company">
 					</td>
 				</tr>
 				
@@ -39,7 +39,7 @@
 		&lt;label for="company"&gt;异步校验&lt;/label&gt;
 	&lt;/th&gt;
 	&lt;td&gt;
-		&lt;input id="company" name="company" type="text" mod-required="true" mod-method="get" mod-action-type="ajax" mod-action="ajax/setForm.php" mod-action-key="company"&gt;
+		&lt;input id="company" name="company" type="text" mod-required="true" mod-method="get" mod-action-type="jsonp" mod-action="http://mod.jackness.org/api/checkDemo" mod-action-key="company"&gt;
 	&lt;/td&gt;
 &lt;/tr&gt;
 	</pre>
@@ -78,9 +78,9 @@
 //js
 mod.widget("#company1",{
 	required:true,
-	action:"ajax/setForm.php",
+	action:"http://mod.jackness.org/api/checkDemo",
 	method:"get",
-	actionType:"ajax",
+	actionType:"jsonp",
 	actionKey:"company",
 	onsubmit:function(json){
 		json.cmd = "nihaoma";
@@ -335,20 +335,13 @@ mod.widget("#company1",{
 
 mod.widget("#company1",{
 	required:true,
-	action:"ajax/setForm.php",
+	action:"http://mod.jackness.org/api/checkDemo",
 	method:"get",
-	actionType:"ajax",
+	actionType:"jsonp",
 	actionKey:"company",
 	onsubmit:function(json){
 		json.cmd = "nihaoma";
 		return json;
-	},
-	submitCallback:function(json){
-		if(json.status == "1"){
-			$("#company1")[0].srcBox.success();
-		} else {
-			mod.dialog("error",json.error);
-		}
 	}
 });
 

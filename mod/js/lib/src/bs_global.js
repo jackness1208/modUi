@@ -2,8 +2,8 @@
  * $Copyright: 2015, jackness.org $
  * $Creator: Jackness Lau $
  * $Author: Jackness Lau $
- * $Date: Mon Aug 10 2015 11:59:49 GMT+0800 (中国标准时间) $
- * $Version: 1.4.7 $
+ * $Date: Mon Aug 10 2015 16:44:36 GMT+0800 (中国标准时间) $
+ * $Version: 1.4.8 $
  */
 !function(global,undefined){
  
@@ -1623,6 +1623,16 @@ function leafRebuild(nowPage,showNum,total,source){
 	return html;
 }
 
+
+function urlRender(url){
+    var r = url.replace(/\{\{[^\}]*\}\}/g, function(str){
+        var selector = str.replace(/^\{\{\s*/g,'').replace(/\s*\}\}$/,'');
+        return $(selector).val();
+    });
+
+    return r;
+}
+
 /**
  * 赋值用函数
  * @param  {object} o1 输出数据
@@ -2500,8 +2510,10 @@ moduleBuild.prototype = {
 					input.isOk = true;
 					return true;
 				}
-
+                
+                console.log(input.oValue)
                 if((input.oValue == input.value)){
+                    
                     return input.isOk;
                 }
 
@@ -2524,6 +2536,7 @@ moduleBuild.prototype = {
                         }
 
 						if(!isNaNFn(attr.submitCallback)){
+							input.oValue = input.value;
 							attr.submitCallback(json, param, input);
                             callback && callback(input.isOk, input);
                             return;
@@ -2533,6 +2546,7 @@ moduleBuild.prototype = {
 							status: getObjByKey(json,attr.statusKey),
 							msg: getObjByKey(json,attr.messageKey)
 						};
+
                         if(myAttr.status == attr.successCode){
 							input.isOk = true;
 							input.oValue = input.value;
@@ -2552,7 +2566,6 @@ moduleBuild.prototype = {
 					"dataType":attr.actionType == "jsonp"?"jsonp":"json",
 					"type":attr.method || "GET"
 				});
-
 			},
 
 			boxInit = function(elm,attr){
@@ -2677,6 +2690,7 @@ moduleBuild.prototype = {
 						box.clear();
 						$(box).addClass("bs_detectbox_error");
 						$(box.tips).addClass("bs_detectbox_error");
+                        console.log('thisway', box.tips.cnt)
 						box.tips.cnt.innerHTML = txt;
 						box.tips.status = "error";
 						box.tips.show(2000);
@@ -2711,7 +2725,9 @@ moduleBuild.prototype = {
 							clearTimeout(box.loading.timeoutKey);
 							box.clear();
 							$(box).addClass("bs_detectbox_loading");
-							box.tips.innerHTML = txt ||"正在校验";
+							$(box.tips).addClass("bs_detectbox_loading");
+							
+                            box.tips.cnt.innerHTML = txt ||"正在校验";
 							box.loading.isTimeout = false;
 							box.loading.timeoutKey = setTimeout(function(){
 								box.error(global.Config.ajax.timeoutText);
@@ -2719,11 +2735,10 @@ moduleBuild.prototype = {
 								typeof timeoutCallback == "function" && timeoutCallback();
 
 							},global.Config.ajax.timeout);
-							//..
 						},
 						clear:function(){
 							box.clear();
-							box.tips.innerHTML = "";
+							box.tips.cnt.innerHTML = "";
 							clearTimeout(box.loading.timeoutKey);
 							
 						}
@@ -3563,6 +3578,7 @@ moduleBuild.prototype = {
 													msg: getObjByKey(json,attr.messageKey)
 												};
 
+                                                console.log(myAttr);
 
                                                 if(myAttr.status == attr.successCode){
 													drawbox.myAutos = myAttr.data;
@@ -3984,14 +4000,14 @@ moduleBuild.prototype = {
 								that.linked && (that.ajaxData[that.linked.value] = myData);
 
 							} else {
-								actionKey = attr.actionKey || that.name;
+								actionKey = attr.actionKey;
 								myAjaxVal = that.linked?that.linked.value:"";
 								
 								if(actionKey){
 									param[actionKey] = myAjaxVal;
 									myAjaxUrl = attr.action;
 								} else {
-									myAjaxUrl = attr.action + myAjaxVal;
+									myAjaxUrl = attr.action;
 								}
 
 								param._ = new Date().getTime();
@@ -4003,7 +4019,7 @@ moduleBuild.prototype = {
 								},'获取数据ing');
 								
 								$.ajax({
-									"url":myAjaxUrl,
+                                    "url":urlRender(myAjaxUrl),
 									"data":param,
 									"success":function(json){
 										if(that.srcBox.loading.isTimeout){
@@ -4837,6 +4853,9 @@ moduleBuild.prototype = {
 			
                 //异步请求最大超时时间 0 为 跟 Config 默认
 				timeout:0,
+                
+                // 是否需要将当前 表格的 页码记录在 地址栏上面
+                mark: false,
 
 				//是否可编辑
 				edit:false,
@@ -5899,11 +5918,12 @@ moduleBuild.prototype = {
 		}
 
 		if(isEqual(target.opAttr,option)){
-			return;
+			return target.reload();
 		}
 
 		if(!target.id){
 			target.id = "modTab" + new Date().getTime() + Math.round(Math.random() * 100);
+            option.mark = false;
 		}
 
 
@@ -5976,8 +5996,7 @@ moduleBuild.prototype = {
 				option.actionParam[option.pageKey] = page;
 				target.page = page;
 
-
-				historyManage.add(target.id + "Cur",page);
+				option.mark && historyManage.add(target.id + "Cur",page);
 
 				var fParam = clone(option.actionParam);
 
@@ -6051,7 +6070,7 @@ moduleBuild.prototype = {
 
 				target.page = page;
 
-				historyManage.add(target.id + "Cur",page);
+				option.mark && historyManage.add(target.id + "Cur",page);
 
 				target.total = option.data.length;
 
@@ -6440,9 +6459,9 @@ moduleBuild.prototype = {
 		}
 
 		
-		needReset && request.hash(target.id + "Cur",target.page);
+		needReset && option.mark && request.hash(target.id + "Cur",target.page);
 
-		historyManage.init(hashchangeHandle,target.id);
+		option.mark && historyManage.init(hashchangeHandle,target.id);
 		!hashchangeHandle() && target.pageTo(target.page);
 		
 		target.opAttr = option;

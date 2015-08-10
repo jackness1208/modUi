@@ -91,7 +91,7 @@
 					<label id="singleSelectAjax">异步单个下拉</label>
 				</th>
 				<td>
-					<select id="singleSelectAjax" name="singleSelectAjax" mod-format="single" mod-action="http://test.kugou.com/backstage/static/html/demo/ajax/getSelect.php?type=0" mod-method="get" mod-action-type="ajax" mod-action-key="val" mod-default-value="女生">
+					<select id="singleSelectAjax" name="singleSelectAjax" mod-format="single" mod-action="http://mod.jackness.org/api/selectDemo?type=1" mod-method="get" mod-action-type="jsonp" mod-action-key="val" mod-default-value="PSV">
 						<option value="">请选择</option>
 					</select>
 				</td>
@@ -106,7 +106,7 @@
 		&lt;label id="singleSelectAjax"&gt;异步单个下拉&lt;/label&gt;
 	&lt;/th&gt;
 	&lt;td&gt;
-		&lt;select id="singleSelectAjax" name="singleSelectAjax" mod-format="single" mod-action="http://test.kugou.com/backstage/static/html/demo/ajax/getSelect.php?type=0" mod-method="get" mod-action-type="ajax" mod-action-key="val"&gt;
+		&lt;select id="singleSelectAjax" name="singleSelectAjax" mod-format="single" mod-action="http://mod.jackness.org/api/selectDemo?type=1" mod-method="get" mod-action-type="ajax" mod-action-key="val"&gt;
 			&lt;option value=""&gt;请选择&lt;/option&gt;
 		&lt;/select&gt;
 	&lt;/td&gt;
@@ -297,15 +297,15 @@ mod.widget("#muilteSelect04,#muilteSelect05,#muilteSelect06");
 					<label for="ajaxSelect01">异步选择</label>
 				</th>
 				<td>
-					<select id="ajaxSelect01" name="ajaxSelect01" mod-action="http://test.kugou.com/backstage/static/html/demo/ajax/getSelect.php?type=0" mod-method="get" mod-action-type="ajax" mod-action-key="val">
+					<select id="ajaxSelect01" name="ajaxSelect01" mod-action="http://mod.jackness.org/api/selectDemo?type=1" mod-method="get" mod-action-type="jsonp">
 						<option value="">请选择</option>
 					</select>
 
-					<select id="ajaxSelect02" name="ajaxSelect02" mod-action="http://test.kugou.com/backstage/static/html/demo/ajax/getSelect.php?type=1" mod-method="get" mod-action-type="ajax" mod-linked="#ajaxSelect01" mod-action-key="val">
+                    <select id="ajaxSelect02" name="ajaxSelect02" mod-action="http://mod.jackness.org/api/selectDemo?type=2&val={{#ajaxSelect01}}" mod-method="get" mod-action-type="jsonp" mod-linked="#ajaxSelect01">
 						<option value="">请选择</option>
 					</select>
 
-					<select id="ajaxSelect03" name="ajaxSelect03" mod-action="http://test.kugou.com/backstage/static/html/demo/ajax/getSelect.php?type=2" mod-method="get" mod-action-type="ajax" mod-linked="#ajaxSelect02" mod-action-key="val">
+					<select id="ajaxSelect03" name="ajaxSelect03" mod-action="http://mod.jackness.org/api/selectDemo?type=3&val2={{#ajaxSelect02}}&val={{#ajaxSelect01}}" mod-method="get" mod-action-type="jsonp" mod-linked="#ajaxSelect02">
 						<option value="">请选择</option>
 					</select>
 
@@ -322,15 +322,15 @@ mod.widget("#muilteSelect04,#muilteSelect05,#muilteSelect06");
 		&lt;label for="ajaxSelect01"&gt;异步选择&lt;/label&gt;
 	&lt;/th&gt;
 	&lt;td&gt;
-		&lt;select id="ajaxSelect01" name="ajaxSelect01" mod-action="http://test.kugou.com/backstage/static/html/demo/ajax/getSelect.php?type=0" mod-method="get" mod-action-type="ajax" mod-action-key="val"&gt;
+		&lt;select id="ajaxSelect01" name="ajaxSelect01" mod-action="http://mod.jackness.org/api/selectDemo?type=1" mod-method="get" mod-action-type="jsonp" mod-action-key="val"&gt;
 			&lt;option value=""&gt;请选择&lt;/option&gt;
 		&lt;/select&gt;
 
-		&lt;select id="ajaxSelect02" name="ajaxSelect02" mod-action="http://test.kugou.com/backstage/static/html/demo/ajax/getSelect.php?type=1" mod-method="get" mod-action-type="ajax" mod-linked="#ajaxSelect01" mod-action-key="val"&gt;
+		&lt;select id="ajaxSelect02" name="ajaxSelect02" mod-action="http://mod.jackness.org/api/selectDemo?type=2&val={{#ajaxSelect01}}" mod-method="get" mod-action-type="jsonp" mod-linked="#ajaxSelect01"&gt;
 			&lt;option value=""&gt;请选择&lt;/option&gt;
 		&lt;/select&gt;
 
-		&lt;select id="ajaxSelect03" name="ajaxSelect03" mod-action="http://test.kugou.com/backstage/static/html/demo/ajax/getSelect.php?type=2" mod-method="get" mod-action-type="ajax" mod-linked="#ajaxSelect02" mod-action-key="val"&gt;
+		&lt;select id="ajaxSelect03" name="ajaxSelect03" mod-action="http://mod.jackness.org/api/selectDemo?type=3&val2={{#ajaxSelect02}}&val={{#ajaxSelect01}}" mod-method="get" mod-action-type="jsonp" mod-linked="#ajaxSelect02"&gt;
 			&lt;option value=""&gt;请选择&lt;/option&gt;
 		&lt;/select&gt;
 
@@ -418,8 +418,11 @@ mod.widget(target,{format:"select"});
 								<td>action</td>
 								<td>{string}</td>
 
-								<td><strong class="blue">&gt;= 1.0</strong></td>
-								<td>异步获取数据地址</td>
+								<td><strong class="blue">&gt;= 1.4.8</strong></td>
+								<td>
+                                    异步获取数据地址
+                                    支持 {{#id名称}} 方式的模板， 引擎会自动获取 对应元素的 value 值
+                                </td>
 							</tr>
 							
 							<tr>

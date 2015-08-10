@@ -162,10 +162,10 @@ mod.widget("#ac021",{
 			<table class="bs_table_s0">
 				<tr>
 					<th>
-						<label for="ac03">异步自动完成</label>
+						<label for="ac03">电影搜索</label>
 					</th>
 					<td>
-						<input id="ac03" width="200" name="ac03" type="text" mod-required="true" mod-autocomplete="http://test.kugou.com/backstage/static/html/demo/ajax/getAutocomplete.php" mod-method="get" mod-action-type="ajax" mod-action-key="val" >
+						<input id="ac03" width="200" name="ac03" type="text" mod-required="true" mod-autocomplete="http://mod.jackness.org/api/autocompleteDemo" mod-method="get" mod-action-type="jsonp" mod-action-key="keyword" >
 					</td>
 				</tr>
 			</table>
@@ -178,10 +178,10 @@ mod.widget("#ac021",{
 	&lt;table class="bs_table_s0"&gt;
 		&lt;tr&gt;
 			&lt;th&gt;
-				&lt;label for="ac03"&gt;异步自动完成&lt;/label&gt;
+				&lt;label for="ac03"&gt;电影搜索&lt;/label&gt;
 			&lt;/th&gt;
 			&lt;td&gt;
-				&lt;input id="ac03" width="200" name="ac03" type="text" mod-required="true" mod-autocomplete="http://test.kugou.com/backstage/static/html/demo/ajax/getAutocomplete.php" mod-method="get" mod-action-type="ajax" mod-action-key="val" &gt;
+				&lt;input id="ac03" width="200" name="ac03" type="text" mod-required="true" mod-autocomplete="http://mod.jackness.org/api/autocompleteDemo" mod-method="get" mod-action-type="jsonp" mod-action-key="keyword" &gt;
 			&lt;/td&gt;
 		&lt;/tr&gt;
 	&lt;/table&gt;
@@ -195,7 +195,7 @@ mod.widget("#ac021",{
 		<table class="bs_table_s0">
 			<tr>
 				<th>
-					<label for="ac031">异步自动完成</label>
+					<label for="ac031">电影搜索</label>
 				</th>
 				<td>
 					<input id="ac031" width="200" name="ac031" type="text" >
@@ -210,23 +210,23 @@ mod.widget("#ac021",{
 &lt;table class="bs_table_s0"&gt;
 	&lt;tr&gt;
 		&lt;th&gt;
-			&lt;label for="ac031"&gt;异步自动完成&lt;/label&gt;
+			&lt;label for="ac031"&gt;电影搜索&lt;/label&gt;
 		&lt;/th&gt;
 		&lt;td&gt;
 			&lt;input id="ac031" width="200" name="ac031" type="text" &gt;
 		&lt;/td&gt;
 	&lt;/tr&gt;
-&lt;/table&gt;		
+&lt;/table&gt;
 	</pre>
 
 	<pre class="brush:js;">
 //js
 mod.widget("#ac031",{
 	required:true,
-	autocomplete:"http://test.kugou.com/backstage/static/html/demo/ajax/getAutocomplete.php",
+	autocomplete:"http://mod.jackness.org/api/autocompleteDemo",
 	method:"get",
-	actionType:"ajax",
-	actionKey:"val"
+	actionType:"jsonp",
+	actionKey:"keyword"
 });
 	</pre>
 
@@ -425,10 +425,10 @@ mod.widget("#ac021",{
 
 mod.widget("#ac031",{
 	required:true,
-	autocomplete:"http://test.kugou.com/backstage/static/html/demo/ajax/getAutocomplete.php",
+	autocomplete:"http://mod.jackness.org/api/autocompleteDemo",
 	method:"get",
-	actionType:"ajax",
-	actionKey:"val"
+	actionType:"jsonp",
+	actionKey:"keyword"
 });
 
 </script>
