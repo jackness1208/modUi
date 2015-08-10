@@ -203,6 +203,16 @@ new fn.Promise().then(function(next){
         fs.writeFileSync(item, render(fs.readFileSync(item)));
     });
 
+    next(info);
+
+// 修改 package.json 版本号
+}).then(function(info, next){
+    var pkgPath = fn.formatPath(__dirname + '/../package.json')
+        pkg = require(pkgPath);
+
+    pkg.version = info.version;
+
+    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 4));
     next();
 
 // 处理完成
@@ -214,7 +224,3 @@ new fn.Promise().then(function(next){
     next();
 
 }).start();
-
-var defaultValue = '1.4.7';
-
-
