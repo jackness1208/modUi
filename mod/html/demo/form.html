@@ -18,7 +18,7 @@
 	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
 
 	<div class="ins">
-			<form class="bs_form" mod-action="ajax/setForm.php" mod-method="get" mod-action-type="ajax" mod-action-param='{"status":1}' mod-action-callback="alert('提交成功')" mod-message-key="error">
+			<form class="bs_form" mod-action="http://mod.jackness.org/api/checkDemo?isOk=1" mod-method="get" mod-action-type="ajax" mod-action-param='{"status":1}' mod-action-callback="alert('提交成功')" mod-message-key="error">
 				<table class="bs_table_s0">
 					<tr>
 						<th>
@@ -39,7 +39,7 @@
 			</form>
 	</div>
 	<pre class="brush:xml;">
-&lt;form class="bs_form" mod-action="http://lib9.service.kugou.com/websearch/index.php" mod-method="get" mod-action-type="jsonp" mod-action-param='{"cmd":100, "keyword":"", "page":1, "pagesize":20 }' mod-action-callback="alert('提交成功')" mod-message-key="error"&gt;
+&lt;form class="bs_form" mod-action="http://mod.jackness.org/api/checkDemo?isOk=1" mod-method="get" mod-action-type="jsonp" mod-action-param='{"cmd":100, "keyword":"", "page":1, "pagesize":20 }' mod-action-callback="alert('提交成功')" mod-message-key="error"&gt;
 	&lt;table class="bs_table_s0"&gt;
 		&lt;tr&gt;
 			&lt;th&gt;
@@ -108,7 +108,7 @@
 	<pre class="brush:js;">
 //javascript
 mod.form("#form1",{
-	action:"http://lib9.service.kugou.com/websearch/index.php",
+	action:"http://mod.jackness.org/api/checkDemo?isOk=1",
 	method:"get",
 	actionType:"jsonp",
 	actionParam:{"cmd":100, "keyword":"", "page":1, "pagesize":20},
@@ -333,7 +333,7 @@ mod.form("#form1",{
 <script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
 <script>
 mod.form("#form1",{
-	action:"http://lib9.service.kugou.com/websearch/index.php",
+	action:"http://mod.jackness.org/api/checkDemo?isOk=1",
 	method:"get",
 	actionType:"jsonp",
 	actionParam:{"cmd":100, "keyword":"", "page":1, "pagesize":20},

@@ -17,10 +17,19 @@
 			<table class="bs_table_s0">
 				<tr>
 					<th>
-						<label for="keyword">关键字</label>
+						<label for="keyword">电影名称</label>
 					</th>
 					<td>
-						<input id="keyword" width="200" name="keyword" type="text" value="123" mod-required="true"  mod-format="" mod-autocomplete="张三,李四,黄五,赵六" >
+						<input id="keyword" width="200" name="keyword" type="text" value="速" mod-required="true"  mod-format="" mod-autocomplete="http://mod.jackness.org/api/autocompleteDemo" mod-method='get' mod-action-type='jsonp' mod-action-key="keyword">
+					</td>
+				</tr>
+                <tr>
+					<th>
+						<label for="keyword">电影名称</label>
+					</th>
+					<td>
+					    <input type="checkbox" name="wahaha" id="wahaha01" mod-title="你妹" />	
+					    <input type="checkbox" name="wahaha" id="wahaha02" mod-title="你爸" />	
 					</td>
 				</tr>
 				<tr>
@@ -47,7 +56,7 @@
 				&lt;label for="keyword"&gt;关键字&lt;/label&gt;
 			&lt;/th&gt;
 			&lt;td&gt;
-				&lt;input id="keyword" width="200" name="keyword" type="text" mod-required="true" mod-format="" mod-autocomplete="张三,李四,黄五,赵六" &gt;
+				&lt;input id="keyword" width="200" name="keyword" type="text" value="123" mod-required="true"  mod-format="" mod-autocomplete="http://mod.jackness.org/autocompleteDemo" mod-method='get' mod-action-type='jsonp' mod-action-key="keyword" &gt;
 			&lt;/td&gt;
 		&lt;/tr&gt;
 		&lt;tr&gt;
@@ -64,21 +73,49 @@
 	<h2 class="ins">Javascript写法</h2>
 	<pre class="brush:js;">
 //javascript
-mod.form(target,{
-target:"#searchResultGird",
+mod.form('#form1',{
+    target:"#searchResultGird",
 	targetConfig:{
-		action:"http://lib9.service.kugou.com/websearch/index.php", 
+		action:"http://mod.jackness.org/api/searchDemo", 
 		actionParam:{
-			"cmd":100, 
-			"keyword":"123", 
 			"page":1, 
-			"pagesize":20 
+			"size":20 
 		}, 
 		actionType:"jsonp", 
 		method:"GET", 
-		dataKey:"data.songs", 
-		totalKey:"data.total"
+		dataKey:"data", 
+		totalKey:"count",
+        layout:[
+            {
+                name: '封面',
+                field: 'img',
+                html: '<img src="{$img}" width="100" height="150" />',
+                width: '100'
+            },{
+                name: '电影名称',
+                field: 'title',
+                width: '80'
+            },{
+                name: '别名',
+                field: 'otherName'
+            },{
+                name: '年份',
+                field: 'year',
+                width: '30'
+            },{
+                name: '地区',
+                field: 'area'
+            },{
+                name:'演员列表',
+                field: 'actress'
+            },{
+                name: '豆瓣评分',
+                field: 'mark',
+                width: '60'
+            }
+        ]
 	},
+    search: true,
     onerror: function(arrs){
         alert('err!')
         console.log(arrs);
@@ -95,27 +132,53 @@ target:"#searchResultGird",
 <script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
 <script>
 
-mod.form("#form1",{
-	target:"#searchResultGird",
+mod.form('#form1',{
+    target:"#searchResultGird",
 	targetConfig:{
-		action:"http://lib9.service.kugou.com/websearch/index.php", 
+		action:"http://mod.jackness.org/api/searchDemo", 
 		actionParam:{
-			"cmd":100, 
-			"keyword":"123", 
 			"page":1, 
-			"pagesize":20 
+			"size":20 
 		}, 
 		actionType:"jsonp", 
 		method:"GET", 
-		dataKey:"data.songs", 
-		totalKey:"data.total"
+		dataKey:"data", 
+		totalKey:"count",
+        layout:[
+            {
+                name: '封面',
+                field: 'img',
+                html: '<img src="{$img}" width="100" height="150" />',
+                width: '100'
+            },{
+                name: '电影名称',
+                field: 'title',
+                width: '80'
+            },{
+                name: '别名',
+                field: 'otherName'
+            },{
+                name: '年份',
+                field: 'year',
+                width: '30'
+            },{
+                name: '地区',
+                field: 'area'
+            },{
+                name:'演员列表',
+                field: 'actress'
+            },{
+                name: '豆瓣评分',
+                field: 'mark',
+                width: '60'
+            }
+        ]
 	},
-	search:true,
+    search: true,
     onerror: function(arrs){
         alert('err!')
         console.log(arrs);
     }
-
 });
 
 </script>

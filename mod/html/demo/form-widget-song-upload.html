@@ -24,7 +24,7 @@
 						<label for="songUpload">歌曲上传</label>
 					</th>
 					<td>
-						<input id="songUpload" name="songUpload" type="hidden" mod-required="false" mod-format="song-upload" mod-action="http://10.13.0.34/index.php?m=singerImg&a=upload&type=softimage" mod-status-key="status" mod-msg-key="data" mod-action-callback="$('songUpload')[0].srcBox.success('上传成功')">
+						<input id="songUpload" name="songUpload" type="hidden" mod-required="false" mod-format="song-upload" mod-action="http://mod.jackness.org/api/checkDemo?isOk=1" mod-status-key="status" mod-msg-key="data" mod-action-callback="$('songUpload')[0].srcBox.success('上传成功')">
 					</td>
 				</tr>
 			</table>
@@ -41,7 +41,7 @@
 				&lt;label for="songUpload"&gt;歌曲上传&lt;/label&gt;
 			&lt;/th&gt;
 			&lt;td&gt;
-				&lt;input id="songUpload" name="songUpload" type="hidden" mod-required="false" mod-format="song-upload" mod-action="http://10.13.0.34/index.php?m=singerImg&a=upload&type=softimage" mod-status-key="status" mod-msg-key="data" mod-action-callback="$('imgUpload')[0].srcBox.success('上传成功')"&gt;
+				&lt;input id="songUpload" name="songUpload" type="hidden" mod-required="false" mod-format="song-upload" mod-action="http://mod.jackness.org/api/checkDemo?isOk=1" mod-status-key="status" mod-msg-key="data" mod-action-callback="$('imgUpload')[0].srcBox.success('上传成功')"&gt;
 			&lt;/td&gt;
 		&lt;/tr&gt;
 	&lt;/table&gt;
@@ -82,7 +82,7 @@
 //js
 mod.widget("#songUpload1",{
 	format:"song-upload",
-	action:"http://kgedit2.kugou.com/index.php?m=singerImg&a=upload&type=softimage",
+	action:"http://mod.jackness.org/api/checkDemo?isOk=1",
 	submitCallback:function(json){
 		if(json.status == 1){
 			$("#imgUpload1").val(json.data);
@@ -245,7 +245,7 @@ mod.widget("#songUpload1",{
 <script>
 mod.widget("#songUpload1",{
 	format:"song-upload",
-	action:"http://kgedit2.kugou.com/index.php?m=singerImg&a=upload&type=softimage",
+	action:"http://mod.jackness.org/api/checkDemo?isOk=1",
 	submitCallback:function(json){
 		if(json.status == 1){
 			$("#songUpload1").val(json.data);

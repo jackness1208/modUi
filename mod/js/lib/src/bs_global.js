@@ -1625,9 +1625,9 @@ function leafRebuild(nowPage,showNum,total,source){
 
 
 function urlRender(url){
-    var r = url.replace(/\{\{[^\}]*\}\}/g, function(str){
-        var selector = str.replace(/^\{\{\s*/g,'').replace(/\s*\}\}$/,'');
-        return $(selector).val();
+    var r = url.replace(/\{[^\}\{]*\}/g, function(str){
+        var selector = str.replace(/^\{\s*/g,'').replace(/\s*\}$/,'');
+        return $(selector).val() || $(selector).text();
     });
 
     return r;
@@ -2317,7 +2317,7 @@ moduleBuild.prototype = {
 				});
 			}
 
-            that.clean = function(){
+            that.clean = that.clear = function(){
                 that.checkElms = [];
 				//form标签特有属性
 				elms = that.elements;
@@ -2326,12 +2326,14 @@ moduleBuild.prototype = {
 					!/button|submit/.test(fs.type) && fs.name && fs.srcBox && that.checkElms.push(fs);
 				}
 				
+                that.reset();
 				
 				for(i = 0, len = that.checkElms.length; i < len; i++){
-					that.checkElms[i].srcBox.reset();
+					fs = that.checkElms[i];
+                    fs.srcBox.reset();
+                    /radio|checkbox/.test(fs.type) && $(fs).trigger('change');
 				}
 
-                that.reset();
             };
 			
 			attr.search && that.check();
@@ -2740,7 +2742,7 @@ moduleBuild.prototype = {
 							box.clear();
 							box.tips.cnt.innerHTML = "";
 							clearTimeout(box.loading.timeoutKey);
-							
+							box.tips.hide();
 						}
 					};
 
@@ -2785,6 +2787,8 @@ moduleBuild.prototype = {
 							
 						};
 
+
+
 					} else {
 						box.check = function(callback){
 							var i,len,fs,
@@ -2793,8 +2797,7 @@ moduleBuild.prototype = {
 							
 							for(i = 0, len = box.srcItems.length; i < len; i++){
 								fs = box.srcItems[i];
-								
-								if(!fs.required && !fs.value.trim()){
+								if(!isRequired && !fs.required && !fs.value.trim()){
 									continue;
 								} else {
 									isRequired = true;
@@ -7096,6 +7099,11 @@ function pageInit(){
 					d2.appendChild(myNodes[i]);
 				}
 				document.onreadystatechange = null;
+
+                // 修复表格在此过后 宽度不正常问题
+                $('.bs_tablebox ').each(function(){
+                    this.parentNode.resize && this.parentNode.resize();
+                });
 			}
 		};
 		
