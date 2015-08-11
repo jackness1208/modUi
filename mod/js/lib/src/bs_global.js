@@ -2341,9 +2341,8 @@ moduleBuild.prototype = {
 			!isNaNFn(attr.onload) && attr.onload();
 			that.opAttr = attr;
 
-
 		});
-		
+	    return $tar[0];
 	},
 
 	/**
@@ -4618,7 +4617,7 @@ moduleBuild.prototype = {
 		
 
 		
-		
+	    return $tar[0];
 	},
 	/**
 	 * 按钮控件

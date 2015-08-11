@@ -316,6 +316,14 @@ mod.form("#form1",{
 									</table>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>search</td>
+								<td>{boolean}</td>
+								<td><strong class="blue">&gt;= 1.0.0</strong></td>
+                                <td>
+                                    是否初始化的同时执行 搜索（配合 mod.grid 一起使用）
+                                </td>
+                            </tr>
 						</tbody>
 					</table>
 				</td>
@@ -324,9 +332,31 @@ mod.form("#form1",{
 		</tbody>
 	</table>
 	
+    <h2 class="ins">mod.form(target,op) 返回：</h2>
+    <table class="ins">
+		<thead>
+			<tr>
+				<td width="100">属性</td>
+				<td width="100">类型</td>
+				<td>说明</td>
+
+			</tr>
+		</thead>
+		<tbody>
+            <tr>
+                <td>clear()</td>
+                <td>{function}</td>
+                <td>重置表格</td>
+            </tr>
+			<tr>
+                <td>check()</td>
+                <td>{function}</td>
+                <td>校验 &amp; 提交表格</td>
+            </tr>
+        </tbody>
+	</table>
 </div>
 	
-
 	
 </body>
 </html>
