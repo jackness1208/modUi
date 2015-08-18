@@ -6,10 +6,9 @@
  * $Version: 1.4.8 $
  */
 !function(window,undefined){
-console.log( window.__MODCONFIG ) 
-if(window.mod){
-	return;
-}
+
+var document = window.document;
+
 //原生扩展
 String.prototype.trim = function(){return this.replace(/^(\s|\u3000)*|(\s|\u3000)*$/g,"");};
 
@@ -19,21 +18,10 @@ String.prototype.getBytes = function(){var bytes=0;for(var i=0;i<this.length;i++
 Array.prototype.indexOf = Array.prototype.indexOf || function(s){
 	for(var i = 0, len = this.length; i < len; i++){
 		if(this[i] === s){
-			return i;
-		}
-	}
-	return -1;
-};
-
-Array.prototype.remove = Array.prototype.remove || function(s){
-	for(var i = 0, len = this.length; i < len;){
-		if(this[i] === s){
-			this.splice(i, 1);
-		} else {
-			i++
-		}
-	}
-};
+			return i
+        };
+    }
+}   
 
 Array.prototype.forEach = Array.prototype.forEach || function(fn){
     var she = this;
@@ -46,7 +34,6 @@ var mod = {};
 
 mod.fn = {};
 
-mod.options = window.__MODCONFIG;
 /**
  * 判断对象类别
  * @param {Anything} 对象
@@ -155,15 +142,6 @@ mod.fn.extend = function(){
 
     // Return the modified object
     return target;
-};
-
-mod.extend = function(){
-    var she = this,
-        myArgv = [she];
-    for(var i = 0, len = arguments.length; i < len; i++){
-        myArgv.push(arguments[i]);
-    }
-    return she.fn.extend.apply(mod, myArgv);
 };
 
 
@@ -360,7 +338,7 @@ mod.fn.cookies = {///{
 	 * @date:    2012-5-25
 	 * @version: 1.0
 	 */
-	get:function(name){
+	get: function(name){
 		var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
 		if(arr !== null) {
 			return window.unescape(arr[2]);
@@ -382,7 +360,7 @@ mod.fn.cookies = {///{
 	 * @date:    2013-1-28
 	 * @version: 1.1
 	 */
-	set:function(name,value,delayHours,path,domain,secure){
+	set: function(name,value,delayHours,path,domain,secure){
 		if(!delayHours){
 			delayHours = 24;
 		}
@@ -400,7 +378,7 @@ mod.fn.cookies = {///{
 	 * @date:    2012-5-25
 	 * @version: 1.0
 	 */
-	del:function(name){
+	del: function(name){
 		var exp = new Date();
 		exp.setTime(exp.getTime() - 1);
 		var cval = this.get(name);
@@ -420,9 +398,8 @@ var JSON = mod.fn.JSON = function() {function f(n) {return n < 10 ? '0' + n: n; 
 
 mod.fn.loader = function(option,callback){
 
-    var dc = document,
-        _type = "",
-        _url = "",
+    var type = option.type || '',
+        url = option.url || '',
         _callback = callback||function(){},
         createScript = function(url,callback){
             var urls = url.replace(/[,]\s*$/ig,"").split(","),
@@ -471,14 +448,17 @@ mod.fn.loader = function(option,callback){
             callback instanceof Function?callback():"";
         };
 
-    option.type? _type = option.type:"";
-    option.url? _url = option.url:"";
-    typeof option.filtration == "boolean"? option.filtration = option.filtration:"";
+    typeof option.filtration == "boolean" && (option.filtration = option.filtration);
     
-    switch(_type){
+    switch(type){
         case "js":
-        case "javascript": createScript(_url,_callback); break;
-        case "css": createLink(_url,_callback); break;
+        case "javascript": 
+            createScript(url,_callback); 
+            break;
+
+        case "css": 
+            createLink(url,_callback); 
+            break;
     }
 
 };
@@ -1946,6 +1926,241 @@ function getObjByKey(obj,str){///{
 	return r === obj? undefined:r;
 }///}
 
+var renderPark = {
+    elements: function(elm, data){
+        var keyMatchs = {
+                'mod-if': function(target, context){
+                    
+                },
+
+                'mod-component': function(target, context){
+                    var component = data[context];
+                    if(/^document/g.test(mod.fn.type(component))){
+                        target.appendChild(component);
+                    } else if(mod.fn.type(component) == 'contexting'){
+                        target.innerHTML = component;
+                    }
+
+                    target.removeAttribute('mod-component');
+                },
+
+                'mod-on': function(target, context){
+
+                },
+
+                'mod-class': function(target, context){
+                    var ctxArr = context.replace(/\s+/g,'').split(','),
+                        ctxMap = {
+
+                        };
+                    ctxArr.forEach(function(item, i){
+                        var sArr = item.split(':');
+                        if(sArr.length > 1){
+                            ctxMap[sArr[0]] = sArr[1];
+                        }
+                    });
+
+                    //TODO
+                }
+            };
+        $(elm).find('*').each(function(){
+            var item = this,
+                myVal;
+            for(var key in keyMatchs){
+                if(keyMatchs.hasOwnProperty(key)){
+                    myVal = $(item).attr(key);
+                    myVal && keyMatchs[key](item, myVal);
+                }
+            }
+
+        });
+    },
+    string: function(str, obj){
+        if(!str){return "";}
+
+        //替换变量
+        var var2Str = function(r){
+            return r.replace(/\$\w+/g,function(t){
+                var attr = t.replace("$",""),
+                    r = obj[attr] || "";
+                
+                
+                return typeof r == "number"?r: '"' + r.replace(/["]/g,'\\"').replace(/\r/g,"").replace(/\n/g,"") + '"';
+            
+            }).replace(/return\s".+?";/g,function(t){
+                return [
+                    'return "',
+                    t.replace(/^return\s"/g,"").replace(/";$/g,"").replace(/[^\\]"/g,function(w){
+                        
+                        return w.substr(0,1) + '\\"';
+                    }),
+                    '";'
+                ].join("");
+            
+            });
+        };
+
+        //普通变量
+        return str.replace(/[{]\$[^{}]*\}/g,function(t){
+            var attr = t.replace("{$",'').replace("}",''),
+                r = obj[attr] || "";
+
+            return r;
+
+        // js 方法执行 模板 {js:: xx}
+        }).replace(/\{js::[^{}]*\}/g,function(t){
+            var r = t.replace("{js::",'').replace("}",'');
+            try{
+                return new Function('try{return ' + var2Str(r) + ';}catch(er){return "";}')();
+            } catch(er){
+                return "";
+            }
+            
+
+        // if else 模板 {if xx} xx {else if xx} xx {else} xx {/if}
+        // 必须最后替换，否则会被其他替换规则影响
+        }).replace(/\{if.+?\{\/if\}/g,function(str){
+
+            // if
+            var r = str.replace(/\{if\s[^{}]*\}/g,function(t){
+                return 'if('+ t.replace("{if ",'').replace("}",'') +'){';
+            // else if
+            }).replace(/\{else\sif\s[^{}]*\}/g,function(t){
+                return '}else if('+ t.replace("{else if",'').replace("}",'') +'){';
+
+            // else
+            }).replace(/\{else[^{}]*\}/g,function(t){
+                return "}else{";
+
+            //if结尾
+            }).replace(/\{\/if\}/g,function(t){
+                return "}";
+
+            // 替换{}中的内容
+            }).replace(/\)\{[^{}]*\}/g,function(t){
+                var ft = t.substr(0,t.indexOf("{"));
+                return ft + '{return "' + t.substr(t.indexOf("{")).replace("{",'').replace("}",'').replace(/"/g,'\\"') + '";}';
+
+            }).replace(/\}else\{[^{}]*\}/g,function(t){
+                var ft = t.substr(0,t.indexOf("{"));
+                return ft + '{return "' + t.substr(t.indexOf("{")).replace("{",'').replace("}",'').replace(/"/g,'\\"') + '";}';
+
+            });
+
+            try{
+                return new Function(var2Str(r))() || "";
+            } catch(er){
+                return "";
+
+            }
+            
+            
+
+        });
+    }
+};
+/**
+ * define mod main fn
+ *******************************/
+mod.options = window.__MODCONFIG;
+mod.extend = function(){
+    var she = this,
+        myArgv = [she];
+    for(var i = 0, len = arguments.length; i < len; i++){
+        myArgv.push(arguments[i]);
+    }
+    return she.fn.extend.apply(mod, myArgv);
+};
+
+mod.box = function(context, op){
+    var $tar = $(context),
+        him = mod.box,
+        key;
+		
+		//赋值
+	var option = modAssignment(him.data, op);
+
+    //重构
+    $tar.each(function() {
+        var she = this,
+            attr = modAssignment(option,she);
+
+        if(isEqual(she.opAttr,attr)){
+            return;
+        }
+
+        $(she).addClass(him.class);
+        var myFrag = document.createDocumentFragment();
+            
+
+        while(she.childNodes.length > 0){
+            myFrag.appendChild(she.childNodes[0]);
+        }
+        
+        attr.content = myFrag;
+        she.innerHTML = renderPark.string(him.template, attr);
+        renderPark.elements(she, attr);
+
+        // she.innerHTML = tplParse(him.tpl, attr);
+
+        $(she).show();
+
+        // var myExt = {
+        //         toggleIco:$(she).children(".bs_mod01_hd").find(".bs_toggle_icon")[0],
+        //         toggleCnt:$(she).children(".bs_mod01_bd")[0]
+        //     },
+        //     toggleArea = myExt.toggleIco?myExt.toggleIco.parentNode:null;
+
+
+        // she.show = function(){
+        //     $(myExt.toggleIco).removeClass("bs_toggle_icon_cur");
+        //     $(myExt.toggleCnt).slideDown(200)
+        // };
+        
+        // she.hide = function(){
+        //     $(myExt.toggleIco).addClass("bs_toggle_icon_cur");
+        //     $(myExt.toggleCnt).slideUp(200);
+        // };
+
+        // toggleArea && (toggleArea.onclick = function(){
+        //     myExt.toggleIco.className.indexOf("bs_toggle_icon_cur") == -1 ? (
+        //         she.hide()
+        //     ) : (
+        //         she.show()
+        //     );
+
+        // });
+
+        // she.opAttr = attr;
+        // toggleArea = null;
+        
+    });
+
+
+};
+
+mod.fn.extend(mod.box, {
+    class: 'bs_mod01',
+    data: {
+        title: '',
+        titleLeft: '',
+        titleRight: '',
+        hide: false
+    },
+    template: [
+        '<div class="bs_mod01_hd">',
+                '<h3 class="h_tl" mod-if="title"><i class="bs_toggle_icon" mod-class="bs_toggle_icon_cur: !hide" mod-on="click: onToggle" ></i>{$title}</h3>',
+                '<div class="h_l">{$titleLeft}</div>',
+                '<div class="h_r">{$titleRight}</div>',
+        '</div>',
+        '<div class="bs_mod01_bd" mod-component="content"></div>'
+    ].join(''),
+    methods: {
+        onToggle: function(){
+            alert('onToggle!')
+        }
+    }
+});
 
 //模板初始化用函数
 function moduleBuild() {
@@ -1963,7 +2178,7 @@ moduleBuild.prototype = {
 	 *                  - titleRight [string] 模块标题右侧 html内容
 	 * @return {void} 
 	 */
-	box: function(target,op) {
+	_box: function(target,op) {
 		var $tar = target ? $(target) : $(".bs_mod01"),
 			option = {
 				title:"",
@@ -7243,7 +7458,7 @@ moduleBuild.prototype = {
 	 */
 	init: function() {
 		var me = this;
-			me.box();
+			me.box('.' + me.box.class);
 			me.tab();
 			me.button();
 			me.form();
