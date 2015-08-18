@@ -6,31 +6,35 @@
  * $Version: 1.4.8 $
  */
 
-!function(global,undefined){
+!function(window, undefined){
+var document = window.document;
 
 //防止重复渲染
-if(global.Config){
+if(window.__MOD_CONFIG){
 	return;
 }
-var mySrc = (function(){
-    if(/bs_config\.js$/g.test(document.scripts[document.scripts.length - 1].src)){
+
+var fileName = 'mod-config',
+    fileLocation = (function(){
+    if(new RegExp(fileName + '\\.js','g').test(document.scripts[document.scripts.length - 1].src)){
         return document.scripts[document.scripts.length - 1].src;
+
     } else {
         for(var i = 0, fsrc, len = document.scripts.length; i < len; i++){
             fsrc = document.scripts[i].src;
-            if(/bs_config\.js/g.test(fsrc)){
+            if(new RegExp(fileName + '\\.js','g').test(fsrc)){
                 return fsrc;
             }
         }
     }
 })();
 
-var Config = global.Config = {
+var Config = window.__MODCONFIG = {
 	
 	//主域名
-	domain:mySrc.split("bs_config.js")[0] + "../",
+	domain:fileLocation.split(fileName + ".js")[0] + "../",
 	//时间错
-	cssjsdate:mySrc.indexOf("?") != -1? mySrc.split("?").pop():"",
+	cssjsdate:fileLocation.indexOf("?") != -1? fileLocation.split("?").pop():"",
 
 	//用来记录location的 cookies 键值
 	locationMark:"moduiBackstage",
@@ -43,8 +47,8 @@ var Config = global.Config = {
 		'js/lib/dist/jquery-1.11.0.min.js',
 		'js/lib/dist/jns_calendar.min.js',
 		// 'js/lib/dist/bs_global.min.js',
-		'js/lib/src/bs_global.js',
-		'js/bs_init.js'
+		'js/lib/src/mod.js',
+		'js/mod-init.js'
 	],
 
 	//上传接口用地址参数
@@ -135,71 +139,51 @@ var Config = global.Config = {
     data: {}
 };
 
-//执行函数
-global.jcLoader = function(option,callback){
 
-		var dc = document,
-			_type = "",
-			_url = "",
-			_callback = callback||function(){},
-			createScript = function(url,callback){
-				var urls = url.replace(/[,]\s*$/ig,"").split(","),
-					scripts = [],
-					completeNum = 0,
-					onreadystatechangeHandle = function(){
-						if( this.readyState == "loaded" || this.readyState == "complete" ){
-							this.onreadystatechange = null;
-							completeNum++;
-							completeNum >= urls.length?callback():"";
-						}
-					},
-					onloadHandle = function(){
-						completeNum++;
-						completeNum >= urls.length?callback():"";
-					};
-				for( var i = 0; i < urls.length; i++ ){
-					
-					scripts[i] = dc.createElement("script");
-					scripts[i].type = "text/javascript";
-					scripts[i].src = urls[i];
-					dc.getElementsByTagName("head")[0].appendChild(scripts[i]);
-					
-					if(!callback instanceof Function){return;}
-					
-					if(scripts[i].readyState){
-						scripts[i].onreadystatechange = onreadystatechangeHandle;
-					}
-					else{
-						scripts[i].onload = onloadHandle;
-					}
-					
-				}
-				
-			},
-		
-			createLink = function(url,callback){
-				var urls = url.replace(/[,]\s*$/ig,"").split(",");
-				var links = [];
-				for( var i = 0; i < urls.length; i++ ){
-					links[i] = dc.createElement("link");
-					links[i].rel = "stylesheet";
-					links[i].href = urls[i];
-					dc.getElementsByTagName("head")[0].appendChild(links[i]);
-				}
-				callback instanceof Function?callback():"";
-			};
+// 加载函数
+function loader(option,callback){
+    var url = option.url,
+        callback = callback || function(){},
+        createScript = function(url, done){
+            var urls = url.replace(/[,]\s*$/ig,"").split(","),
+                scripts = [],
+                completeNum = 0,
+                onreadystatechangeHandle = function(){
+                    if( this.readyState == "loaded" || this.readyState == "complete" ){
+                        this.onreadystatechange = null;
+                        completeNum++;
+                        completeNum >= urls.length && done();
+                    }
+                },
+                onloadHandle = function(){
+                    completeNum++;
+                    completeNum >= urls.length && done();
+                },
+                head = document.getElementsByTagName("head")[0];
+            for( var i = 0, len = urls.length, elm; i < len; i++ ){
+                elm = script[i];
+                elm = document.createElement("script");
+                elm.type = "text/javascript";
+                elm.src = urls[i];
+                head.appendChild(elm);
+                
+                if(item.readyState){
+                    elm.onreadystatechange = onreadystatechangeHandle;
 
-		option.type? _type = option.type:"";
-		option.url? _url = option.url:"";
-		typeof option.filtration == "boolean"? option.filtration = option.filtration:"";
-		
-		switch(_type){
-			case "js":
-			case "javascript": createScript(_url,_callback); break;
-			case "css": createLink(_url,_callback); break;
-		}
+                } else {
+                    elm.onload = onloadHandle;
+                }
+                
+            }
+            
+        };
 
-	};
+    typeof option.filtration == "boolean" && (
+        option.filtration = option.filtration
+    );
+    createScript(url,callback);
+
+};
 
 
 var urls = [];
@@ -209,11 +193,10 @@ for(var i = 0,src = "", len = Config.scripts.length; i < len; i++){
 }
 
 // 异步加载
-if(/type=ajax/.test(mySrc)){
-    var callbackName = mySrc.replace(/^.+callback=/,'').replace(/&.*$/, '');
-    jcLoader({
-        "url": urls.join(','), 
-        "type": 'js'
+if(/type=ajax/.test(fileLocation)){
+    var callbackName = fileLocation.replace(/^.+callback=/,'').replace(/&.*$/, '');
+    loader({
+        "url": urls.join(',')
     }, function(){
         callbackName && window[callbackName] && window[callbackName]();
     });

@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div class="bs_mod01" mod-title='全局配置文件' mod-title-left='文件地址：<a href="../../js/bs_config.js" target="_blank">bs_config.js</a>'>
+<div class="bs_mod01" mod-title='全局配置文件' mod-title-left='文件地址：<a href="../../js/mod-config.js" target="_blank">mod-config.js</a>'>
 	<p class="ins"></p>
     <h2 class="ins">引入方式</h2>
     <h3 class="ins">script标签方式</h3>
@@ -25,17 +25,17 @@
 &lt;/html&gt;
     </pre>
     <h3 class="ins">异步方式</h3>
-    <p class="ins">在 地址中加入 bs_config.js?type=ajax&callback=xx, 其中callback为引入成功后回调方法</p>
+    <p class="ins">在 地址中加入 mod-config.js?type=ajax&callback=xx, 其中callback为引入成功后回调方法</p>
     <pre class="brush:js;">
 window.scriptback = function(){
     //do something
 }
 var myScript = document.createElement('script');
-myScript.src = '../js/bs_config.js?type=ajax&callback=scriptback';
+myScript.src = '../js/mod-config.js?type=ajax&callback=scriptback';
 myScript.type = 'text/javascript';
 document.getElementByTagName('head')[0].appendChild(myScript);
     </pre>
-    <h4 class="ins">bs_config.js search 参数说明</h4>
+    <h4 class="ins">mod-config.js search 参数说明</h4>
     <table class="ins">
         <thead>
             <tr>
@@ -94,7 +94,7 @@ var mySrc = (function(){
 var Config = global.Config = {
 	
 	//主域名
-	domain:mySrc.split("bs_config.js")[0] + "../",
+	domain:mySrc.split("mod-config.js")[0] + "../",
 	//时间错
 	cssjsdate:mySrc.indexOf("?") != -1? mySrc.split("?").pop():"",
 
@@ -301,6 +301,6 @@ if(/type=ajax/.test(mySrc)){
 	
 </body>
 </html>
-<script type="text/javascript" src="../../js/bs_config.js?201407161047"></script>
+<script type="text/javascript" src="../../js/mod-config.js?201407161047"></script>
 
 

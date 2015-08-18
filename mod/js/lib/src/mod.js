@@ -5,9 +5,9 @@
  * $Date: Tue Aug 11 2015 13:57:03 GMT+0800 (中国标准时间) $
  * $Version: 1.4.8 $
  */
-!function(global,undefined){
- 
-if(global.mod){
+!function(window,undefined){
+console.log( window.__MODCONFIG ) 
+if(window.mod){
 	return;
 }
 //原生扩展
@@ -35,16 +35,173 @@ Array.prototype.remove = Array.prototype.remove || function(s){
 	}
 };
 
+Array.prototype.forEach = Array.prototype.forEach || function(fn){
+    var she = this;
+    for(var i = 0, len = she.length; i < len;){
+        fn(she, i);
+    }
+};
+
+var mod = {};
+
+mod.fn = {};
+
+mod.options = window.__MODCONFIG;
+/**
+ * 判断对象类别
+ * @param {Anything} 对象
+ * @return {string}  类型
+ */
+mod.fn.type = function (obj) {
+    var type,
+        toString = Object.prototype.toString;
+    if (obj == null) {
+        type = String(obj);
+    } else {
+        type = toString.call(obj).toLowerCase();
+        type = type.substring(8, type.length - 1);
+    }
+    return type;
+};
+
+mod.fn.isPlainObject = function (obj) {
+    var she = this,
+        key,
+        hasOwn = Object.prototype.hasOwnProperty;
+
+    if (!obj || she.type(obj) !== 'object') {
+        return false;
+    }
+
+    if (obj.constructor &&
+        !hasOwn.call(obj, 'constructor') &&
+        !hasOwn.call(obj.constructor.prototype, 'isPrototypeOf')) {
+        return false;
+    }
+
+    for (key in obj) {}
+    return key === undefined || hasOwn.call(obj, key);
+};
+
+/**
+ * 扩展方法(来自 jQuery)
+ * extend([deep,] target, obj1 [, objN])
+ * @base mod.fn.isPlainObject
+ * @base mod.fn.type
+ */
+mod.fn.extend = function(){
+    var she = mod,
+        isPlainObject = she.fn.isPlainObject,
+        type = she.fn.type,
+        extend = she.fn.extend,
+        options, name, src, copy, copyIsArray, clone,
+
+        target = arguments[0] || {},
+        i = 1,
+        length = arguments.length,
+        deep = false;
+
+    // Handle a deep copy situation
+    if (typeof target === 'boolean') {
+        deep = target;
+        target = arguments[1] || {};
+        // skip the boolean and the target
+        i = 2;
+    }
+
+    // Handle case when target is a string or something (possible in deep copy)
+    if (typeof target !== 'object' && type(target) !== 'function') {
+        target = {};
+    }
+
+    // extend caller itself if only one argument is passed
+    if (length === i) {
+        target = this;
+        --i;
+    }
+
+    for (; i<length; i++) {
+        // Only deal with non-null/undefined values
+        if ((options = arguments[i]) != null) {
+            // Extend the base object
+            for (name in options) {
+                src = target[name];
+                copy = options[name];
+
+                // Prevent never-ending loop
+                if (target === copy) {
+                    continue;
+                }
+
+                // Recurse if we're merging plain objects or arrays
+                if (deep && copy && (isPlainObject(copy) || (copyIsArray = type(copy) === 'array'))) {
+                    if (copyIsArray) {
+                        copyIsArray = false;
+                        clone = src && type(src) === 'array' ? src : [];
+                    } else {
+                        clone = src && isPlainObject(src) ? src : {};
+                    }
+
+                    // Never move original objects, clone them
+                    target[name] = extend(deep, clone, copy);
+
+                // Don't bring in undefined values
+                } else if (copy !== undefined) {
+                    target[name] = copy;
+                }
+            }
+        }
+    }
+
+    // Return the modified object
+    return target;
+};
+
+mod.extend = function(){
+    var she = this,
+        myArgv = [she];
+    for(var i = 0, len = arguments.length; i < len; i++){
+        myArgv.push(arguments[i]);
+    }
+    return she.fn.extend.apply(mod, myArgv);
+};
 
 
+/**
+ * promise 模块
+ */
+mod.fn.Promise = function(fn){
+    var she = this;
+    
+    she.queue = [];
+    she.then = function(fn){
+        typeof fn == 'function' && she.queue.push(fn);
+        return she;
+    };
+    she.start = function(fn){
+        she.resolve();
+    };
+
+    she.resolve = function(){
+        var myArgv = [];
+        for(var i = 0, len = arguments.length; i < len; i++){
+            myArgv.push(arguments[i]);
+        }
+        myArgv.push(she.resolve);
+        if(she.queue.length){
+            she.queue.shift().apply(she, myArgv);
+        }
+    };
+
+}
 
 //全局函数 - UA
-var UA = global.UA = {
+mod.fn.UA = {
 	ie:(!!window.ActiveXObject && /msie (\d*)/i.test(navigator.userAgent) ? RegExp.$1 : false)
 };
 
 //全局函数 - request
-var request = global.request = {
+mod.fn.request = {
 	search:function(key){
 		var s = location.search.replace(/[? ]/g,"");
 		if(s === ""){return null;}
@@ -107,7 +264,7 @@ var request = global.request = {
  * @param:  {string} attr     hash上的 属性
  * @param:  {string} val      hash上的 值
  */
-var historyManage = global.historyManage = UA.ie && UA.ie < 8?{
+mod.fn.historyManage = mod.fn.UA.ie && mod.fn.UA.ie < 8?{///{
 	init: function(callback,key){
 		this.ifElement = document.getElementById("modHistoryManage");
 		if(!this.ifElement){
@@ -154,8 +311,8 @@ var historyManage = global.historyManage = UA.ie && UA.ie < 8?{
 				'<head>',
 				'<script type="text/javascript">',
 					'function onloadEvent(){',
-						'parent.request.hash("'+ hash +'","'+ val +'");',
-						'parent.historyManage.hashChangeCallback();',
+						'parent.mod.fn.request.hash("'+ hash +'","'+ val +'");',
+						'parent.mod.fn.historyManage.hashChangeCallback();',
 					'};',
 				'</script>',
 				'</head>',
@@ -186,15 +343,13 @@ var historyManage = global.historyManage = UA.ie && UA.ie < 8?{
 
 	},
 	add: function(hash,val){
-		request.hash(hash,val);
+		mod.fn.request.hash(hash,val);
 
 	}
-};
+};///}
 
-//全局函数 - console
-var console = global.console || {log:function(txt){}};
 
-var cookies = global.cookies = {
+mod.fn.cookies = {///{
 	/** 
 	 * 获取 cookies中的某个变量
 	 * <pre>
@@ -253,13 +408,80 @@ var cookies = global.cookies = {
 			document.cookie= name + "="+cval+";expires="+exp.toGMTString();
 		}
 	}
-};
+};///}
 
-//全局函数 - flash
-var flash = global.flash = {init:function(name,op){var option = {wmode:"opaque", width:300, height:300, flashvars:"", flashUrl:""}; if(typeof op == "object"){if (typeof op.wmode != "undefined"){switch(op.wmode.toLowerCase()){case "opaque": option.wmode = "opaque"; break; case "window": option.wmode = "window"; break; case "transparent": option.wmode = "transparent"; break; } option.wmode = op.wmode; } typeof op.width != "undefined"? option.width = op.width:""; typeof op.height != "undefined"? option.height = op.height:""; typeof op.flashvars != "undefined"? option.flashvars = op.flashvars:""; typeof op.flashUrl != "undefined"? option.flashUrl = op.flashUrl:""; } if(option.flashUrl === ""){ return; } var writeHTML =['<object id="object_' + name + '" name="' + name + '" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10.0.32" width="' + option.width + '" height="' + option.height + '">', '<param name="movie" value="' + option.flashUrl + '" />', '<param name="flashvars" value="' + option.flashvars + '" />', '<param name="quality" value="high" />', '<param name="allowscriptaccess" value="always" />', '<param name="wmode" value="' + option.wmode + '"/>', '<embed id="embed_'+ name +'" src="' + option.flashUrl + '" width="' + option.width + '"  height="' + option.height + '" allowscriptaccess="always" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="' + option.flashvars + '" type="application/x-shockwave-flash" wmode="'+ option.wmode +'"></embed>', '</object>'].join(""); return writeHTML; }, write:function(name,op){var writeHTML = this.init(name,op); if(writeHTML){document.write(writeHTML); } }, add:function(target,name,op){var innerHTML = this.init(name,op); if(!target){ return; } if(innerHTML){target.innerHTML= innerHTML; } }, ctrl:function(name){var dc = document, embedElm = dc.getElementById("embed_" + name), objectElm = dc.getElementById("object_" + name); if(navigator.appName.indexOf("Microsoft") == -1){if(!embedElm){ return; } return embedElm; } else {if(!objectElm){ return; } return objectElm; } } };
+// flash
+mod.fn.flash = {init:function(name,op){var option = {wmode:"opaque", width:300, height:300, flashvars:"", flashUrl:""}; if(typeof op == "object"){if (typeof op.wmode != "undefined"){switch(op.wmode.toLowerCase()){case "opaque": option.wmode = "opaque"; break; case "window": option.wmode = "window"; break; case "transparent": option.wmode = "transparent"; break; } option.wmode = op.wmode; } typeof op.width != "undefined"? option.width = op.width:""; typeof op.height != "undefined"? option.height = op.height:""; typeof op.flashvars != "undefined"? option.flashvars = op.flashvars:""; typeof op.flashUrl != "undefined"? option.flashUrl = op.flashUrl:""; } if(option.flashUrl === ""){ return; } var writeHTML =['<object id="object_' + name + '" name="' + name + '" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10.0.32" width="' + option.width + '" height="' + option.height + '">', '<param name="movie" value="' + option.flashUrl + '" />', '<param name="flashvars" value="' + option.flashvars + '" />', '<param name="quality" value="high" />', '<param name="allowscriptaccess" value="always" />', '<param name="wmode" value="' + option.wmode + '"/>', '<embed id="embed_'+ name +'" src="' + option.flashUrl + '" width="' + option.width + '"  height="' + option.height + '" allowscriptaccess="always" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="' + option.flashvars + '" type="application/x-shockwave-flash" wmode="'+ option.wmode +'"></embed>', '</object>'].join(""); return writeHTML; }, write:function(name,op){var writeHTML = this.init(name,op); if(writeHTML){document.write(writeHTML); } }, add:function(target,name,op){var innerHTML = this.init(name,op); if(!target){ return; } if(innerHTML){target.innerHTML= innerHTML; } }, ctrl:function(name){var dc = document, embedElm = dc.getElementById("embed_" + name), objectElm = dc.getElementById("object_" + name); if(navigator.appName.indexOf("Microsoft") == -1){if(!embedElm){ return; } return embedElm; } else {if(!objectElm){ return; } return objectElm; } } };
 
 // 全局函数 - JSON
-var JSON = global.JSON = function() {function f(n) {return n < 10 ? '0' + n: n; } Date.prototype.toJSON = function() {return this.getUTCFullYear() + '-' + f(this.getUTCMonth() + 1) + '-' + f(this.getUTCDate()) + 'T' + f(this.getUTCHours()) + ':' + f(this.getUTCMinutes()) + ':' + f(this.getUTCSeconds()) + 'Z'; }; var m = {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"': '\\"', '\\': '\\\\'}; function stringify(value, whitelist) {var a, i, k, l, r = /["\\\x00-\x1f\x7f-\x9f]/g, v; switch (typeof value) {case 'string': return r.test(value) ? '"' + value.replace(r, function(a) {var c = m[a]; if (c) {return c; } c = a.charCodeAt(); return '\\u00' + Math.floor(c / 16).toString(16) + (c % 16).toString(16); }) + '"': '"' + value + '"'; case 'number': return isFinite(value) ? String(value) : 'null'; case 'boolean': case 'null': return String(value); case 'object': if (!value) {return 'null'; } if (typeof value.toJSON === 'function') {return stringify(value.toJSON()); } a = []; if (typeof value.length === 'number' && !(value.propertyIsEnumerable('length'))) {l = value.length; for (i = 0; i < l; i += 1) {a.push(stringify(value[i], whitelist) || 'null'); } return '[' + a.join(',') + ']'; } if (whitelist) {l = whitelist.length; for (i = 0; i < l; i += 1) {k = whitelist[i]; if (typeof k === 'string') {v = stringify(value[k], whitelist); if (v) {a.push(stringify(k) + ':' + v); } } } } else {for (k in value) {if (typeof k === 'string') {v = stringify(value[k], whitelist); if (v) {a.push(stringify(k) + ':' + v); } } } } return '{' + a.join(',') + '}'; } } return {stringify: stringify, parse: function(text, filter) {var j; function walk(k, v) {var i, n; if (v && typeof v === 'object') {for (i in v) {if (Object.prototype.hasOwnProperty.apply(v, [i])) {n = walk(i, v[i]); if (n !== undefined) {v[i] = n; } else {delete v[i]; } } } } return filter(k, v); } if (/^[\],:{}\s]*$/.test(text.replace(/\\["\\\/bfnrtu]/g, '@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {j = eval('(' + text + ')'); return typeof filter === 'function' ? walk('', j) : j; } throw new SyntaxError('parseJSON'); } }; }();
+var JSON = mod.fn.JSON = function() {function f(n) {return n < 10 ? '0' + n: n; } Date.prototype.toJSON = function() {return this.getUTCFullYear() + '-' + f(this.getUTCMonth() + 1) + '-' + f(this.getUTCDate()) + 'T' + f(this.getUTCHours()) + ':' + f(this.getUTCMinutes()) + ':' + f(this.getUTCSeconds()) + 'Z'; }; var m = {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"': '\\"', '\\': '\\\\'}; function stringify(value, whitelist) {var a, i, k, l, r = /["\\\x00-\x1f\x7f-\x9f]/g, v; switch (typeof value) {case 'string': return r.test(value) ? '"' + value.replace(r, function(a) {var c = m[a]; if (c) {return c; } c = a.charCodeAt(); return '\\u00' + Math.floor(c / 16).toString(16) + (c % 16).toString(16); }) + '"': '"' + value + '"'; case 'number': return isFinite(value) ? String(value) : 'null'; case 'boolean': case 'null': return String(value); case 'object': if (!value) {return 'null'; } if (typeof value.toJSON === 'function') {return stringify(value.toJSON()); } a = []; if (typeof value.length === 'number' && !(value.propertyIsEnumerable('length'))) {l = value.length; for (i = 0; i < l; i += 1) {a.push(stringify(value[i], whitelist) || 'null'); } return '[' + a.join(',') + ']'; } if (whitelist) {l = whitelist.length; for (i = 0; i < l; i += 1) {k = whitelist[i]; if (typeof k === 'string') {v = stringify(value[k], whitelist); if (v) {a.push(stringify(k) + ':' + v); } } } } else {for (k in value) {if (typeof k === 'string') {v = stringify(value[k], whitelist); if (v) {a.push(stringify(k) + ':' + v); } } } } return '{' + a.join(',') + '}'; } } return {stringify: stringify, parse: function(text, filter) {var j; function walk(k, v) {var i, n; if (v && typeof v === 'object') {for (i in v) {if (Object.prototype.hasOwnProperty.apply(v, [i])) {n = walk(i, v[i]); if (n !== undefined) {v[i] = n; } else {delete v[i]; } } } } return filter(k, v); } if (/^[\],:{}\s]*$/.test(text.replace(/\\["\\\/bfnrtu]/g, '@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {j = eval('(' + text + ')'); return typeof filter === 'function' ? walk('', j) : j; } throw new SyntaxError('parseJSON'); } }; }();
+
+
+
+mod.fn.loader = function(option,callback){
+
+    var dc = document,
+        _type = "",
+        _url = "",
+        _callback = callback||function(){},
+        createScript = function(url,callback){
+            var urls = url.replace(/[,]\s*$/ig,"").split(","),
+                scripts = [],
+                completeNum = 0,
+                onreadystatechangeHandle = function(){
+                    if( this.readyState == "loaded" || this.readyState == "complete" ){
+                        this.onreadystatechange = null;
+                        completeNum++;
+                        completeNum >= urls.length?callback():"";
+                    }
+                },
+                onloadHandle = function(){
+                    completeNum++;
+                    completeNum >= urls.length?callback():"";
+                };
+            for( var i = 0; i < urls.length; i++ ){
+                
+                scripts[i] = dc.createElement("script");
+                scripts[i].type = "text/javascript";
+                scripts[i].src = urls[i];
+                dc.getElementsByTagName("head")[0].appendChild(scripts[i]);
+                
+                if(!callback instanceof Function){return;}
+                
+                if(scripts[i].readyState){
+                    scripts[i].onreadystatechange = onreadystatechangeHandle;
+                }
+                else{
+                    scripts[i].onload = onloadHandle;
+                }
+                
+            }
+            
+        },
+    
+        createLink = function(url,callback){
+            var urls = url.replace(/[,]\s*$/ig,"").split(",");
+            var links = [];
+            for( var i = 0; i < urls.length; i++ ){
+                links[i] = dc.createElement("link");
+                links[i].rel = "stylesheet";
+                links[i].href = urls[i];
+                dc.getElementsByTagName("head")[0].appendChild(links[i]);
+            }
+            callback instanceof Function?callback():"";
+        };
+
+    option.type? _type = option.type:"";
+    option.url? _url = option.url:"";
+    typeof option.filtration == "boolean"? option.filtration = option.filtration:"";
+    
+    switch(_type){
+        case "js":
+        case "javascript": createScript(_url,_callback); break;
+        case "css": createLink(_url,_callback); break;
+    }
+
+};
 
 //判断是否数组
 function isArray(obj){
@@ -267,7 +489,7 @@ function isArray(obj){
 }
 
 //对象克隆
-function clone(obj){
+function clone(obj){///{
 	if(typeof(obj) != 'object' || obj === null){
 		return obj;
 	}
@@ -281,9 +503,9 @@ function clone(obj){
 	}
 	
 	return r;
-}
+}///}
 
-function isEqual(o1,o2){
+function isEqual(o1,o2){///{
 	if(typeof o1 != typeof o2){
 		return false;
 	}
@@ -346,10 +568,10 @@ function isEqual(o1,o2){
 	}(o1,o2);
 
 	return same;
-}
+}///}
 
 /* 获取 元素所在的dom 最上层的 z-index */
-function getTopperZIndex(o){
+function getTopperZIndex(o){///{
 	var check = function(str){
 			return str == "auto"? 1: str;
 		},
@@ -373,9 +595,9 @@ function getTopperZIndex(o){
 	}
 
 	return Number(r);
-}
+}///}
 
-function getCssProperty(cssProperty){
+function getCssProperty(cssProperty){///{
 	var firstLetter = cssProperty.substr(0,1),
 		otherStrs = cssProperty.substr(1),
 		fUpperStrs = firstLetter.toUpperCase() + otherStrs,
@@ -395,16 +617,16 @@ function getCssProperty(cssProperty){
 		}
 	}
 	return null;
-}
+}///}
 
-function stopBubble(e){
+function stopBubble(e){///{
 	e = e || window.event;
 	e.stopPropagation && e.stopPropagation();
 	e.cancelBubble = true;
-}
+}///}
 
 //内部函数 - 弹出层
-function bsPopup(type, op) {
+function bsPopup(type, op) {///{
 	var me = bsPopup;
 
 	if(!document.body){
@@ -451,7 +673,7 @@ function bsPopup(type, op) {
 
 			width:"",
 			height:"auto",
-			zIndex:global.Config.popup.zIndex,
+			zIndex:mod.options.popup.zIndex,
 
 			//默认显示
 			show:true,
@@ -460,10 +682,10 @@ function bsPopup(type, op) {
 			top:false,
 
 			//允许调整宽高
-			resize:global.Config.popup.resize,
+			resize:mod.options.popup.resize,
 
 			//允许最小化
-			minimize:global.Config.popup.minimize,
+			minimize:mod.options.popup.minimize,
 
 			//弹窗默认显示状态：normal|max
 			sizingType:"normal",
@@ -893,8 +1115,8 @@ function bsPopup(type, op) {
 			}
 
 			var that = this,
-				extTop = window.Config.page.reset? 0: (UA.ie && UA.ie <= 6? me.myScroll.scrollTop: 0),
-				extLeft = window.Config.page.reset? 0: (UA.ie && UA.ie <= 6? me.myScroll.scrollLeft: 0),
+				extTop = mod.options.page.reset? 0: (mod.fn.UA.ie && mod.fn.UA.ie <= 6? me.myScroll.scrollTop: 0),
+				extLeft = mod.options.page.reset? 0: (mod.fn.UA.ie && mod.fn.UA.ie <= 6? me.myScroll.scrollLeft: 0),
 
 				limitLeft = extLeft,
 				limitRight = extLeft + document.documentElement.clientWidth - popup.offsetWidth,
@@ -1097,8 +1319,8 @@ function bsPopup(type, op) {
 
 				var myLeft = e.clientX - popup.posX,
 					myTop = e.clientY - popup.posY,
-					extTop = UA.ie && UA.ie <= 6? me.myScroll.scrollTop: 0,
-					extLeft = UA.ie && UA.ie <= 6? me.myScroll.scrollLeft: 0;
+					extTop = mod.fn.UA.ie && mod.fn.UA.ie <= 6? me.myScroll.scrollTop: 0,
+					extLeft = mod.fn.UA.ie && mod.fn.UA.ie <= 6? me.myScroll.scrollLeft: 0;
 					
 
 				popup.myLeft = myLeft - extLeft;
@@ -1159,7 +1381,7 @@ function bsPopup(type, op) {
 		});
 
 		$(window).bind("resize",popup.fixed);
-		UA.ie && UA.ie <= 6 && $(window).bind("scroll",popup.fixed);
+		mod.fn.UA.ie && mod.fn.UA.ie <= 6 && $(window).bind("scroll",popup.fixed);
 
 		switch(option.type){
 			case "confirm":
@@ -1372,10 +1594,10 @@ function bsPopup(type, op) {
 	
 
 	return popup;
-}
+}///}
 
 
-function makeFunction(str,type){
+function makeFunction(str,type){///{
 	if(/function|object/.test(typeof str) || (type != "function" && type != "object" && type != "reg" && typeof str == "string")){
 		return function(){ return str;}();
 	
@@ -1388,17 +1610,17 @@ function makeFunction(str,type){
 		}
 	return type == "function"? fn:fn();
 	}
-}
+}///}
 
-function isNaNFn(fn){
+function isNaNFn(fn){///{
 	if(typeof fn == "function"){
 		return fn.toString().replace(" ","") === "function(){}";
 	} else {
 		return true;
 	}
-}
+}///}
 
-function getPosition(target,cw){
+function getPosition(target,cw){///{
 	cw = cw || window;
 
 	var dc = document,
@@ -1419,9 +1641,9 @@ function getPosition(target,cw){
 		right:document.body.scrollLeft + acc.right,
 		bottom:document.body.scrollTop + acc.bottom
 	};
-}
+}///}
 
-var tplParse = global.tplParse = function(obj,str){
+var tplParse = function(obj,str){///{
 	if(!str){return "";}
 
 	//替换变量
@@ -1503,23 +1725,23 @@ var tplParse = global.tplParse = function(obj,str){
 		
 
 	});
-};
+};///}
 
-function attr2mod(str){
+function attr2mod(str){///{
 	var arr = [];
 	return "mod-" + str.replace(/[A-Z]/g,function(ch){return "-" + ch.toLowerCase(); }); 
-}
+}///}
 
-function isBelong(target,belongOne){
+function isBelong(target,belongOne){///{
 	for(var _belongOne = belongOne;_belongOne;_belongOne = _belongOne.parentNode){
 		if(_belongOne === target){
 			return true;
 		}
 	}
-}
+}///}
 
 //页码重构
-function leafRebuild(nowPage,showNum,total,source){
+function leafRebuild(nowPage,showNum,total,source){///{
 
 	var op = {
 		leafCount: 5,
@@ -1621,17 +1843,17 @@ function leafRebuild(nowPage,showNum,total,source){
 	
 	
 	return html;
-}
+}///}
 
 
-function urlRender(url){
+function urlRender(url){///{
     var r = url.replace(/\{[^\}\{]*\}/g, function(str){
         var selector = str.replace(/^\{\s*/g,'').replace(/\s*\}$/,'');
         return $(selector).val() || $(selector).text();
     });
 
     return r;
-}
+}///}
 
 /**
  * 赋值用函数
@@ -1639,7 +1861,7 @@ function urlRender(url){
  * @param  {object} o2 比对数据|含有 mod-xxx 的节点标签
  * @return {void}
  */
-function modAssignment(o1,o2){
+function modAssignment(o1,o2){///{
 	if(!o1){
 		return {};
 	}
@@ -1695,12 +1917,12 @@ function modAssignment(o1,o2){
 	}
 
 	return clone(r);
-}
+}///}
 
 /**
  * 属性获取 data.total => obj[data][total]
  */
-function getObjByKey(obj,str){
+function getObjByKey(obj,str){///{
 
 
 	if(!obj || !str){return;}
@@ -1722,7 +1944,7 @@ function getObjByKey(obj,str){
 		}
 	}
 	return r === obj? undefined:r;
-}
+}///}
 
 
 //模板初始化用函数
@@ -2059,12 +2281,12 @@ moduleBuild.prototype = {
 				timeout:0,
 
 				//错误信息对应的json 属性
-				messageKey:global.Config.ajax.key.message,
+				messageKey:mod.options.ajax.key.message,
 
 				//状态信息对应的json 属性
-				statusKey:global.Config.ajax.key.status,
+				statusKey:mod.options.ajax.key.status,
                 //成功返回的状态码
-                successCode: global.Config.ajax.successCode,
+                successCode: mod.options.ajax.successCode,
 				
                 reset:false
 			},
@@ -2182,7 +2404,7 @@ moduleBuild.prototype = {
 								option.reset?(
                                     nowPage = 0
                                 ):(
-                                    nowPage = request.hash(this.replace("#","") + "Cur") || 0
+                                    nowPage = mod.fn.request.hash(this.replace("#","") + "Cur") || 0
                                 ),
 								attr.search = false
 							):(
@@ -2481,16 +2703,16 @@ moduleBuild.prototype = {
 				autocomplete: "",
 
 				//数据 对应的json 属性
-				dataKey:global.Config.ajax.key.data,
+				dataKey:mod.options.ajax.key.data,
 
 				//错误信息对应的json 属性
-				messageKey:global.Config.ajax.key.message,
+				messageKey:mod.options.ajax.key.message,
 
 				//状态信息对应的json 属性
-				statusKey:global.Config.ajax.key.status,
+				statusKey:mod.options.ajax.key.status,
                 
                 //成功返回的状态码
-                successCode: global.Config.ajax.successCode
+                successCode: mod.options.ajax.successCode
 			},
 			
 			ajaxCheck = function(input,callback){
@@ -2512,7 +2734,6 @@ moduleBuild.prototype = {
 					return true;
 				}
                 
-                console.log(input.oValue)
                 if((input.oValue == input.value)){
                     
                     return input.isOk;
@@ -2691,7 +2912,6 @@ moduleBuild.prototype = {
 						box.clear();
 						$(box).addClass("bs_detectbox_error");
 						$(box.tips).addClass("bs_detectbox_error");
-                        console.log('thisway', box.tips.cnt)
 						box.tips.cnt.innerHTML = txt;
 						box.tips.status = "error";
 						box.tips.show(2000);
@@ -2731,11 +2951,11 @@ moduleBuild.prototype = {
                             box.tips.cnt.innerHTML = txt ||"正在校验";
 							box.loading.isTimeout = false;
 							box.loading.timeoutKey = setTimeout(function(){
-								box.error(global.Config.ajax.timeoutText);
+								box.error(mod.options.ajax.timeoutText);
 								box.loading.isTimeout = true;
 								typeof timeoutCallback == "function" && timeoutCallback();
 
-							},global.Config.ajax.timeout);
+							},mod.options.ajax.timeout);
 						},
 						clear:function(){
 							box.clear();
@@ -3065,14 +3285,14 @@ moduleBuild.prototype = {
 					that.style.display = "none";
 
 
-					flashArea.innerHTML = flash.init(flashArea.id,{
-						flashUrl:global.Config.domain + global.Config.swf.imgUpload + "?callback=" + flashCallbackName + "&fileurl=" + encodeURIComponent(attr.action || global.Config.upload.imagePath) +"&filetype="+ uploadType +"&method=get&filesize=1073741824",
+					flashArea.innerHTML = mod.fn.flash.init(flashArea.id,{
+						flashUrl:mod.options.domain + mod.options.swf.imgUpload + "?callback=" + flashCallbackName + "&fileurl=" + encodeURIComponent(attr.action || mod.options.upload.imagePath) +"&filetype="+ uploadType +"&method=get&filesize=1073741824",
 						width:500,
 						height:100
 					});
 
 					
-					global[flashCallbackName] = function(jsonstr){
+					window[flashCallbackName] = function(jsonstr){
 
 						var json = JSON.parse(jsonstr);
                         
@@ -3580,7 +3800,6 @@ moduleBuild.prototype = {
 													msg: getObjByKey(json,attr.messageKey)
 												};
 
-                                                console.log(myAttr);
 
                                                 if(myAttr.status == attr.successCode){
 													drawbox.myAutos = myAttr.data;
@@ -4097,16 +4316,16 @@ moduleBuild.prototype = {
                                     selectElm.className = "bs_selectbox";
                                     that.parentNode.insertBefore(selectElm,that);
 
-                                    for(key in global.Config.data.cities){
-                                        if(global.Config.data.cities.hasOwnProperty(key)){
+                                    for(key in mod.options.data.cities){
+                                        if(mod.options.data.cities.hasOwnProperty(key)){
                                             selectElm.options.add(new Option(key||"请选择",key));
                                         }
                                     }
 
                                     onchangeHandle = function(){
                                         that.innerHTML = "";
-                                        for(var i = 0, fs, len = global.Config.data.cities[this.value].length; i < len; i++){
-                                            fs = global.Config.data.cities[this.value][i];
+                                        for(var i = 0, fs, len = mod.options.data.cities[this.value].length; i < len; i++){
+                                            fs = mod.options.data.cities[this.value][i];
                                             that.options.add(new Option(fs,fs));
                                         }
                                     };
@@ -4115,8 +4334,8 @@ moduleBuild.prototype = {
                                     
 
                                     if(myValue){
-                                        for(key in global.Config.data.cities){
-                                            if(global.Config.data.cities.hasOwnProperty(key) && new RegExp("[,]*"+ myValue +"[,]*","g").test(global.Config.data.cities[key].join(","))){
+                                        for(key in mod.options.data.cities){
+                                            if(mod.options.data.cities.hasOwnProperty(key) && new RegExp("[,]*"+ myValue +"[,]*","g").test(mod.options.data.cities[key].join(","))){
                                                 selectElm.value = key;
                                                 onchangeHandle.call(selectElm);
                                                 that.value = myValue;
@@ -4125,9 +4344,9 @@ moduleBuild.prototype = {
                                         }
                                     }
                                 };///}
-                            if(!global.Config.data.cities){
-                                global.jcLoader({
-                                    url: global.Config.domain + 'js/data/cities.js',
+                            if(!mod.options.data.cities){
+                                mod.fn.loader({
+                                    url: mod.options.domain + 'js/data/cities.js',
                                     type: 'js'
                                 }, citiesInit);
                             } else {
@@ -4201,7 +4420,7 @@ moduleBuild.prototype = {
 					that.defaultText = "请输入电子邮箱";
 					that.localCheck = function(){
 						that.value = that.value.trim();
-						if(!that.value.match(global.Config.reg.email)){
+						if(!that.value.match(mod.options.reg.email)){
 							that.srcBox.error("请输入可用的邮箱地址");
 							return false;
 						} else {
@@ -4236,7 +4455,7 @@ moduleBuild.prototype = {
 							that.srcBox.error(that.defaultText);
 							return false;
 
-						}else if(!that.value.match(global.Config.reg.mobile)){
+						}else if(!that.value.match(mod.options.reg.mobile)){
 							that.srcBox.error("请输入可用的手机号码");
 							return false;
 
@@ -4329,7 +4548,7 @@ moduleBuild.prototype = {
 						"日期"
 					].join(""));
 
-					global.jnsCalendar(that,{
+					window.jnsCalendar(that,{
 						type:"date",
 						zIndex:200,
 						format:"YYYY-MM-DD",
@@ -4384,7 +4603,7 @@ moduleBuild.prototype = {
 					].join(""));
 
 					
-					global.jnsCalendar(that,{
+					window.jnsCalendar(that,{
 						zIndex:200,
 						type:"dateTime",
 						format:"YYYY-MM-DD hh:mm:ss",
@@ -4445,7 +4664,7 @@ moduleBuild.prototype = {
 
 					if(that.linked){
 						$(that.linked).addClass("bs_textbox");
-						global.jnsCalendar([that,that.linked],{
+						window.jnsCalendar([that,that.linked],{
 							zIndex:200,
 							type:"intervalTime",
 							startDateInput:that,
@@ -4498,7 +4717,7 @@ moduleBuild.prototype = {
 
 					that.localCheck = function(){
 						var v = that.value = that.value.trim();
-						if(!v.match(global.Config.reg.password)){
+						if(!v.match(mod.options.reg.password)){
 							that.srcBox.error("请输入6-16位的数字或字符");
 							return false;
 						} else{
@@ -4814,17 +5033,17 @@ moduleBuild.prototype = {
                 //当前页(r/w)
 				page:0,
 				//从第几页开始为第一页
-				pageStart:global.Config.ajax.key.pageStart,
+				pageStart:mod.options.ajax.key.pageStart,
 				//当前页 对应的json 属性
-				pageKey:global.Config.ajax.key.page,
+				pageKey:mod.options.ajax.key.page,
 
 				//一页多少条数据(r/w)
 				pagesize:10,
 				//一页多少条数据 对应的json 属性
-				sizeKey:global.Config.ajax.key.size,
+				sizeKey:mod.options.ajax.key.size,
 
 				//总共多少条数据 对应的json 属性
-				totalKey:global.Config.ajax.key.total,
+				totalKey:mod.options.ajax.key.total,
 
 				//数据(r/w)
 				data:[],
@@ -4842,16 +5061,16 @@ moduleBuild.prototype = {
 				nowrap:false,
 
 				//数据 对应的json 属性
-				dataKey:global.Config.ajax.key.data,
+				dataKey:mod.options.ajax.key.data,
 
 				//错误信息对应的json 属性
-				messageKey:global.Config.ajax.key.message,
+				messageKey:mod.options.ajax.key.message,
 
 				//状态信息对应的json 属性
-				statusKey:global.Config.ajax.key.status,
+				statusKey:mod.options.ajax.key.status,
                 
                 //成功返回的状态码
-                successCode: global.Config.ajax.successCode,
+                successCode: mod.options.ajax.successCode,
 			
                 //异步请求最大超时时间 0 为 跟 Config 默认
 				timeout:0,
@@ -4872,13 +5091,13 @@ moduleBuild.prototype = {
 					submitCallback:function(){},
 					onresponse:function(){},
 					//错误信息对应的json 属性
-					messageKey:global.Config.ajax.key.message,
+					messageKey:mod.options.ajax.key.message,
 
 					//状态信息对应的json 属性
-					statusKey:global.Config.ajax.key.status,
+					statusKey:mod.options.ajax.key.status,
                     
                     //成功返回的状态码
-                    successCode: global.Config.ajax.successCode
+                    successCode: mod.options.ajax.successCode
 				},
 
 				//是否可删除
@@ -4894,13 +5113,13 @@ moduleBuild.prototype = {
 					submitCallback:function(){},
 					onresponse:function(){},
 					//错误信息对应的json 属性
-					messageKey:global.Config.ajax.key.message,
+					messageKey:mod.options.ajax.key.message,
 
 					//状态信息对应的json 属性
-					statusKey:global.Config.ajax.key.status,
+					statusKey:mod.options.ajax.key.status,
                     
                     //成功返回的状态码
-                    successCode: global.Config.ajax.successCode,
+                    successCode: mod.options.ajax.successCode,
 
 					batchConfig:{
 						enable:false,
@@ -4912,13 +5131,13 @@ moduleBuild.prototype = {
 						submitCallback:function(){},
 						onresponse:function(){},
 						//错误信息对应的json 属性
-						messageKey:global.Config.ajax.key.message,
+						messageKey:mod.options.ajax.key.message,
 
 						//状态信息对应的json 属性
-						statusKey:global.Config.ajax.key.status,
+						statusKey:mod.options.ajax.key.status,
                         
                         //成功返回的状态码
-                        successCode: global.Config.ajax.successCode
+                        successCode: mod.options.ajax.successCode
 					}
 				},
 
@@ -5514,7 +5733,7 @@ moduleBuild.prototype = {
 
 
 									if(attr.status == she.myAttr.successCode){
-										mod.dialog("success",{content:"操作成功",timeout:global.Config.popup.autoHide});
+										mod.dialog("success",{content:"操作成功",timeout:mod.options.popup.autoHide});
 										she.myAttr.actionCallback && she.myAttr.actionCallback(json,param);
 
 									} else {
@@ -5556,7 +5775,7 @@ moduleBuild.prototype = {
 								return;
 							}
 
-							mod.dialog("success",{content:"操作成功",timeout:global.Config.popup.autoHide});
+							mod.dialog("success",{content:"操作成功",timeout:mod.options.popup.autoHide});
 							she.actionCallback && she.actionCallback(json, param);
 						},
 
@@ -5646,7 +5865,7 @@ moduleBuild.prototype = {
 
 									if(attr.status == attr.successCode){
 										target.remove(ftr,function(data){
-											mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:global.Config.popup.autoHide});
+											mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:mod.options.popup.autoHide});
 											she.myAttr.actionCallback && she.myAttr.actionCallback(json,param);
 										});
 
@@ -5662,7 +5881,7 @@ moduleBuild.prototype = {
 							});
 						}:function(){
 							target.remove(ftr,function(data){
-								mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:global.Config.popup.autoHide});
+								mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:mod.options.popup.autoHide});
 							});
 						};
 
@@ -5783,7 +6002,7 @@ moduleBuild.prototype = {
 			},///}
 			hashchangeHandle = function(){
 				
-				var hashPage = request.hash(target.id + "Cur");
+				var hashPage = mod.fn.request.hash(target.id + "Cur");
 
 				if(!isNaN(hashPage) && target.page != hashPage){
 					target.pageTo(Number(hashPage));
@@ -5866,7 +6085,7 @@ moduleBuild.prototype = {
 				target.srcCnt.style.minHeight = "0";
 
 				target.srcCnt.offsetHeight && (
-					UA.ie && UA.ie <= 6 && (target.srcCnt.style.height = target.srcCnt.offsetHeight + "px"),
+					mod.fn.UA.ie && mod.fn.UA.ie <= 6 && (target.srcCnt.style.height = target.srcCnt.offsetHeight + "px"),
 					target.srcCnt.style.minHeight = target.srcCnt.offsetHeight + "px"
 				);*/
 
@@ -5998,7 +6217,7 @@ moduleBuild.prototype = {
 				option.actionParam[option.pageKey] = page;
 				target.page = page;
 
-				option.mark && historyManage.add(target.id + "Cur",page);
+				option.mark && mod.fn.historyManage.add(target.id + "Cur",page);
 
 				var fParam = clone(option.actionParam);
 
@@ -6072,7 +6291,7 @@ moduleBuild.prototype = {
 
 				target.page = page;
 
-				option.mark && historyManage.add(target.id + "Cur",page);
+				option.mark && mod.fn.historyManage.add(target.id + "Cur",page);
 
 				target.total = option.data.length;
 
@@ -6210,7 +6429,7 @@ moduleBuild.prototype = {
 				target.totalNum.innerHTML = target.total;
                 target.resize();
 				
-                mod.dialog("success",{content:"共 " + fdatas.length + " 条记录添加到 <strong class='blue'>" + (option.title|| target.id) + "</strong> 列表",timeout:global.Config.popup.autoHide});
+                mod.dialog("success",{content:"共 " + fdatas.length + " 条记录添加到 <strong class='blue'>" + (option.title|| target.id) + "</strong> 列表",timeout:mod.options.popup.autoHide});
 
 				typeof callback == "function" && callback(fdatas);
 			},
@@ -6370,7 +6589,7 @@ moduleBuild.prototype = {
 
 							if(attr.status == myAttr.successCode){
 								target.remove(ftrs,function(data){
-									mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:global.Config.popup.autoHide});
+									mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:mod.options.popup.autoHide});
 									myAttr.actionCallback && myAttr.actionCallback(json,param);
 								});
 
@@ -6387,7 +6606,7 @@ moduleBuild.prototype = {
 				}:function(){
 					var ftrs = target.get("tr:checked");
 					target.remove(ftrs,function(data){
-						mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:global.Config.popup.autoHide});
+						mod.dialog("success",{content:data.length + " 条记录移除成功",timeout:mod.options.popup.autoHide});
 					});
 				};
 
@@ -6461,9 +6680,9 @@ moduleBuild.prototype = {
 		}
 
 		
-		needReset && option.mark && request.hash(target.id + "Cur",target.page);
+		needReset && option.mark && mod.fn.request.hash(target.id + "Cur",target.page);
 
-		option.mark && historyManage.init(hashchangeHandle,target.id);
+		option.mark && mod.fn.historyManage.init(hashchangeHandle,target.id);
 		!hashchangeHandle() && target.pageTo(target.page);
 		
 		target.opAttr = option;
@@ -6852,7 +7071,7 @@ moduleBuild.prototype = {
 			var that = this,
 				navData = (function(){
 					try{
-						return JSON.parse(cookies.get(global.Config.locationMark));
+						return JSON.parse(mod.fn.cookies.get(mod.options.locationMark));
 					} catch(er){
 						return [];
 					}
@@ -6877,7 +7096,7 @@ moduleBuild.prototype = {
 			var that = this,
 				navData = (function(){
 					try{
-						return JSON.parse(cookies.get(global.Config.locationMark));
+						return JSON.parse(mod.fn.cookies.get(mod.options.locationMark));
 					} catch(er){
 						return [];
 					}
@@ -6933,7 +7152,7 @@ moduleBuild.prototype = {
 			}
 
 			
-			cookies.set(global.Config.locationMark,JSON.stringify(navData),1,"/");
+			mod.fn.cookies.set(mod.options.locationMark,JSON.stringify(navData),1,"/");
 
 			//导航渲染
 			for(i = 0, len = navData.length; i < len; i++){
@@ -6951,7 +7170,7 @@ moduleBuild.prototype = {
 			parent.$(".bs_menu")[0].current(navData[0].url);
 
 			//地址栏hash设置
-			parent.request.hash("url",encodeURIComponent(navData[0].url));
+			parent.mod.fn.request.hash("url",encodeURIComponent(navData[0].url));
 			/*parent.$(".bs_menu a").each(function(){
 				$(this).removeClass("cur");
 				isSameComes(this.href,navData[0].url) && $(this).addClass("cur");
@@ -6990,7 +7209,7 @@ moduleBuild.prototype = {
 
 			if(!she.pop || loadingText){
 				she.pop = bsPopup("loading",{
-					content:loadingText || global.Config.ajax.loadingText,
+					content:loadingText || mod.options.ajax.loadingText,
 					show:false
 				});
 			}
@@ -7000,12 +7219,12 @@ moduleBuild.prototype = {
 			she.timeoutKey = setTimeout(function(){
 				she.pop.hide();
 
-				mod.dialog("error",{content:global.Config.ajax.timeoutText});
+				mod.dialog("error",{content:mod.options.ajax.timeoutText});
 
 				she.isTimeout = true;
 				typeof timeoutCallback == "function" && timeoutCallback();
 
-			},delayTime || global.Config.ajax.timeout);
+			},delayTime || mod.options.ajax.timeout);
 			she.pop.show();
 		},
 		/*
@@ -7036,7 +7255,7 @@ moduleBuild.prototype = {
 function pageInit(){
 	//结构调整
 	var myHtml = document.getElementsByTagName("html")[0],
-		firstHref = global.Config.mainPage,
+		firstHref = mod.options.mainPage,
 		fment,
 		fs,len,i,
 		myNodes;
@@ -7054,8 +7273,8 @@ function pageInit(){
 		});
 		*/
 
-		if(request.hash("url")){
-			firstHref = decodeURIComponent(request.hash("url"));
+		if(mod.fn.request.hash("url")){
+			firstHref = decodeURIComponent(mod.fn.request.hash("url"));
 		}
 
 		//左侧菜单初始化
@@ -7118,16 +7337,16 @@ function pageInit(){
 }
 
 //全局函数 - mod
-var mod = global.mod = new moduleBuild();
-
+// var mod = window.mod = new moduleBuild();
+window.mod = mod.extend( new moduleBuild() );
 //打打补丁(那些年拼错的单词)
 mod.gird = mod.grid;
 
 //全局变量 菊花（向下兼容用处理）
-var bsTimeout = global.bsTimeout = mod.loading;
+var bsTimeout = window.bsTimeout = mod.loading;
 
 //页面初始化
-global.Config.page.reset && pageInit();
+mod.options.page.reset && pageInit();
 mod.init();
 
 }(this);
