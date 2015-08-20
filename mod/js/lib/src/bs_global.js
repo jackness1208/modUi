@@ -2,8 +2,8 @@
  * $Copyright: 2015, jackness.org $
  * $Creator: Jackness Lau $
  * $Author: Jackness Lau $
- * $Date: Tue Aug 11 2015 13:57:03 GMT+0800 (中国标准时间) $
- * $Version: 1.4.8 $
+ * $Date: Thu Aug 20 2015 15:24:03 GMT+0800 (中国标准时间) $
+ * $Version: 1.4.9 $
  */
 !function(global,undefined){
  
@@ -1431,7 +1431,9 @@ var tplParse = global.tplParse = function(obj,str){
 				r = obj[attr] || "";
 			
 			
-			return typeof r == "number"?r: '"' + r.replace(/["]/g,'\\"').replace(/\r/g,"").replace(/\n/g,"") + '"';
+			return typeof r == "number"
+                ? r
+                : '"' + r.replace(/["]/g,'\\"').replace(/\r|\n/g,"") + '"';
 		
 		}).replace(/return\s".+?";/g,function(t){
 			return [
@@ -1451,7 +1453,9 @@ var tplParse = global.tplParse = function(obj,str){
 		var attr = t.replace("{$",'').replace("}",''),
 			r = obj[attr] || "";
 
-		return r;
+		return typeof r == 'number'
+            ? r
+            : r.replace(/\r|\n/,'');
 
 	// js 方法执行 模板 {js:: xx}
 	}).replace(/\{js::[^{}]*\}/g,function(t){

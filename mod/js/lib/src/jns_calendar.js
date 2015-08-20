@@ -2,7 +2,7 @@
  * Copyright 2015, jackness.org
  * Creator: jackNEss Lau
  * $Author: Jackness Lau $
- * $Date: Tue Aug 11 2015 13:57:03 GMT+0800 (中国标准时间) $
+ * $Date: Thu Aug 20 2015 15:24:03 GMT+0800 (中国标准时间) $
  * version:1.28
  */
 var jnsCalendar = function(){
