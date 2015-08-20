@@ -1623,89 +1623,7 @@ function getPosition(target,cw){///{
 	};
 }///}
 
-var tplParse = function(obj,str){///{
-	if(!str){return "";}
 
-	//替换变量
-	var var2Str = function(r){
-		return r.replace(/\$\w+/g,function(t){
-			var attr = t.replace("$",""),
-				r = obj[attr] || "";
-			
-			
-			return typeof r == "number"?r: '"' + r.replace(/["]/g,'\\"').replace(/\r/g,"").replace(/\n/g,"") + '"';
-		
-		}).replace(/return\s".+?";/g,function(t){
-			return [
-				'return "',
-				t.replace(/^return\s"/g,"").replace(/";$/g,"").replace(/[^\\]"/g,function(w){
-					
-					return w.substr(0,1) + '\\"';
-				}),
-				'";'
-			].join("");
-		
-		});
-	};
-
-	//普通变量
-	return str.replace(/[{]\$[^{}]*\}/g,function(t){
-		var attr = t.replace("{$",'').replace("}",''),
-			r = obj[attr] || "";
-
-		return r;
-
-	// js 方法执行 模板 {js:: xx}
-	}).replace(/\{js::[^{}]*\}/g,function(t){
-		var r = t.replace("{js::",'').replace("}",'');
-		try{
-			return new Function('try{return ' + var2Str(r) + ';}catch(er){return "";}')();
-		} catch(er){
-			return "";
-		}
-		
-
-	// if else 模板 {if xx} xx {else if xx} xx {else} xx {/if}
-	// 必须最后替换，否则会被其他替换规则影响
-	}).replace(/\{if.+?\{\/if\}/g,function(str){
-
-		// if
-		var r = str.replace(/\{if\s[^{}]*\}/g,function(t){
-			return 'if('+ t.replace("{if ",'').replace("}",'') +'){';
-		// else if
-		}).replace(/\{else\sif\s[^{}]*\}/g,function(t){
-			return '}else if('+ t.replace("{else if",'').replace("}",'') +'){';
-
-		// else
-		}).replace(/\{else[^{}]*\}/g,function(t){
-			return "}else{";
-
-		//if结尾
-		}).replace(/\{\/if\}/g,function(t){
-			return "}";
-
-		// 替换{}中的内容
-		}).replace(/\)\{[^{}]*\}/g,function(t){
-			var ft = t.substr(0,t.indexOf("{"));
-			return ft + '{return "' + t.substr(t.indexOf("{")).replace("{",'').replace("}",'').replace(/"/g,'\\"') + '";}';
-
-		}).replace(/\}else\{[^{}]*\}/g,function(t){
-			var ft = t.substr(0,t.indexOf("{"));
-			return ft + '{return "' + t.substr(t.indexOf("{")).replace("{",'').replace("}",'').replace(/"/g,'\\"') + '";}';
-
-		});
-
-		try{
-			return new Function(var2Str(r))() || "";
-		} catch(er){
-			return "";
-
-		}
-		
-		
-
-	});
-};///}
 
 function attr2mod(str){///{
 	var arr = [];
@@ -1927,95 +1845,108 @@ function getObjByKey(obj,str){///{
 }///}
 
 var renderPark = {
-    elements: function(elm, data){
-        var keyMatchs = {
-                'mod-if': function(target, context){
-                    
-                },
+    keyEvent: {
+        'mod-if': function(target, data, context){
+            if(!renderPark.eval(renderPark.var2Str(context, data))){
+                target.parentNode.removeChild(target);
+            }
 
-                'mod-component': function(target, context){
-                    var component = data[context];
-                    if(/^document/g.test(mod.fn.type(component))){
-                        target.appendChild(component);
-                    } else if(mod.fn.type(component) == 'contexting'){
-                        target.innerHTML = component;
-                    }
+        },
 
-                    target.removeAttribute('mod-component');
-                },
+        'mod-component': function(target, data, context){
+            var component = data[context];
+            if(/^document/g.test(mod.fn.type(component))){
+                target.appendChild(component);
+            } else if(mod.fn.type(component) == 'contexting'){
+                target.innerHTML = component;
+            }
 
-                'mod-on': function(target, context){
+        },
 
-                },
+        'mod-on': function(target, data, context){
 
-                'mod-class': function(target, context){
-                    var ctxArr = context.replace(/\s+/g,'').split(','),
-                        ctxMap = {
+        },
 
-                        };
-                    ctxArr.forEach(function(item, i){
-                        var sArr = item.split(':');
-                        if(sArr.length > 1){
-                            ctxMap[sArr[0]] = sArr[1];
-                        }
-                    });
-
-                    //TODO
+        'mod-class': function(target, data, context){
+            var ctxArr = context.replace(/\s+/g,'').split(','),
+                ctxMap = {};
+            ctxArr.forEach(function(item, i){
+                var sArr = item.split(':');
+                if(sArr.length > 1){
+                    ctxMap[sArr[0]] = sArr[1];
                 }
-            };
+            });
+            
+            //TODO
+        }
+    },
+    elements: function(elm, data){
+        var she = this,
+            keyEvent = she.keyEvent;
         $(elm).find('*').each(function(){
             var item = this,
                 myVal;
-            for(var key in keyMatchs){
-                if(keyMatchs.hasOwnProperty(key)){
+            for(var key in keyEvent){
+                if(keyEvent.hasOwnProperty(key)){
                     myVal = $(item).attr(key);
-                    myVal && keyMatchs[key](item, myVal);
+                    myVal && (
+                        keyEvent[key](item, data, myVal), 
+                        item.removeAttribute(key)
+                    );
                 }
             }
 
         });
     },
-    string: function(str, obj){
+    var2Str: function(rtx, data){
+        return rtx.replace(/\$\w+/g,function(t){
+            var attr = t.replace("$",""),
+                r = data[attr] || "";
+            
+            
+            return typeof r == "number"
+                ? r
+                : '"' + r.replace(/["]/g,'\\"').replace(/\r|\n/g,"") + '"';
+        
+        }).replace(/return\s".+?";/g,function(t){
+            return [
+                t.replace(/^return\s"/g,"").replace(/";$/g,"").replace(/[^\\]"/g,function(w){
+                    
+                    return w.substr(0,1) + '\\"';
+                })
+            ].join("");
+        
+        });
+    },
+    eval: function(ctx){
+        try{
+            return new Function('return ' + ctx + ';')() || '';
+
+        } catch(er){
+            return "";
+        }
+    },
+    string: function(str, data){///{
         if(!str){return "";}
 
         //替换变量
-        var var2Str = function(r){
-            return r.replace(/\$\w+/g,function(t){
-                var attr = t.replace("$",""),
-                    r = obj[attr] || "";
-                
-                
-                return typeof r == "number"?r: '"' + r.replace(/["]/g,'\\"').replace(/\r/g,"").replace(/\n/g,"") + '"';
-            
-            }).replace(/return\s".+?";/g,function(t){
-                return [
-                    'return "',
-                    t.replace(/^return\s"/g,"").replace(/";$/g,"").replace(/[^\\]"/g,function(w){
-                        
-                        return w.substr(0,1) + '\\"';
-                    }),
-                    '";'
-                ].join("");
-            
-            });
-        };
+        var 
+            she = this,
+            var2Str = she.var2Str;
 
         //普通变量
         return str.replace(/[{]\$[^{}]*\}/g,function(t){
             var attr = t.replace("{$",'').replace("}",''),
-                r = obj[attr] || "";
+                r = data[attr] || "";
 
-            return r;
+            return typeof r == "number"
+                ? r
+                : r.replace(/\r|\n/g,'');
 
         // js 方法执行 模板 {js:: xx}
         }).replace(/\{js::[^{}]*\}/g,function(t){
             var r = t.replace("{js::",'').replace("}",'');
-            try{
-                return new Function('try{return ' + var2Str(r) + ';}catch(er){return "";}')();
-            } catch(er){
-                return "";
-            }
-            
+            return she.eval(var2Str(r, data));
 
         // if else 模板 {if xx} xx {else if xx} xx {else} xx {/if}
         // 必须最后替换，否则会被其他替换规则影响
@@ -2046,22 +1977,71 @@ var renderPark = {
                 return ft + '{return "' + t.substr(t.indexOf("{")).replace("{",'').replace("}",'').replace(/"/g,'\\"') + '";}';
 
             });
-
-            try{
-                return new Function(var2Str(r))() || "";
-            } catch(er){
-                return "";
-
-            }
             
+            return she.eval(var2Str(r, data));
             
-
         });
-    }
+    }///}
 };
 /**
  * define mod main fn
  *******************************/
+var modFactory = {
+    class: '',
+    data: {},
+    template: '',
+    methods: {},
+
+    // 初始化
+    init: function(handle ,context, op){
+        var 
+            modFact = handle.__modFact,
+            $tar = $(context || modFact.class),
+            //赋值
+            option = modAssignment(modFact.data, op);
+
+        $tar.each(function(){
+            var she = this,
+                attr = modAssignment(option, she);
+
+            if(isEqual(she.__modOptions, attr)){
+                return;
+            }
+            
+            $(she).addClass(modFact.class);
+
+            
+            new mod.fn.Promise().then(function(next){
+                modFact.build(she, attr, modFact, next);
+
+            }).then(function(she, attr, next){
+                $(she).show();
+                she.__modOptions = attr;
+                next(she, attr);
+
+            }).then(function(she, attr, next){
+                modFact.ready(she, attr, next);
+
+            }).start();
+        });
+    },
+
+    // 构建
+    build: function(target, attr, fact, next){ 
+        next(target, attr);
+    },
+
+    // 完成
+    ready: function(target, attr, next){
+        next();
+    },
+
+    // 摧毁
+    destroy: function(){
+        delete this.__modFacts;
+        delete this.__modOptions;
+    }
+};
 mod.options = window.__MODCONFIG;
 mod.extend = function(){
     var she = this,
@@ -2072,38 +2052,46 @@ mod.extend = function(){
     return she.fn.extend.apply(mod, myArgv);
 };
 
+
+
 mod.box = function(context, op){
-    var $tar = $(context),
-        him = mod.box,
-        key;
-		
-		//赋值
-	var option = modAssignment(him.data, op);
+    mod.box.__modFact.init(mod.box, context, op);
+};
 
-    //重构
-    $tar.each(function() {
-        var she = this,
-            attr = modAssignment(option,she);
-
-        if(isEqual(she.opAttr,attr)){
-            return;
+mod.box.__modFact = mod.fn.extend(modFactory, {
+    class: 'bs_mod01',
+    data: {
+        title: '',
+        titleLeft: '',
+        titleRight: '',
+        hide: false
+    },
+    template: [
+        '<div class="bs_mod01_hd">',
+                '<h3 class="h_tl" mod-if="$title"><i class="bs_toggle_icon" mod-class="bs_toggle_icon_cur: !$hide" mod-on="click: onToggle" ></i>{$title}</h3>',
+                '<div class="h_l">{$titleLeft}</div>',
+                '<div class="h_r">{$titleRight}</div>',
+        '</div>',
+        '<div class="bs_mod01_bd" mod-component="content"></div>'
+    ].join(''),
+    methods: {
+        onToggle: function(){
+            alert('onToggle!')
         }
-
-        $(she).addClass(him.class);
+    },
+    build: function(target, attr, fact, next){
         var myFrag = document.createDocumentFragment();
-            
 
-        while(she.childNodes.length > 0){
-            myFrag.appendChild(she.childNodes[0]);
+        while(target.childNodes.length > 0){
+            myFrag.appendChild(target.childNodes[0]);
         }
         
         attr.content = myFrag;
-        she.innerHTML = renderPark.string(him.template, attr);
-        renderPark.elements(she, attr);
+        target.innerHTML = renderPark.string(fact.template, attr);
+        renderPark.elements(target, attr);
 
-        // she.innerHTML = tplParse(him.tpl, attr);
+        // she.innerHTML = renderPark.string(him.tpl, attr);
 
-        $(she).show();
 
         // var myExt = {
         //         toggleIco:$(she).children(".bs_mod01_hd").find(".bs_toggle_icon")[0],
@@ -2133,34 +2121,10 @@ mod.box = function(context, op){
 
         // she.opAttr = attr;
         // toggleArea = null;
-        
-    });
-
-
-};
-
-mod.fn.extend(mod.box, {
-    class: 'bs_mod01',
-    data: {
-        title: '',
-        titleLeft: '',
-        titleRight: '',
-        hide: false
-    },
-    template: [
-        '<div class="bs_mod01_hd">',
-                '<h3 class="h_tl" mod-if="title"><i class="bs_toggle_icon" mod-class="bs_toggle_icon_cur: !hide" mod-on="click: onToggle" ></i>{$title}</h3>',
-                '<div class="h_l">{$titleLeft}</div>',
-                '<div class="h_r">{$titleRight}</div>',
-        '</div>',
-        '<div class="bs_mod01_bd" mod-component="content"></div>'
-    ].join(''),
-    methods: {
-        onToggle: function(){
-            alert('onToggle!')
-        }
+        next(target, attr);
     }
 });
+
 
 //模板初始化用函数
 function moduleBuild() {
@@ -5490,7 +5454,7 @@ moduleBuild.prototype = {
 							f.view.className = "view_item";
 							f.view.value = myValue;
 							f.view.html = flayout.html;
-							f.view.innerHTML = tplParse(data,f.view.html) || myValue;
+							f.view.innerHTML = renderPark.string(data,f.view.html) || myValue;
 							
 							switch(flayout.edit.type){
 								case "input":
@@ -5516,7 +5480,7 @@ moduleBuild.prototype = {
 												if(f.view.html){
 													fdata = clone(data);
 													fdata[flayout.field] = fo.value;
-													f.view.innerHTML = tplParse(fdata,f.view.html);
+													f.view.innerHTML = renderPark.string(fdata,f.view.html);
 
 												} else {
 													f.view.innerHTML = fo.text;
@@ -5533,7 +5497,7 @@ moduleBuild.prototype = {
 									f.edit = document.createElement("textarea");
 									f.edit.className = "edit_item";
 									f.edit.style.width = widthStr;
-									f.edit.value = tplParse(data,f.view.html) || myValue;
+									f.edit.value = renderPark.string(data,f.view.html) || myValue;
 									
 									break;
 
@@ -5545,7 +5509,7 @@ moduleBuild.prototype = {
 							f.appendChild(f.view);
 							f.edit && f.appendChild(f.edit);
 						} else {
-							f.innerHTML = tplParse(data,flayout.html) || data[flayout.field] || "";
+							f.innerHTML = renderPark.string(data,flayout.html) || data[flayout.field] || "";
 						}
 
 						
@@ -5878,7 +5842,7 @@ moduleBuild.prototype = {
 				$(ftr).find(".ctrl_save").each(function(){
 					$(this).addClass("edit_item").addClass("bs_btn").attr("mod-type","2");
 					this.myAttr = modAssignment(option.editConfig,this);
-					this.myAttr.action = tplParse(ftr.chk.data,this.myAttr.action);
+					this.myAttr.action = renderPark.string(ftr.chk.data,this.myAttr.action);
 
 				}).bind("click",function(e){
 					stopBubble(e);
@@ -5928,13 +5892,13 @@ moduleBuild.prototype = {
 
 											
 											if(fs.edit.tagName == "INPUT"){
-												fs.view.innerHTML = tplParse(ftr.chk.data,fs.view.html) || fs.edit.value;
+												fs.view.innerHTML = renderPark.string(ftr.chk.data,fs.view.html) || fs.edit.value;
 
 											} else if(fs.edit.tagName == "SELECT"){
-												fs.view.innerHTML = tplParse(ftr.chk.data,fs.view.html) || fs.edit.options[fs.edit.selectedIndex].text;
+												fs.view.innerHTML = renderPark.string(ftr.chk.data,fs.view.html) || fs.edit.options[fs.edit.selectedIndex].text;
 
 											} else {
-												fs.view.innerHTML = tplParse(ftr.chk.data,fs.view.html) || fs.edit.value;
+												fs.view.innerHTML = renderPark.string(ftr.chk.data,fs.view.html) || fs.edit.value;
 											}
 										}
 									}
@@ -6034,7 +5998,7 @@ moduleBuild.prototype = {
 				$(ftr).find(".ctrl_del").each(function(){
 					$(this).addClass("bs_btn");
 					this.myAttr = modAssignment(option.delConfig,this);
-					this.myAttr.action = tplParse(ftr.chk.data,this.myAttr.action);
+					this.myAttr.action = renderPark.string(ftr.chk.data,this.myAttr.action);
 
 				}).bind("click",function(e){
 					stopBubble(e);
@@ -7458,7 +7422,7 @@ moduleBuild.prototype = {
 	 */
 	init: function() {
 		var me = this;
-			me.box('.' + me.box.class);
+			me.box('.' + me.box.__modFact.class);
 			me.tab();
 			me.button();
 			me.form();
