@@ -10,7 +10,7 @@
 <body>
 
 
-<div class="bs_mod01" mod-title="表单控件">
+<div class="mod-module" mod-title="表单控件">
 
 	<p class="ins">表单控件的 提交操作会把 form表单里面 <strong class="blue">所有带有 name 属性</strong>的input、textarea、select 按照name的值提交到处理页面。</p>
 	
@@ -18,8 +18,8 @@
 	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
 
 	<div class="ins">
-			<form class="bs_form" mod-action="http://mod.jackness.org/api/checkDemo?isOk=1" mod-method="get" mod-action-type="ajax" mod-action-param='{"status":1}' mod-action-callback="alert('提交成功')" mod-message-key="error">
-				<table class="bs_table_s0">
+			<form class="mod-form" mod-action="http://mod.jackness.org/api/checkDemo?isOk=1" mod-method="get" mod-action-type="ajax" mod-action-param='{"status":1}' mod-action-callback="alert('提交成功')" mod-message-key="error">
+				<table class="mod-table_s0">
 					<tr>
 						<th>
 							<label for="keyword">关键字</label>
@@ -39,8 +39,8 @@
 			</form>
 	</div>
 	<pre class="brush:xml;">
-&lt;form class="bs_form" mod-action="http://mod.jackness.org/api/checkDemo?isOk=1" mod-method="get" mod-action-type="jsonp" mod-action-param='{"cmd":100, "keyword":"", "page":1, "pagesize":20 }' mod-action-callback="alert('提交成功')" mod-message-key="error"&gt;
-	&lt;table class="bs_table_s0"&gt;
+&lt;form class="mod-form" mod-action="http://mod.jackness.org/api/checkDemo?isOk=1" mod-method="get" mod-action-type="jsonp" mod-action-param='{"cmd":100, "keyword":"", "page":1, "pagesize":20 }' mod-action-callback="alert('提交成功')" mod-message-key="error"&gt;
+	&lt;table class="mod-table_s0"&gt;
 		&lt;tr&gt;
 			&lt;th&gt;
 				&lt;label for="keyword"&gt;关键字&lt;/label&gt;
@@ -64,7 +64,7 @@
 	<p class="ins">submitCallback 与 actionCallback 2者选其一，如果不设置 submitCallback 当 服务器返回 json.status == 0 时 自动调用 mod.dialog(error),json.status == 1 时 调用 mod.dialog(success) 并调用 actionCallback 方法。如果设置 submitCallback 方法，actionCallback 将失效，提交完成之后的操作 移交给 submitCallback(json) 函数并把服务器返回的信息全部传给 该函数。</p>
 	<div class="ins">
         <form id="form1">
-            <table class="bs_table_s0">
+            <table class="mod-table_s0">
                 <tr>
                     <th>
                         <label for="keyword">关键字</label>
@@ -86,7 +86,7 @@
 	<pre class="brush:xml;">
 &lt;!-- html --&gt;
 &lt;form id="form1"&gt;
-	&lt;table class="bs_table_s0"&gt;
+	&lt;table class="mod-table_s0"&gt;
 		&lt;tr&gt;
 			&lt;th&gt;
 				&lt;label for="keyword"&gt;关键字&lt;/label&gt;

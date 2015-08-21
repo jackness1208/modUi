@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div class="bs_mod01" mod-title="弹窗控件">
+<div class="mod-module" mod-title="弹窗控件">
 
 	<h2 class="ins">通用部分</h2>
 	
@@ -18,7 +18,7 @@
 	<h3 class="ins">一般模块(normal)</h3>
 	<h4 class="ins">页面效果</h4>
 	<div class="ins">
-		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('normal','你好吗')">alert</a>
+		<a class="mod-btn" href="javascript:;" onclick="mod.dialog('normal','你好吗')">alert</a>
 	</div>
 	
 	<h4 class="ins">Javascript写法</h4>
@@ -30,7 +30,7 @@ mod.dialog('normal','你好吗');
 
 	<h4 class="ins">页面效果</h4>
 	<div class="ins">
-		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('confirm',{content:'你好吗',callback:function(){alert('果然很好')}})">confirm</a>
+		<a class="mod-btn" href="javascript:;" onclick="mod.dialog('confirm',{content:'你好吗',callback:function(){alert('果然很好')}})">confirm</a>
 	</div>
 	
 	<h4 class="ins">Javascript写法</h4>
@@ -41,7 +41,7 @@ mod.dialog('confirm',{content:'你好吗',callback:function(){alert('果然很�
 	<h3 class="ins">成功(success)</h3>
 
 	<div class="ins">
-		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('success','你好吗')">success</a>
+		<a class="mod-btn" href="javascript:;" onclick="mod.dialog('success','你好吗')">success</a>
 	</div>
 
 	<h4 class="ins">Javascript写法</h4>
@@ -52,7 +52,7 @@ mod.dialog('success','你好吗');
 	<h3 class="ins">失败(error)</h3>
 
 	<div class="ins">
-		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('error','你好吗')">error</a>
+		<a class="mod-btn" href="javascript:;" onclick="mod.dialog('error','你好吗')">error</a>
 	</div>
 
 	<h4 class="ins">Javascript写法</h4>
@@ -63,7 +63,7 @@ mod.dialog('error','你好吗');
 	<h3 class="ins">菊花(loading)</h3>
 
 	<div class="ins">
-		<a class="bs_btn" href="javascript:;" onclick="mod.dialog('loading','你好吗')">loading</a>
+		<a class="mod-btn" href="javascript:;" onclick="mod.dialog('loading','你好吗')">loading</a>
 	</div>
 
 	<h4 class="ins">Javascript写法</h4>
@@ -77,14 +77,14 @@ mod.dialog('loading','你好吗');
 
 	<h3 class="ins">模块效果</h3>
 	<div class="ins">
-		<a class="bs_btn" href="javascript:;" onclick="pop.show();">自定义</a>
+		<a class="mod-btn" href="javascript:;" onclick="pop.show();">自定义</a>
 		<div style="height:200px; display:none; background:gray" id="box01">你好吗</div>
 		
 	</div>
 	
 	<h3 class="ins">HTML部分内容</h3>
 	<pre class="brush:xml;">
-&lt;a class="bs_btn" href="javascript:;" onclick="pop.show();"&gt;自定义&lt;/a&gt;
+&lt;a class="mod-btn" href="javascript:;" onclick="pop.show();"&gt;自定义&lt;/a&gt;
 &lt;div style="height:200px; display:none; background:gray" id="box01"&gt;你好吗&lt;/div&gt;
 &lt;script&gt;
 var pop = mod.dialog('customPop',{width:'500px',title:'自定义区域',content:'#box01'.show:false});
@@ -213,31 +213,31 @@ pop.hide();
 								<td>是否默认显示</td>
 							</tr>
 							<tr>
-								<td>sizingType <i class="bs_new_icon"></i></td>
+								<td>sizingType <i class="mod-new_icon"></i></td>
 								<td>{string}</td>
 								<td><strong class="blue">&gt;= 1.10</strong></td>
 								<td>打开弹窗类型。<br>normal:普通<br>max:最大化<br>默认值为normal。</td>
 							</tr>
 							<tr>
-								<td>resize <i class="bs_new_icon"></i></td>
+								<td>resize <i class="mod-new_icon"></i></td>
 								<td>{boolean}</td>
 								<td><strong class="blue">&gt;= 1.26</strong></td>
 								<td>是否允许调整弹窗大小。默认跟 Config一致</td>
 							</tr>
 							<tr>
-								<td>minimize <i class="bs_new_icon"></i></td>
+								<td>minimize <i class="mod-new_icon"></i></td>
 								<td>{boolean}</td>
 								<td><strong class="blue">&gt;= 1.26</strong></td>
 								<td>是否允许弹窗最小化。默认跟 Config一致</td>
 							</tr>
 							<tr>
-								<td>top <i class="bs_new_icon"></i></td>
+								<td>top <i class="mod-new_icon"></i></td>
 								<td>{boolean}</td>
 								<td><strong class="blue">&gt;= 1.29</strong></td>
 								<td>设置弹窗是否置顶</td>
 							</tr>
 							<tr>
-								<td>close <i class="bs_new_icon"></i></td>
+								<td>close <i class="mod-new_icon"></i></td>
 								<td>{boolean}</td>
 								<td><strong class="blue">&gt;= 1.30</strong></td>
 								<td>设置弹窗是否显示关闭按钮</td>

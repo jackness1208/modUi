@@ -46,7 +46,7 @@ var Config = window.__MODCONFIG = {
 	scripts:[
 		'js/lib/dist/jquery-1.11.0.min.js',
 		'js/lib/dist/jns_calendar.min.js',
-		// 'js/lib/dist/bs_global.min.js',
+		// 'js/lib/dist/mod-global.min.js',
 		'js/lib/src/mod.js',
 		'js/mod-init.js'
 	],

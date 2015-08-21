@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div class="bs_mod01" mod-title='全局配置文件' mod-title-left='文件地址：<a href="../../js/mod-config.js" target="_blank">mod-config.js</a>'>
+<div class="mod-module" mod-title='全局配置文件' mod-title-left='文件地址：<a href="../../js/mod-config.js" target="_blank">mod-config.js</a>'>
 	<p class="ins"></p>
     <h2 class="ins">引入方式</h2>
     <h3 class="ins">script标签方式</h3>
@@ -17,7 +17,7 @@
 
     <pre class="brush:xml;">
 ...
-&lt;script src="../js/bs_config?201507101521"&gt;&lt;/script&gt;
+&lt;script src="../js/mod-config?201507101521"&gt;&lt;/script&gt;
 &lt;script&gt;
 //do something
 &lt;/script&gt;
@@ -48,7 +48,7 @@ document.getElementByTagName('head')[0].appendChild(myScript);
                 <td>type</td>
                 <td>
                     ajax|空<br/>
-                    当type = ajax时， bs_config将会采取ajax方式加载其他依赖文件，否则采取document.write 方式直接插入 script标签
+                    当type = ajax时， mod-config将会采取ajax方式加载其他依赖文件，否则采取document.write 方式直接插入 script标签
                 </td>
             </tr>
             <tr>
@@ -79,12 +79,12 @@ if(global.Config){
 	return;
 }
 var mySrc = (function(){
-    if(/bs_config\.js$/g.test(document.scripts[document.scripts.length - 1].src)){
+    if(/mod-config\.js$/g.test(document.scripts[document.scripts.length - 1].src)){
         return document.scripts[document.scripts.length - 1].src;
     } else {
         for(var i = 0, fsrc, len = document.scripts.length; i &lt; len; i++){
             fsrc = document.scripts[i].src;
-            if(/bs_config\.js/g.test(fsrc)){
+            if(/mod-config\.js/g.test(fsrc)){
                 return fsrc;
             }
         }
@@ -108,8 +108,8 @@ var Config = global.Config = {
 	scripts:[
 		'js/lib/dist/jquery-1.11.0.min.js',
 		'js/lib/dist/jns_calendar.min.js',
-		'js/lib/dist/bs_global.min.js',
-		'js/bs_init.js'
+		'js/lib/dist/mod-global.min.js',
+		'js/mod-init.js'
 	],
 
 	//上传接口用地址参数

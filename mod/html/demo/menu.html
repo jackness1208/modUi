@@ -9,14 +9,14 @@
 </head>
 <body>
 
-<div class="bs_mod01" mod-title="带checkbox多级菜单">
+<div class="mod-module" mod-title="带checkbox多级菜单">
 
 	<h2 class="ins">HTML模板写法</h2>
 	<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
 	
 	<h3 class="ins">模块效果</h3>
 	<div class="ins">
-		<div id="menu1" class="bs_menu" mod-show="true" mod-checkbox="true">
+		<div id="menu1" class="mod-menu" mod-show="true" mod-checkbox="true">
 			<ul>
 				<li><a mod-value="1">一级标题</a></li>
 				<li>
@@ -49,7 +49,7 @@
 	<h3 class="ins">HTML模板写法</h3>
 	<p class="ins">纯css样式控制，理论上无限极菜单</p>
 	<pre class="brush:xml;">
-&lt;div class="bs_menu" mod-show="true" mod-checkbox="true"&gt;
+&lt;div class="mod-menu" mod-show="true" mod-checkbox="true"&gt;
 	&lt;ul&gt;
 		&lt;li&gt;&lt;a mod-value="1"&gt;一级标题&lt;/a&gt;&lt;/li&gt;
 		&lt;li&gt;
@@ -80,7 +80,7 @@
 	
 	<h3 class="ins">模块效果</h3>
 	<div class="ins">
-		<div class="bs_menu" mod-show="true" mod-href-target="_blank">
+		<div class="mod-menu" mod-show="true" mod-href-target="_blank">
 			<ul>
 				<li><a href="#">一级标题</a></li>
 				<li>
@@ -111,7 +111,7 @@
 	<h3 class="ins">HTML模板写法</h3>
 	<p class="ins">纯css样式控制，理论上无限极菜单</p>
 	<pre class="brush:xml;">
-&lt;div class="bs_menu"  mod-show="true"  mod-href-target="_blank" &gt;
+&lt;div class="mod-menu"  mod-show="true"  mod-href-target="_blank" &gt;
 	&lt;ul&gt;
 		&lt;li&gt;&lt;a href="#"&gt;一级标题&lt;/a&gt;&lt;/li&gt;
 		&lt;li&gt;

@@ -722,7 +722,7 @@ function bsPopup(type, op) {///{
 		},
 		popConfig = function(t){
 			var classConfig = {
-					"popup":"bs_pop"
+					"popup":"mod-pop"
 				},
 				idConfig = {
 					"popup":"",
@@ -749,7 +749,7 @@ function bsPopup(type, op) {///{
 					switch(type){
 						case "confirm":
 							return [
-								'<div class="bs_pop_hd" id="'+ idConfig.head +'">',
+								'<div class="mod-pop_hd" id="'+ idConfig.head +'">',
 									'<h3 class="h_tl" id="'+ idConfig.title +'"></h3>',
 									'<div class="h_ctrl">',
 										'<a href="javascript:;" class="mini" id="'+ idConfig.mini +'">mini</a>',
@@ -757,38 +757,38 @@ function bsPopup(type, op) {///{
 										'<a href="javascript:;" class="close" id="'+ idConfig.close +'">CLOSE</a>',
 									'</div>',
 								'</div>',
-								'<div class="bs_pop_resize">',
-									'<i class="bs_pop_resize_l" id="'+ idConfig.resizeL +'"></i>',
-									'<i class="bs_pop_resize_b" id="'+ idConfig.resizeB +'"></i>',
-									'<i class="bs_pop_resize_r" id="'+ idConfig.resizeR +'"></i>',
-									'<i class="bs_pop_resize_lb" id="'+ idConfig.resizeLb +'"></i>',
-									'<i class="bs_pop_resize_rb" id="'+ idConfig.resizeRb +'"></i>',
+								'<div class="mod-pop_resize">',
+									'<i class="mod-pop_resize_l" id="'+ idConfig.resizeL +'"></i>',
+									'<i class="mod-pop_resize_b" id="'+ idConfig.resizeB +'"></i>',
+									'<i class="mod-pop_resize_r" id="'+ idConfig.resizeR +'"></i>',
+									'<i class="mod-pop_resize_lb" id="'+ idConfig.resizeLb +'"></i>',
+									'<i class="mod-pop_resize_rb" id="'+ idConfig.resizeRb +'"></i>',
 
-									'<div class="bs_pop_bd" id="'+ idConfig.body +'">',
-										'<div class="bs_pop_bd_cnt" id="'+ idConfig.content +'"></div>',
+									'<div class="mod-pop_bd" id="'+ idConfig.body +'">',
+										'<div class="mod-pop_bd_cnt" id="'+ idConfig.content +'"></div>',
 									'</div>',
-									'<div class="bs_pop_ft" id="'+ idConfig.foot +'">',
-										'<a href="javascript:;" class="bs_btn_s01 bs_btn_small" id="'+ idConfig.okBtn +'"><span>确定</span></a>',
-										'<a href="javascript:;" class="bs_btn_s03 bs_btn_small" id="'+ idConfig.cancelBtn +'"><span>取消</span></a>',
+									'<div class="mod-pop_ft" id="'+ idConfig.foot +'">',
+										'<a href="javascript:;" class="mod-btn_s01 mod-btn_small" id="'+ idConfig.okBtn +'"><span>确定</span></a>',
+										'<a href="javascript:;" class="mod-btn_s03 mod-btn_small" id="'+ idConfig.cancelBtn +'"><span>取消</span></a>',
 									'</div>',
 								'</div>',
-								'<div class="bs_pop_resize_area" id="'+ idConfig.resizeArea +'" style="display:none;"></div>',
-								'<iframe class="bs_pop_if" frameborder="0"></iframe>'
+								'<div class="mod-pop_resize_area" id="'+ idConfig.resizeArea +'" style="display:none;"></div>',
+								'<iframe class="mod-pop_if" frameborder="0"></iframe>'
 							].join("");
 
 						case "loading":
 							return [
-								'<div class="bs_loading_icon"></div>',
+								'<div class="mod-loading_icon"></div>',
 								'<a href="javascript:;" class="close" id="'+ idConfig.close +'">CLOSE</a>',
-								'<div class="bs_pop_bd" id="'+ idConfig.content +'"></div>',
-								'<iframe class="bs_pop_if" frameborder="0"></iframe>'
+								'<div class="mod-pop_bd" id="'+ idConfig.content +'"></div>',
+								'<iframe class="mod-pop_if" frameborder="0"></iframe>'
 							].join("");
 
 						case "normal":
 						case "alert":
 							
 							return [
-								'<div class="bs_pop_hd" id="'+ idConfig.head +'">',
+								'<div class="mod-pop_hd" id="'+ idConfig.head +'">',
 									'<h3 class="h_tl" id="'+ idConfig.title +'"></h3>',
 									'<div class="h_ctrl">',
 										'<a href="javascript:;" class="mini" id="'+ idConfig.mini +'">mini</a>',
@@ -796,27 +796,27 @@ function bsPopup(type, op) {///{
 										'<a href="javascript:;" class="close" id="'+ idConfig.close +'">CLOSE</a>',
 									'</div>',
 								'</div>',
-								'<div class="bs_pop_resize">',
-									'<i class="bs_pop_resize_l" id="'+ idConfig.resizeL +'"></i>',
-									'<i class="bs_pop_resize_b" id="'+ idConfig.resizeB +'"></i>',
-									'<i class="bs_pop_resize_r" id="'+ idConfig.resizeR +'"></i>',
-									'<i class="bs_pop_resize_lb" id="'+ idConfig.resizeLb +'"></i>',
-									'<i class="bs_pop_resize_rb" id="'+ idConfig.resizeRb +'"></i>',
+								'<div class="mod-pop_resize">',
+									'<i class="mod-pop_resize_l" id="'+ idConfig.resizeL +'"></i>',
+									'<i class="mod-pop_resize_b" id="'+ idConfig.resizeB +'"></i>',
+									'<i class="mod-pop_resize_r" id="'+ idConfig.resizeR +'"></i>',
+									'<i class="mod-pop_resize_lb" id="'+ idConfig.resizeLb +'"></i>',
+									'<i class="mod-pop_resize_rb" id="'+ idConfig.resizeRb +'"></i>',
 
-									'<div class="bs_pop_bd" id="'+ idConfig.body +'">',
-										'<div class="bs_pop_status" id="'+ idConfig.status +'"></div>',
-										'<div class="bs_pop_bd_cnt" id="'+ idConfig.content +'"></div>',
+									'<div class="mod-pop_bd" id="'+ idConfig.body +'">',
+										'<div class="mod-pop_status" id="'+ idConfig.status +'"></div>',
+										'<div class="mod-pop_bd_cnt" id="'+ idConfig.content +'"></div>',
 									'</div>',
 								'</div>',
-								'<div class="bs_pop_resize_area" id="'+ idConfig.resizeArea +'" style="display:none;"></div>',
-								'<iframe class="bs_pop_if" frameborder="0"></iframe>'
+								'<div class="mod-pop_resize_area" id="'+ idConfig.resizeArea +'" style="display:none;"></div>',
+								'<iframe class="mod-pop_if" frameborder="0"></iframe>'
 							].join("");
 
 						case "error":
 						case "success":
 							
 							return [
-								'<div class="bs_pop_hd" id="'+ idConfig.head +'">',
+								'<div class="mod-pop_hd" id="'+ idConfig.head +'">',
 									'<h3 class="h_tl" id="'+ idConfig.title +'"></h3>',
 									'<div class="h_ctrl">',
 										'<a href="javascript:;" class="mini" id="'+ idConfig.mini +'">mini</a>',
@@ -824,30 +824,30 @@ function bsPopup(type, op) {///{
 										'<a href="javascript:;" class="close" id="'+ idConfig.close +'">CLOSE</a>',
 									'</div>',
 								'</div>',
-								'<div class="bs_pop_resize">',
-									'<i class="bs_pop_resize_l" id="'+ idConfig.resizeL +'"></i>',
-									'<i class="bs_pop_resize_b" id="'+ idConfig.resizeB +'"></i>',
-									'<i class="bs_pop_resize_r" id="'+ idConfig.resizeR +'"></i>',
-									'<i class="bs_pop_resize_lb" id="'+ idConfig.resizeLb +'"></i>',
-									'<i class="bs_pop_resize_rb" id="'+ idConfig.resizeRb +'"></i>',
+								'<div class="mod-pop_resize">',
+									'<i class="mod-pop_resize_l" id="'+ idConfig.resizeL +'"></i>',
+									'<i class="mod-pop_resize_b" id="'+ idConfig.resizeB +'"></i>',
+									'<i class="mod-pop_resize_r" id="'+ idConfig.resizeR +'"></i>',
+									'<i class="mod-pop_resize_lb" id="'+ idConfig.resizeLb +'"></i>',
+									'<i class="mod-pop_resize_rb" id="'+ idConfig.resizeRb +'"></i>',
 
-									'<div class="bs_pop_bd" id="'+ idConfig.body +'">',
-										'<div class="bs_pop_status" id="'+ idConfig.status +'"></div>',
-										'<div class="bs_pop_bd_cnt" id="'+ idConfig.content +'"></div>',
+									'<div class="mod-pop_bd" id="'+ idConfig.body +'">',
+										'<div class="mod-pop_status" id="'+ idConfig.status +'"></div>',
+										'<div class="mod-pop_bd_cnt" id="'+ idConfig.content +'"></div>',
 									'</div>',
-									'<div class="bs_pop_ft" id="'+ idConfig.foot +'">',
-										'<a href="javascript:;" class="bs_btn_s03 bs_btn_small" mod-init="true" id="'+ idConfig.okBtn +'"><span>确定</span></a>',
+									'<div class="mod-pop_ft" id="'+ idConfig.foot +'">',
+										'<a href="javascript:;" class="mod-btn_s03 mod-btn_small" mod-init="true" id="'+ idConfig.okBtn +'"><span>确定</span></a>',
 									'</div>',
 								'</div>',
-								'<div class="bs_pop_resize_area" id="'+ idConfig.resizeArea +'" style="display:none;"></div>',
-								'<iframe class="bs_pop_if" frameborder="0"></iframe>'
+								'<div class="mod-pop_resize_area" id="'+ idConfig.resizeArea +'" style="display:none;"></div>',
+								'<iframe class="mod-pop_if" frameborder="0"></iframe>'
 							].join("");
 
 						
 
 						default: 
 							return [
-								'<div class="bs_pop_hd" id="'+ idConfig.head +'">',
+								'<div class="mod-pop_hd" id="'+ idConfig.head +'">',
 									'<h3 class="h_tl" id="'+ idConfig.title +'"></h3>',
 									'<div class="h_ctrl">',
 										'<a href="javascript:;" class="mini" id="'+ idConfig.mini +'">mini</a>',
@@ -855,20 +855,20 @@ function bsPopup(type, op) {///{
 										'<a href="javascript:;" class="close" id="'+ idConfig.close +'">CLOSE</a>',
 									'</div>',
 								'</div>',
-								'<div class="bs_pop_resize">',
-									'<i class="bs_pop_resize_l" id="'+ idConfig.resizeL +'"></i>',
-									'<i class="bs_pop_resize_b" id="'+ idConfig.resizeB +'"></i>',
-									'<i class="bs_pop_resize_r" id="'+ idConfig.resizeR +'"></i>',
-									'<i class="bs_pop_resize_lb" id="'+ idConfig.resizeLb +'"></i>',
-									'<i class="bs_pop_resize_rb" id="'+ idConfig.resizeRb +'"></i>',
+								'<div class="mod-pop_resize">',
+									'<i class="mod-pop_resize_l" id="'+ idConfig.resizeL +'"></i>',
+									'<i class="mod-pop_resize_b" id="'+ idConfig.resizeB +'"></i>',
+									'<i class="mod-pop_resize_r" id="'+ idConfig.resizeR +'"></i>',
+									'<i class="mod-pop_resize_lb" id="'+ idConfig.resizeLb +'"></i>',
+									'<i class="mod-pop_resize_rb" id="'+ idConfig.resizeRb +'"></i>',
 
-									'<div class="bs_pop_bd" id="'+ idConfig.body +'">',
-										'<div class="bs_pop_status" id="'+ idConfig.status +'"></div>',
-										'<div class="bs_pop_bd_cnt" id="'+ idConfig.content +'"></div>',
+									'<div class="mod-pop_bd" id="'+ idConfig.body +'">',
+										'<div class="mod-pop_status" id="'+ idConfig.status +'"></div>',
+										'<div class="mod-pop_bd_cnt" id="'+ idConfig.content +'"></div>',
 									'</div>',
 								'</div>',
-								'<div class="bs_pop_resize_area" id="'+ idConfig.resizeArea +'" style="display:none;"></div>',
-								'<iframe class="bs_pop_if" frameborder="0"></iframe>'
+								'<div class="mod-pop_resize_area" id="'+ idConfig.resizeArea +'" style="display:none;"></div>',
+								'<iframe class="mod-pop_if" frameborder="0"></iframe>'
 							].join("");
 
 					}
@@ -885,17 +885,17 @@ function bsPopup(type, op) {///{
 
 				case "loading":
 					frontName += "Loading";
-					classConfig.popup += " bs_pop_loading";
+					classConfig.popup += " mod-pop_loading";
 					break;
 
 				case "error":
 					frontName += "Status";
-					classConfig.popup += " bs_pop_error";
+					classConfig.popup += " mod-pop_error";
 					break;
 
 				case "success":
 					frontName += "Status";
-					classConfig.popup += " bs_pop_success";
+					classConfig.popup += " mod-pop_success";
 					break;
 
 				case "normal":
@@ -1076,7 +1076,7 @@ function bsPopup(type, op) {///{
 		popup.hide = function(param) {
 			var that = this;
 			clearTimeout(that.timeoutKey);
-			$(that).removeClass("bs_pop_cur");
+			$(that).removeClass("mod-pop_cur");
 
 			popup.myLeft = popup.myTop = NaN;
 
@@ -1179,7 +1179,7 @@ function bsPopup(type, op) {///{
 
 				that.timeoutKey = setTimeout(function(){
 					that.srcBg && that.srcBg.show();
-					$(that).addClass("bs_pop_cur");
+					$(that).addClass("mod-pop_cur");
 					that.fixed();
 					that.offsetHeight && that.focus();
 
@@ -1207,7 +1207,7 @@ function bsPopup(type, op) {///{
 				that.srcBg && that.srcBg.show();
 
 				option.appendTarget.appendChild(that);
-				$(that).addClass("bs_pop_cur");
+				$(that).addClass("mod-pop_cur");
 				that.offsetHeight && that.focus();
 				that.fixed();
 				clearTimeout(this.aniKey);
@@ -1461,7 +1461,7 @@ function bsPopup(type, op) {///{
 					dc.body.appendChild(that);
 					that.style.marginLeft = -that.offsetWidth / 2 + "px";
 					that.style.marginTop = -that.offsetHeight / 2 + "px";
-					$(that).addClass("bs_pop_cur");
+					$(that).addClass("mod-pop_cur");
 					if (that.srcOvertime) {
 						clearTimeout(that.overtimeKey);
 						that.overtimeKey = setTimeout(function() {
@@ -1519,7 +1519,7 @@ function bsPopup(type, op) {///{
 		bg = $("#bsPopBg")[0];
 		if(!bg){
 			bg = dc.createElement("div");
-			bg.className = "bs_pop_bg";
+			bg.className = "mod-pop_bg";
 			bg.id = "popupBg";
 			bg.show = function() {
 				this.style.visibility = "visible";
@@ -1530,9 +1530,9 @@ function bsPopup(type, op) {///{
 			bg.onclick = function() {
 				var _this = this;
 				clearTimeout(this.timeoutKey);
-				$(this.srcPopup).addClass("bs_pop_animate");
+				$(this.srcPopup).addClass("mod-pop_animate");
 				this.timeoutKey = setTimeout(function() {
-					$(_this.srcPopup).removeClass("bs_pop_animate");
+					$(_this.srcPopup).removeClass("mod-pop_animate");
 				}, 1000);
 
 			};
@@ -1564,9 +1564,9 @@ function bsPopup(type, op) {///{
 
 	//判断是否可调整宽度
 	if(option.resize){
-		$(popup.srcResizeL).parent().removeClass("bs_pop_resize_disable");
+		$(popup.srcResizeL).parent().removeClass("mod-pop_resize_disable");
 	} else {
-		$(popup.srcResizeL).parent().addClass("bs_pop_resize_disable");
+		$(popup.srcResizeL).parent().addClass("mod-pop_resize_disable");
 	}
 
 	
@@ -1846,57 +1846,78 @@ function getObjByKey(obj,str){///{
 
 var renderPark = {
     keyEvent: {
-        'mod-if': function(target, data, context){
+        'mod-if': function(target, data, context, component){
             if(!renderPark.eval(renderPark.var2Str(context, data))){
                 target.parentNode.removeChild(target);
             }
 
         },
 
-        'mod-component': function(target, data, context){
-            var component = data[context];
-            if(/^document/g.test(mod.fn.type(component))){
-                target.appendChild(component);
-            } else if(mod.fn.type(component) == 'contexting'){
-                target.innerHTML = component;
+        'mod-component': function(target, data, context, component){
+            var modFact = component.__modFact;
+                childComponent = modFact.component[context];
+            if(/^document/g.test(mod.fn.type(childComponent))){
+                target.appendChild(childComponent);
+
+            } else if(mod.fn.type(childComponent) == 'string'){
+                target.innerHTML = childComponent;
+
             }
 
         },
 
-        'mod-on': function(target, data, context){
+        'mod-on': function(target, data, context, component){
+            var ctxArr = context.replace(/\s+/g,'').split(','),
+                modFact = component.__modFact,
+                ctxMap = {};
 
+            ctxArr.forEach(function(item, i){
+                var sArr = item.split(':');
+
+                if(sArr.length > 1 && modFact.methods[sArr[1]]){
+                    target.__modParentComponent = component;
+                    component.__modChildren.push(target);
+                    $(target).bind(sArr[0], modFact.methods[sArr[1]]);
+                }
+            });
         },
 
-        'mod-class': function(target, data, context){
+        'mod-class': function(target, data, context, conponent){
             var ctxArr = context.replace(/\s+/g,'').split(','),
                 ctxMap = {};
             ctxArr.forEach(function(item, i){
                 var sArr = item.split(':');
-                if(sArr.length > 1){
-                    ctxMap[sArr[0]] = sArr[1];
-                }
+                sArr.length > 1
+                    && renderPark.eval(renderPark.var2Str(sArr[1], data))
+                    && $(target).addClass(sArr[0])
+                    ;
             });
             
-            //TODO
         }
     },
-    elements: function(elm, data){
+    elements: function(target){
         var she = this,
-            keyEvent = she.keyEvent;
-        $(elm).find('*').each(function(){
+            keyEvent = she.keyEvent,
+            modFact = target.__modFact,
+            data = target.__modOptions,
+            context = modFact.template;
+        
+        $(target).html(she.string(context, data, modFact));
+        $(target).find('*').each(function(){
             var item = this,
                 myVal;
             for(var key in keyEvent){
                 if(keyEvent.hasOwnProperty(key)){
                     myVal = $(item).attr(key);
                     myVal && (
-                        keyEvent[key](item, data, myVal), 
+                        keyEvent[key](item, data, myVal, target),
                         item.removeAttribute(key)
                     );
                 }
             }
 
         });
+
     },
     var2Str: function(rtx, data){
         return rtx.replace(/\$\w+/g,function(t){
@@ -1930,8 +1951,7 @@ var renderPark = {
         if(!str){return "";}
 
         //替换变量
-        var 
-            she = this,
+        var she = this,
             var2Str = she.var2Str;
 
         //普通变量
@@ -1986,14 +2006,20 @@ var renderPark = {
 /**
  * define mod main fn
  *******************************/
-var modFactory = {
+var modFactory = {///{
     class: '',
     data: {},
     template: '',
     methods: {},
 
+    // 用于存放 模块
+    component: {},
+
+    // 用于存放 自定义字段
+    extends: {},
+
     // 初始化
-    init: function(handle ,context, op){
+    init: function(handle ,context, op){///{
         var 
             modFact = handle.__modFact,
             $tar = $(context || modFact.class),
@@ -2008,15 +2034,27 @@ var modFactory = {
                 return;
             }
             
-            $(she).addClass(modFact.class);
-
+            mod.fn.extend(she, {
+                __modFact: modFact,
+                __modOptions: attr,
+                __modChildren: [],
+                __modAttributes: {},
+                __modTimeouts: {}
+            });
             
             new mod.fn.Promise().then(function(next){
-                modFact.build(she, attr, modFact, next);
+                modFact.build(she, attr, next);
+
+            }).then(function(she, attr, next){ // 对外方法绑定
+                for(var key in modFact.events){
+                    if(modFact.events.hasOwnProperty(key)){
+                        she[key] = she.__modAttributes[key] = modFact.attributes[key];
+                    }
+                }
+                next(she, attr);
 
             }).then(function(she, attr, next){
                 $(she).show();
-                she.__modOptions = attr;
                 next(she, attr);
 
             }).then(function(she, attr, next){
@@ -2024,10 +2062,12 @@ var modFactory = {
 
             }).start();
         });
-    },
+
+        return $tar[0];
+    },///}
 
     // 构建
-    build: function(target, attr, fact, next){ 
+    build: function(target, attr, next){ 
         next(target, attr);
     },
 
@@ -2036,12 +2076,41 @@ var modFactory = {
         next();
     },
 
+    // 对外事件接口
+    events: {},
+
     // 摧毁
     destroy: function(){
-        delete this.__modFacts;
-        delete this.__modOptions;
+        var component = this,
+            key;
+        delete component.__modFact;
+        delete component.__modOptions;
+
+        // 清除绑定了 __modParentComponent 的对象
+        component.__modChildren.forEach(function(item, i){
+            delete item.__modParentComponent;
+        });
+        
+        delete component.__modChildren;
+
+        // 清除对象 绑定了的方法
+        for(key in component.__modAttributes){
+            if(component.__modAttributes.hasOwnProperty(key) && component[key]){
+                delete component[key];
+            }
+        }
+
+        delete component.__modAttributes;
+
+        // 清除所有 扔在循环执行字段
+        for(key in component.__modTimeouts){
+            clearTimeout(component.__modTimeouts[key]);
+        }
+
+        delete component.__modTimeouts;
     }
-};
+};///}
+
 mod.options = window.__MODCONFIG;
 mod.extend = function(){
     var she = this,
@@ -2053,13 +2122,22 @@ mod.extend = function(){
 };
 
 
-
+/**
+ * 模板初始化
+ * @param  {object} target 需要执行模块化的对象
+ * @param  {object} op     参数设置
+ *
+ *                  - title      [string] 模块标题 
+ *                  - titleLeft  [string] 模块标题左侧 html内容 
+ *                  - titleRight [string] 模块标题右侧 html内容
+ * @return {void} 
+ */
 mod.box = function(context, op){
-    mod.box.__modFact.init(mod.box, context, op);
+    return mod.box.__modFact.init(mod.box, context, op);
 };
 
-mod.box.__modFact = mod.fn.extend(modFactory, {
-    class: 'bs_mod01',
+mod.box.__modFact = mod.fn.extend( undefined, modFactory, {///{
+    class: 'mod-module',
     data: {
         title: '',
         titleLeft: '',
@@ -2067,63 +2145,242 @@ mod.box.__modFact = mod.fn.extend(modFactory, {
         hide: false
     },
     template: [
-        '<div class="bs_mod01_hd">',
-                '<h3 class="h_tl" mod-if="$title"><i class="bs_toggle_icon" mod-class="bs_toggle_icon_cur: !$hide" mod-on="click: onToggle" ></i>{$title}</h3>',
-                '<div class="h_l">{$titleLeft}</div>',
-                '<div class="h_r">{$titleRight}</div>',
+        '<div class="mod-module_hd">',
+                '<h3 class="h_tl" mod-if="$title"  mod-on="click: onToggle"><i class="mod-toggle_icon"></i>{$title}</h3>',
+                '<div class="h_l" mod-if="$titleLeft">{$titleLeft}</div>',
+                '<div class="h_r"  mod-if="$titleRight">{$titleRight}</div>',
         '</div>',
-        '<div class="bs_mod01_bd" mod-component="content"></div>'
+        '<div class="mod-module_bd" mod-component="content"></div>'
     ].join(''),
-    methods: {
-        onToggle: function(){
-            alert('onToggle!')
-        }
-    },
-    build: function(target, attr, fact, next){
-        var myFrag = document.createDocumentFragment();
+    build: function(target, attr, next){
+
+
+        var myFrag = document.createDocumentFragment(),
+            modFact = target.__modFact;
+        
+        $(target).addClass(modFact.class);
+
+        attr.hide 
+            && modFact.attributes.hide.call(target)
+            ;
 
         while(target.childNodes.length > 0){
             myFrag.appendChild(target.childNodes[0]);
         }
         
-        attr.content = myFrag;
-        target.innerHTML = renderPark.string(fact.template, attr);
-        renderPark.elements(target, attr);
+        mod.fn.extend(modFact.component, {
+            content: myFrag
+        });
 
-        // she.innerHTML = renderPark.string(him.tpl, attr);
+        renderPark.elements(target);
 
-
-        // var myExt = {
-        //         toggleIco:$(she).children(".bs_mod01_hd").find(".bs_toggle_icon")[0],
-        //         toggleCnt:$(she).children(".bs_mod01_bd")[0]
-        //     },
-        //     toggleArea = myExt.toggleIco?myExt.toggleIco.parentNode:null;
-
-
-        // she.show = function(){
-        //     $(myExt.toggleIco).removeClass("bs_toggle_icon_cur");
-        //     $(myExt.toggleCnt).slideDown(200)
-        // };
-        
-        // she.hide = function(){
-        //     $(myExt.toggleIco).addClass("bs_toggle_icon_cur");
-        //     $(myExt.toggleCnt).slideUp(200);
-        // };
-
-        // toggleArea && (toggleArea.onclick = function(){
-        //     myExt.toggleIco.className.indexOf("bs_toggle_icon_cur") == -1 ? (
-        //         she.hide()
-        //     ) : (
-        //         she.show()
-        //     );
-
-        // });
-
-        // she.opAttr = attr;
-        // toggleArea = null;
         next(target, attr);
+    },
+    methods: {
+        onToggle: function(){
+            var component = this.__modParentComponent;
+            ~component.className.indexOf('_slideup')
+                ? component.show()
+                : component.hide()
+                ;
+        }
+    },
+    
+    attributes: {
+        show: function(){
+            var component = this;
+            $(component).removeClass('mod-module_slideup');
+        },
+
+        hide: function(){
+            var component = this;
+            $(component).addClass('mod-module_slideup');
+
+        }
     }
+});///}
+
+
+mod.tab = function(context, op){
+    return mod.tab.__modFact.init(mod.tab, context, op);
+};
+
+mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
+    class: 'mod-tab',
+    data: {
+        title:"",
+        titleLeft:"",
+        titleRight:"",
+        index: -1,
+        tabs: [],
+        onchange:function(){},
+        //是否自动切换
+        autoPlay:false,
+        //自动切换停留时间
+        timeout:2000,
+
+        hide:false
+    },
+    template: [
+        '<div class="mod-tab_hd">',
+            '<h3 class="h_tl" mod-if="$title" mod-on="click: onToggle"><i class="mod-toggle_icon"></i>{$title}</h3>',
+            '<div class="mod-tab_tablist">',
+                '<ul>',
+                    '<li mod-repeat="$$extends.tabs" mod-class="cur: $$index == $$data.index"><a href="javascript:;" mod-on="click: tabClick">{$text}</a></li>',
+                '</ul>',
+            '</div>',
+            '<div class="h_l" mod-if="$titleLeft">{$titleLeft}</div>',
+            '<div class="h_r"  mod-if="$titleRight">{$titleRight}</div>',
+        '</div>',
+        '<div class="mod-tab_bd" mod-component="$content"></div>'
+    ].join(''),
+    build: function(target, attr, next){
+
+        var modFact = target.__modFact,
+            tabsArr = [];
+         
+        modFact.attributes.index = attr.index;
+
+        if(!attr.tabs.length){
+            $(she).children("ul").find('a').each(function(index){
+                var item = this,
+                    iParent = item.parentNode,
+                    iHref = $(item).attr('href');
+                tabsArr.push({
+                    text: item.innerHTML,
+                    link: ~iHref.indexOf('#') ? iHref.split('#').pop(): ''
+                });
+
+                if(~iParent.className.indexOf('cur') && modFact.attributes.index == -1){
+                    modFact.attributes.index = index;
+                }
+            });
+        } else {
+            tabsArr = mod.fn.extend(undefined, attr.tabs);
+        }
+
+        
+        mod.fn.extend(modFact.component, {
+            content: document.createDocumentFragment(),
+        });
+
+        mod.fn.extend(modFact.extends, {
+            tabs: tabsArr
+        });
+
+        tabsArr = modFact.extends.tabs;
+        
+        modFact.extends.tabs.forEach(function(item, index){
+            if(mod.fn.type(item) != 'object' || !item.link){
+                return;
+            }
+            
+            var iTarget = $('#' + item.link)[0];
+
+            iTarget && modFact.component.content.appendChild(iTarget);
+        });
+        
+
+        $(target).addClass("mod-tab");
+
+        renderPark.elements(target);
+         
+        // 自定义数据
+        var As = [];
+        $(target).find('.mod-tab_tablist a').each(function(){
+            As.push(this);
+        });
+        
+        mod.fn.extend(modFact.extends, {
+            tabAs: As
+        });
+
+        // 事件绑定
+        if(attr.autoPlay && attr.timeout){
+            var isHover = false,
+                hoverKey,
+                timeoutKey;
+            !function aniMove(){
+                clearTimeout(target.__modTimeouts.hoverKey);
+                clearTimeout(target.__modTimeouts.timeoutKey);
+
+                if(isHover){
+                    target.__modTimeouts.hoverKey = setTimeout(aniMove,20);
+
+                } else {
+                    target.next();
+                    target.__modTimeouts.timeoutKey = setTimeout(aniMove,attr.timeout);
+                }
+            }();
+
+            $(myExt.toggleCnt).bind("mouseenter",function(){
+                isHover = true;
+            });
+
+            $(myExt.toggleCnt).bind("mouseleave",function(){
+                isHover = false;
+            });
+        }
+		
+        next(target, attr);
+    },
+    methods: {
+        onToggle: function(){
+            var component = this.__modParentComponent;
+            ~component.className.indexOf('_slideup')
+                ? component.show()
+                : component.hide()
+                ;
+        },
+        tabClick: function(){
+            var component = this.__modParentComponent,
+                iLi = this.parentNode,
+                index = $(iLi).parent().children().index(iLi);
+
+            $(iLi).addClass('cur').siblings('li').removeClass('cur');
+            component.index = index;
+        }
+    },
+    
+    attributes: {
+        show: function(){
+            var component = this;
+            $(component).removeClass('mod-tab_slideup');
+        },
+
+        hide: function(){
+            var component = this;
+            $(component).addClass('mod-tab_slideup');
+
+        },
+
+        index: 0,
+
+        current: function(index){
+            var component = this;
+            var tabAs = component.__modFact.extends.tabAs;
+            iIndex = (index % tabAs.length + tabAs.length) % tabAs.length;
+            $(tabAs[iIndex]).trigger('click');
+
+        },
+
+        next: function(){
+            var component = this;
+            component.current(component.index + 1);
+
+        },
+
+        prev: function(){
+            var component = this;
+            component.current(component.index - 1);
+        }
+    }
+    
 });
+
+
+
+
 
 
 //模板初始化用函数
@@ -2132,94 +2389,8 @@ function moduleBuild() {
 }
 
 moduleBuild.prototype = {
-	/**
-	 * 模板初始化
-	 * @param  {object} target 需要执行模块化的对象
-	 * @param  {object} op     参数设置
-	 *
-	 *                  - title      [string] 模块标题 
-	 *                  - titleLeft  [string] 模块标题左侧 html内容 
-	 *                  - titleRight [string] 模块标题右侧 html内容
-	 * @return {void} 
-	 */
-	_box: function(target,op) {
-		var $tar = target ? $(target) : $(".bs_mod01"),
-			option = {
-				title:"",
-				titleLeft:"",
-				titleRight:"",
-				hide:false
-			},
-			key;
-		
-		//赋值
-		option = modAssignment(option,op);
-
-		//重构
-		$tar.each(function() {
-			var she = this,
-				attr = modAssignment(option,she);
-
-			if(isEqual(she.opAttr,attr)){
-				return;
-			}
-
-			$(she).addClass("bs_mod01");
-
-			var myFrag = document.createDocumentFragment(),
-				i, len, fs;
-
-			while(she.childNodes.length > 0){
-				myFrag.appendChild(she.childNodes[0]);
-			}
-			
-
-			$(she).html([
-				'<div class="bs_mod01_hd">',
-				attr.title ? '<h3 class="h_tl"><i class="bs_toggle_icon '+ (attr.hide?'bs_toggle_icon_cur':'') +'"></i>' + attr.title + '</h3>' : '',
-				attr.titleLeft ? '<div class="h_l">' + attr.titleLeft + '</div>' : "",
-				attr.titleRight ? '<div class="h_r">' + attr.titleRight + '</div>' : "",
-				'</div>',
-				'<div class="bs_mod01_bd" '+ (attr.hide?'style="display:none;"':'') +'>',
-				'</div>'
-			].join(""));
-
-			$(she).children().eq(1).append(myFrag);
-			$(she).show();
-
-			var myExt = {
-					toggleIco:$(she).children(".bs_mod01_hd").find(".bs_toggle_icon")[0],
-					toggleCnt:$(she).children(".bs_mod01_bd")[0]
-				},
-				toggleArea = myExt.toggleIco?myExt.toggleIco.parentNode:null;
-
-
-			she.show = function(){
-				$(myExt.toggleIco).removeClass("bs_toggle_icon_cur");
-				$(myExt.toggleCnt).slideDown(200)
-			};
-			
-			she.hide = function(){
-				$(myExt.toggleIco).addClass("bs_toggle_icon_cur");
-				$(myExt.toggleCnt).slideUp(200);
-			};
-
-			toggleArea && (toggleArea.onclick = function(){
-				myExt.toggleIco.className.indexOf("bs_toggle_icon_cur") == -1 ? (
-					she.hide()
-				) : (
-					she.show()
-				);
-
-			});
-
-			she.opAttr = attr;
-			toggleArea = null;
-			
-		});
-		
-
-	},
+	
+	
 
 	/**
 	 * 选项卡初始化
@@ -2231,8 +2402,8 @@ moduleBuild.prototype = {
 	 *                  - titleRight [string] 模块标题右侧 html内容
 	 * @return {void} 
 	 */
-	tab: function(target,op) {
-		var $tar = target ? $(target) : $(".bs_tab"),
+	_tab: function(target,op) {
+		var $tar = target ? $(target) : $(".mod-tab"),
 			option = {
 				title:"",
 				titleLeft:"",
@@ -2271,7 +2442,7 @@ moduleBuild.prototype = {
 
 
 			
-			$(target).addClass("bs_tab");
+			$(target).addClass("mod-tab");
 
 			
 
@@ -2288,24 +2459,24 @@ moduleBuild.prototype = {
 			myFrag.appendChild(myUl);
 
 			she.innerHTML = [
-				'<div class="bs_tab_hd">',
-				attr.title ? ('<h3 class="h_tl"><i class="bs_toggle_icon '+ (attr.hide?'bs_toggle_icon_cur':'') +'"></i>' + attr.title + '</h3>') : "",
-				'<div class="bs_tab_tablist"></div>',
+				'<div class="mod-tab_hd">',
+				attr.title ? ('<h3 class="h_tl"><i class="mod-toggle_icon '+ (attr.hide?'mod-toggle_icon_cur':'') +'"></i>' + attr.title + '</h3>') : "",
+				'<div class="mod-tab_tablist"></div>',
 				attr.titleLeft ? ('<div class="h_l">' + attr.titleLeft + '</div>') : "",
 				attr.titleRight ? ('<div class="h_r">' + attr.titleRight + '</div>') : "",
 				'</div>',
-				'<div class="bs_tab_bd '+ (attr.hide?'style="display:none;"':'') +'"></div>'
+				'<div class="mod-tab_bd '+ (attr.hide?'style="display:none;"':'') +'"></div>'
 			].join("");
 
-			$(she).children(".bs_tab_hd").children(".bs_tab_tablist").append(myUl);
-			$(she).children(".bs_tab_bd").append(myFrag).children().addClass("bs_tab_bd_item").hide();
+			$(she).children(".mod-tab_hd").children(".mod-tab_tablist").append(myUl);
+			$(she).children(".mod-tab_bd").append(myFrag).children().addClass("mod-tab_bd_item").hide();
 
 			
 			she.style.display = "block";
 			
 			
 			//事件绑定
-			$(she).children(".bs_tab_hd").children(".bs_tab_tablist").find("a").each(function() {
+			$(she).children(".mod-tab_hd").children(".mod-tab_tablist").find("a").each(function() {
 				var that = this,
 					clickHandle = function(e){
 						e = e || window.event;
@@ -2338,8 +2509,8 @@ moduleBuild.prototype = {
 			});
 
 			var myExt = {
-					toggleIco:$(she).children(".bs_tab_hd").find(".bs_toggle_icon")[0],
-					toggleCnt:$(she).children(".bs_tab_bd")[0]
+					toggleIco:$(she).children(".mod-tab_hd").find(".mod-toggle_icon")[0],
+					toggleCnt:$(she).children(".mod-tab_bd")[0]
 				},
 				toggleArea = myExt.toggleIco ? myExt.toggleIco.parentNode: null;
 			
@@ -2348,18 +2519,18 @@ moduleBuild.prototype = {
 				var toggleIco = myExt.toggleIco,
 					toggleCnt = myExt.toggleCnt;
 
-				toggleIco.className.indexOf("bs_toggle_icon_cur") == -1 ? (
-					$(toggleIco).addClass("bs_toggle_icon_cur"),
+				toggleIco.className.indexOf("mod-toggle_icon_cur") == -1 ? (
+					$(toggleIco).addClass("mod-toggle_icon_cur"),
 					$(toggleCnt).slideUp(200)
 				) : (
-					$(toggleIco).removeClass("bs_toggle_icon_cur"),
+					$(toggleIco).removeClass("mod-toggle_icon_cur"),
 					$(toggleCnt).slideDown(200)
 				);
 
 			});
 
 			var curIndex = isNaN(attr.index)? 0: attr.index,
-				tabAs = $(she).children(".bs_tab_hd").children(".bs_tab_tablist").find("a"),
+				tabAs = $(she).children(".mod-tab_hd").children(".mod-tab_tablist").find("a"),
 				i, len;
 
 			curIndex < 0 && (curIndex = 0);
@@ -2438,7 +2609,7 @@ moduleBuild.prototype = {
 	 */
 	form: function(target,op) {
 		var me = this,
-			$tar = target ? $(target) : $(".bs_form"),
+			$tar = target ? $(target) : $(".mod-form"),
 			option = {
 				action:"",
 				method:"",
@@ -2541,9 +2712,9 @@ moduleBuild.prototype = {
 				return;
 			}
 
-			$(that).addClass("bs_form");
+			$(that).addClass("mod-form");
 			
-			$(that).find("table").addClass("bs_table_s0");
+			$(that).find("table").addClass("mod-table_s0");
 
 			$(that).find("input,select,textarea").each(function(){
 				mod.widget(this);
@@ -2816,7 +2987,7 @@ moduleBuild.prototype = {
 	 */
 	widget:function(target,op){
 		var me = this,
-			$tar = target? $(target):$(".bs_widget"),
+			$tar = target? $(target):$(".mod-widget"),
 			option = {
 				format: "",
 				
@@ -2976,13 +3147,13 @@ moduleBuild.prototype = {
 					myType = elm.type,
 					stu,msgbox,msgboxTri;
 
-				if((myType == "button" && /bs_btn_s0/.test(myParent.className)) || (/checkbox|radio/.test(myType) && /bs_checkarea/.test(myParent.className))){ 
+				if((myType == "button" && /mod-btn_s0/.test(myParent.className)) || (/checkbox|radio/.test(myType) && /mod-checkarea/.test(myParent.className))){ 
 					(myParent = myParent.parentNode);
 				}
 
 				
 
-				if(myParent && myParent.className.indexOf("bs_detectbox") != -1){
+				if(myParent && myParent.className.indexOf("mod-detectbox") != -1){
 					box = myParent;
 
 
@@ -2991,7 +3162,7 @@ moduleBuild.prototype = {
 
 
 					box = document.createElement("div");
-					box.className = "bs_detectbox";
+					box.className = "mod-detectbox";
 					while(myParent.children.length > 0){
 						box.appendChild(myParent.children[0]);
 					}
@@ -2999,23 +3170,23 @@ moduleBuild.prototype = {
 					myParent.appendChild(box);
 
 					box.tips = document.createElement("div");
-					box.tips.className = "bs_detectbox_msg";
+					box.tips.className = "mod-detectbox_msg";
 
 					msgbox = document.createElement("div");
-					msgbox.className = "bs_detectbox_msgbox";
+					msgbox.className = "mod-detectbox_msgbox";
 
 					msgboxTri = document.createElement("i");
-					msgboxTri.className = "bs_detectbox_msg_tri";
+					msgboxTri.className = "mod-detectbox_msg_tri";
 
 					stu = document.createElement("i");
-					stu.className = "bs_detectbox_msg_stu";
+					stu.className = "mod-detectbox_msg_stu";
 
 					box.tips.cnt = document.createElement("div");
-					box.tips.cnt.className = "bs_detectbox_msg_cnt";
+					box.tips.cnt.className = "mod-detectbox_msg_cnt";
 
 					//提示显示
 					box.tips.show = function(time){
-						$(box.tips).addClass("bs_detectbox_msg_show");
+						$(box.tips).addClass("mod-detectbox_msg_show");
 						box.tips.fixed();
 
 						$(window).bind("resize",box.tips.fixed);
@@ -3031,7 +3202,7 @@ moduleBuild.prototype = {
 
 					//提示隐藏
 					box.tips.hide = function(){
-						$(box.tips).removeClass("bs_detectbox_msg_show");
+						$(box.tips).removeClass("mod-detectbox_msg_show");
 
 						$(window).unbind("resize",box.tips.fixed);
 
@@ -3043,7 +3214,7 @@ moduleBuild.prototype = {
 						//层级调整
 						var myParent = box.parentNode;
 						while(myParent){
-							if(/bs_pop_bd|bs_inset_frame/.test(myParent.className)){
+							if(/mod-pop_bd|mod-inset_frame/.test(myParent.className)){
 								break;
 							}
 							myParent = myParent.parentNode;
@@ -3080,8 +3251,8 @@ moduleBuild.prototype = {
 					box.success = function(txt){
 						txt = txt || "";
 						box.clear();
-						$(box).addClass("bs_detectbox_success");
-						$(box.tips).addClass("bs_detectbox_success");
+						$(box).addClass("mod-detectbox_success");
+						$(box.tips).addClass("mod-detectbox_success");
 						box.tips.cnt.innerHTML = txt;
 						box.tips.status = "success";
 					};
@@ -3089,8 +3260,8 @@ moduleBuild.prototype = {
 					box.error = function(txt){
 						txt = txt || "";
 						box.clear();
-						$(box).addClass("bs_detectbox_error");
-						$(box.tips).addClass("bs_detectbox_error");
+						$(box).addClass("mod-detectbox_error");
+						$(box.tips).addClass("mod-detectbox_error");
 						box.tips.cnt.innerHTML = txt;
 						box.tips.status = "error";
 						box.tips.show(2000);
@@ -3101,8 +3272,8 @@ moduleBuild.prototype = {
 						txt = txt || "";
 						box.clear();
 						if(txt){
-							$(box).addClass("bs_detectbox_notice");
-							$(box.tips).addClass("bs_detectbox_notice");
+							$(box).addClass("mod-detectbox_notice");
+							$(box.tips).addClass("mod-detectbox_notice");
 							box.tips.cnt.innerHTML = txt;
 
 
@@ -3115,17 +3286,17 @@ moduleBuild.prototype = {
 					};
 
 					box.clear = function(){
-						$(box).removeClass("bs_detectbox_error").removeClass("bs_detectbox_loading").removeClass("bs_detectbox_success").removeClass("bs_detectbox_notice");
+						$(box).removeClass("mod-detectbox_error").removeClass("mod-detectbox_loading").removeClass("mod-detectbox_success").removeClass("mod-detectbox_notice");
 
-						$(box.tips).removeClass("bs_detectbox_error").removeClass("bs_detectbox_loading").removeClass("bs_detectbox_success").removeClass("bs_detectbox_notice");
+						$(box.tips).removeClass("mod-detectbox_error").removeClass("mod-detectbox_loading").removeClass("mod-detectbox_success").removeClass("mod-detectbox_notice");
 					};
 
 					box.loading = {
 						init:function(timeoutCallback,txt){
 							clearTimeout(box.loading.timeoutKey);
 							box.clear();
-							$(box).addClass("bs_detectbox_loading");
-							$(box.tips).addClass("bs_detectbox_loading");
+							$(box).addClass("mod-detectbox_loading");
+							$(box.tips).addClass("mod-detectbox_loading");
 							
                             box.tips.cnt.innerHTML = txt ||"正在校验";
 							box.loading.isTimeout = false;
@@ -3144,7 +3315,7 @@ moduleBuild.prototype = {
 						}
 					};
 
-					var fTarget = $(".bs_inset_frame")[0];
+					var fTarget = $(".mod-inset_frame")[0];
 					fTarget = fTarget && isBelong(fTarget,elm)?fTarget:document.body;
 
 					fTarget.appendChild(box.tips);
@@ -3430,7 +3601,7 @@ moduleBuild.prototype = {
 						now = new Date().getTime(),
 						myIndex = $(that).parent().children().index(that),
 						myPartName = attr.format.replace("-",""),
-						myClassName = "bs_flash_" + myPartName,
+						myClassName = "mod-flash_" + myPartName,
 						myId = that.name + myPartName + now,
 						flashCallbackName = myId + "Callback",
 						flashArea,
@@ -3501,7 +3672,7 @@ moduleBuild.prototype = {
 
 					//修复flash 显示不正常bug
 					setTimeout(function(){
-						$(".bs_inset_frame")[0] && ($(".bs_inset_frame")[0].scrollTop += 1);
+						$(".mod-inset_frame")[0] && ($(".mod-inset_frame")[0].scrollTop += 1);
 					},200);
 
 					!that.defaultText && (that.defaultText = "选择要上传的文件");
@@ -3528,7 +3699,7 @@ moduleBuild.prototype = {
 						tagsArea,
 						tagsInput;
 
-					if(myIndex - 1 >= 0 && that.parentNode.children[myIndex - 1].className.indexOf("bs_tags_area") != -1){
+					if(myIndex - 1 >= 0 && that.parentNode.children[myIndex - 1].className.indexOf("mod-tags_area") != -1){
 						tagsArea = that.parentNode;
 
 					} else {
@@ -3542,10 +3713,10 @@ moduleBuild.prototype = {
 					
 					
 					if(attr.type == "select"){
-						tagsArea.className = "bs_tags_area bs_tags_area_select";
+						tagsArea.className = "mod-tags_area mod-tags_area_select";
 
 						tagsInput = document.createElement("a");
-						tagsInput.className = "bs_btn";
+						tagsInput.className = "mod-btn";
 						tagsInput.innerHTML = "选择";
 
 						!isNaN(myWidth - 50) && myWidth - 50 > 0 &&(tagsArea.style.width = myWidth - 50 + "px");
@@ -3563,10 +3734,10 @@ moduleBuild.prototype = {
 						});
 
 					} else {
-						tagsArea.className = "bs_tags_area";
+						tagsArea.className = "mod-tags_area";
 
 						tagsInput = document.createElement("input");
-						tagsInput.className = "bs_tags_area_ipt";
+						tagsInput.className = "mod-tags_area_ipt";
 
 						!isNaN(myWidth) && myWidth &&(tagsArea.style.width = myWidth + "px");
 
@@ -3576,13 +3747,13 @@ moduleBuild.prototype = {
 						});
 						
 						$(tagsInput).bind("focus",function(){
-							//$(that.srcBox).addClass("bs_detectbox_focus");
+							//$(that.srcBox).addClass("mod-detectbox_focus");
 							that.srcBox.notice(that.defaultText);
 							that.srcBox.tips.show();
 						});
 						
 						$(tagsInput).bind("blur",function(){
-							//$(that.srcBox).removeClass("bs_detectbox_focus");
+							//$(that.srcBox).removeClass("mod-detectbox_focus");
 
 							tagCheck();
 						});
@@ -3672,7 +3843,7 @@ moduleBuild.prototype = {
 							var	newTag = document.createElement("a"),
 								closeBtn = document.createElement("i");
 
-							newTag.className = "bs_tags_area_tag";
+							newTag.className = "mod-tags_area_tag";
 							newTag.myText = newTag.innerHTML = txt;
 							newTag.appendChild(closeBtn);
 							
@@ -3806,15 +3977,15 @@ moduleBuild.prototype = {
 					!attr.imgHeight && (attr.imgHeight = 100);
 					
 
-					$(that).addClass(myType == "checkbox"?"bs_chkbox":"bs_rdobox");
+					$(that).addClass(myType == "checkbox"?"mod-chkbox":"mod-rdobox");
 
-					if(that.parentNode.className.indexOf('bs_checkarea') != -1){
+					if(that.parentNode.className.indexOf('mod-checkarea') != -1){
 						checkbox = that.parentNode;
 						checkboxCnt = $(checkbox).find('.cnt')[0];
 
 					} else {
 						checkbox = document.createElement("label");
-						checkbox.className = "bs_checkarea";
+						checkbox.className = "mod-checkarea";
 
 						checkboxCnt = document.createElement("span");
 						checkboxCnt.className = "cnt";
@@ -3849,7 +4020,7 @@ moduleBuild.prototype = {
 						
 
 						checkbox.style.width = attr.imgWidth + "px";
-						$(checkbox).addClass("bs_checkarea_withimg");
+						$(checkbox).addClass("mod-checkarea_withimg");
 					}
 
 					checkbox.appendChild(checkboxCnt);
@@ -3890,17 +4061,17 @@ moduleBuild.prototype = {
 					if(myType == "checkbox"){
 						onchangeHandle = function(){
 							this.checked? (
-								$(this).parent().addClass("bs_checkarea_cur"),
+								$(this).parent().addClass("mod-checkarea_cur"),
 								checkboxIpt && checkboxIpt.focus()
 
 							):(
-								$(this).parent().removeClass("bs_checkarea_cur")
+								$(this).parent().removeClass("mod-checkarea_cur")
 							);
 						};
 
 					} else if(myType == "radio"){
 						onchangeHandle = function(){
-							$(this).parent().addClass("bs_checkarea_cur").siblings(".bs_checkarea").removeClass("bs_checkarea_cur");
+							$(this).parent().addClass("mod-checkarea_cur").siblings(".mod-checkarea").removeClass("mod-checkarea_cur");
 
 							checkboxIpt && checkboxIpt.focus();
 						};
@@ -3928,7 +4099,7 @@ moduleBuild.prototype = {
 						that.autocomplete = "off";
 
 						drawbox = document.createElement("div");
-						drawbox.className = "bs_drawbox";
+						drawbox.className = "mod-drawbox";
 						drawbox.style.display = "none";
 						drawbox.innerHTML = [
 							'<span>请选择或继续输入…</span>',
@@ -4085,7 +4256,7 @@ moduleBuild.prototype = {
 							this.style.left = o.left + "px";
 							this.style.top = target.offsetHeight + o.top + this.distance + "px";
 
-							var fTarget = $(".bs_inset_frame")[0],
+							var fTarget = $(".mod-inset_frame")[0],
 								appendTarget = fTarget && isBelong(fTarget,that)?fTarget:document.body;
 								
 							appendTarget.appendChild(this);
@@ -4220,7 +4391,7 @@ moduleBuild.prototype = {
 							}
 						});
 
-						$(".bs_inset_frame").length > 0? $(".bs_inset_frame").append(drawbox): document.body.appendChild(drawbox);
+						$(".mod-inset_frame").length > 0? $(".mod-inset_frame").append(drawbox): document.body.appendChild(drawbox);
 					}
 				},
 
@@ -4235,7 +4406,7 @@ moduleBuild.prototype = {
 				textarea:function(elm,attr){
 					var that = elm;
 
-					$(that).addClass("bs_textareabox");
+					$(that).addClass("mod-textareabox");
 					!that.defaultText && (that.defaultText = "请输入");
 					!that.errorText && (that.errorText = "不能为空");
 					
@@ -4303,7 +4474,7 @@ moduleBuild.prototype = {
 						};
 
 
-					$(that).addClass("bs_selectbox");
+					$(that).addClass("mod-selectbox");
 
 					that.linked = $(attr.linked)[0];
 
@@ -4492,7 +4663,7 @@ moduleBuild.prototype = {
 						case "city":
                             var citiesInit = function(){///{
                                     selectElm = document.createElement("select");
-                                    selectElm.className = "bs_selectbox";
+                                    selectElm.className = "mod-selectbox";
                                     that.parentNode.insertBefore(selectElm,that);
 
                                     for(key in mod.options.data.cities){
@@ -4568,7 +4739,7 @@ moduleBuild.prototype = {
 				code:function(elm,attr){
 					var that = elm;
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					!that.defaultText && (that.defaultText = "请输入验证码");
 					!that.errorText && (that.errorText = "验证码错误");
@@ -4594,7 +4765,7 @@ moduleBuild.prototype = {
 				email:function(elm,attr){
 					var that = elm;
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					that.defaultText = "请输入电子邮箱";
 					that.localCheck = function(){
@@ -4625,7 +4796,7 @@ moduleBuild.prototype = {
 				mobile:function(elm,attr){
 					var that = elm;
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					that.defaultText = "请输入手机号码";
 					that.localCheck = function(){
@@ -4649,7 +4820,7 @@ moduleBuild.prototype = {
 				idcard:function(elm,attr){
 					var that = elm;
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					!that.defaultText && (that.defaultText = "请正确填写身份证号码");
 					!that.errorText && (that.errorText = "请正确填写身份证号码");
@@ -4715,9 +4886,9 @@ moduleBuild.prototype = {
 				//日期
 				date:function(elm,attr){
 					var that = elm,
-						fTarget = $(".bs_inset_frame")[0];
+						fTarget = $(".mod-inset_frame")[0];
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					!that.defaultText && (that.defaultText = [
 						"请选择",
@@ -4737,7 +4908,7 @@ moduleBuild.prototype = {
 							that.srcBox.check();
 						},
 						onload:function(){
-							var fTarget = $(".bs_inset_frame")[0],
+							var fTarget = $(".mod-inset_frame")[0],
 								appendTarget = fTarget && isBelong(fTarget,that)?fTarget:document.body;
 								
 							appendTarget.appendChild(this);
@@ -4769,9 +4940,9 @@ moduleBuild.prototype = {
 				//日期时间
 				datetime:function(elm,attr){
 					var that = elm,
-						fTarget = $(".bs_inset_frame")[0];
+						fTarget = $(".mod-inset_frame")[0];
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					!that.defaultText && (that.defaultText = [
 						"请选择",
@@ -4792,7 +4963,7 @@ moduleBuild.prototype = {
 							that.srcBox.check();
 						},
 						onload:function(){
-							var fTarget = $(".bs_inset_frame")[0],
+							var fTarget = $(".mod-inset_frame")[0],
 								appendTarget = fTarget && isBelong(fTarget,that)?fTarget:document.body;
 								
 							appendTarget.appendChild(this);
@@ -4826,9 +4997,9 @@ moduleBuild.prototype = {
 				//日期区间
 				dateInterval:function(elm,attr){
 					var that = elm,
-						fTarget = $(".bs_inset_frame")[0];
+						fTarget = $(".mod-inset_frame")[0];
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					!that.defaultText && (that.defaultText = [
 						"请选择",
@@ -4842,7 +5013,7 @@ moduleBuild.prototype = {
 					that.linked = $(attr.linked)[0];
 
 					if(that.linked){
-						$(that.linked).addClass("bs_textbox");
+						$(that.linked).addClass("mod-textbox");
 						window.jnsCalendar([that,that.linked],{
 							zIndex:200,
 							type:"intervalTime",
@@ -4854,7 +5025,7 @@ moduleBuild.prototype = {
 								that.srcBox.check();
 							},
 							onload:function(){
-								var fTarget = $(".bs_inset_frame")[0],
+								var fTarget = $(".mod-inset_frame")[0],
 								appendTarget = fTarget && isBelong(fTarget,that)?fTarget:document.body;
 								
 								appendTarget.appendChild(this);
@@ -4890,7 +5061,7 @@ moduleBuild.prototype = {
 				password:function(elm,attr){
 					var that = elm;
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					that.defaultText = "密码需由 6-16个字母、数字和符号组成";
 
@@ -4910,7 +5081,7 @@ moduleBuild.prototype = {
 				password2:function(elm,attr){
 					var that = elm;
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					that.defaultText = "请再次输入密码";
 					that.linked = $(attr.linked)[0];
@@ -4947,7 +5118,7 @@ moduleBuild.prototype = {
 				custom:function(elm,attr){
 					var that = elm;
 
-					$(that).addClass("bs_textbox");
+					$(that).addClass("mod-textbox");
 
 					!that.defaultText && (that.defaultText = "请输入");
 					!that.errorText && (that.errorText = "不能为空");
@@ -5030,7 +5201,7 @@ moduleBuild.prototype = {
 	 * @return {void} 
 	 */
 	button: function(target,op) {
-		var $tar = target ? $(target) : $(".bs_btn"),
+		var $tar = target ? $(target) : $(".mod-btn"),
 			option = {
 				size:"",
 				type:""
@@ -5051,37 +5222,37 @@ moduleBuild.prototype = {
 				myType = attr.type,
 				ta, fa, fp, ft, fm;
 
-			if(isEqual(me.opAttr,attr) || (me.parentNode && /bs_btn_/.test(me.parentNode.className))){
+			if(isEqual(me.opAttr,attr) || (me.parentNode && /mod-btn_/.test(me.parentNode.className))){
 				return;
 			}
 
 			switch (attr.size) {
 				case "big":
-					myClass += "bs_btn_big";
+					myClass += "mod-btn_big";
 					break;
 				case "small":
-					myClass += "bs_btn_small";
+					myClass += "mod-btn_small";
 					break;
 				default:
-					myClass += "bs_btn_small";
+					myClass += "mod-btn_small";
 					break;
 			}
 			switch (attr.type) {
 				case "1":
 				case "submit":
-					myClass += " bs_btn_s01";
+					myClass += " mod-btn_s01";
 					break;
 
 				case "2":
-					myClass += " bs_btn_s02";
+					myClass += " mod-btn_s02";
 					break;
 
 				case "clear":
-					myClass += " bs_btn_s03";
+					myClass += " mod-btn_s03";
 					break;
 
 				default:
-					myClass += " bs_btn_s03";
+					myClass += " mod-btn_s03";
 					break;
 			}
 
@@ -5094,14 +5265,14 @@ moduleBuild.prototype = {
 					fa.href = "javascript:;";
 					fp.insertBefore(fa, me);
 					fa.appendChild(me);
-					$(fa).addClass(me.className).removeClass("bs_btn").addClass(myClass);
+					$(fa).addClass(me.className).removeClass("mod-btn").addClass(myClass);
 					me.className = "";
 					ta = fa;
 					break;
 
 				case "a":
 					me.innerHTML = '<span>' + me.innerHTML + '</span>';
-					$(me).addClass(myClass).removeClass("bs_btn");
+					$(me).addClass(myClass).removeClass("mod-btn");
 					ta = me;
 					break;
 
@@ -5115,18 +5286,18 @@ moduleBuild.prototype = {
 					fp.insertBefore(fa, me);
 					fa.innerHTML = '<span>' + ft + '</span>';
 					fm.appendChild(me);
-					$(fa).addClass(myClass).removeClass("bs_btn");
+					$(fa).addClass(myClass).removeClass("mod-btn");
 					ta = fa;
 					break;
 			}
 
 			//事件绑定
 			me.disable = function() {
-				$(ta).addClass("bs_btn_disable");
+				$(ta).addClass("mod-btn_disable");
 				me.disabled = true;
 			};
 			me.enable = function() {
-				$(ta).removeClass("bs_btn_disable");
+				$(ta).removeClass("mod-btn_disable");
 				me.disabled = false;
 			};
 			
@@ -5539,7 +5710,7 @@ moduleBuild.prototype = {
 					!option.checkbox && (th01.style.display = "none");
 					th01.innerHTML = [
 						'<div class="cnt">',
-							'<input type="checkbox" class="bs_checkall" '+ (!option.checkbox && 'disabled="disabled"') +' />',
+							'<input type="checkbox" class="mod-checkall" '+ (!option.checkbox && 'disabled="disabled"') +' />',
 						'</div>',
 						'<div class="col_resize"></div>'
 					].join("");
@@ -5563,7 +5734,7 @@ moduleBuild.prototype = {
 					ftr.appendChild(th03);
 
 					//属性初始化
-					target.checkall = myExt.checkall = $(myExt.thead).find(".bs_checkall")[0];
+					target.checkall = myExt.checkall = $(myExt.thead).find(".mod-checkall")[0];
 
 					//数据填充
 					ftr.appendChild(build("th",data));
@@ -5747,7 +5918,7 @@ moduleBuild.prototype = {
 				ftd3 = document.createElement("td");
 
 				ftr.className = index % 2? "even":"";
-				ftd.innerHTML = '<input type="checkbox" class="bs_chk" />';
+				ftd.innerHTML = '<input type="checkbox" class="mod-chk" />';
 				!option.checkbox && (ftd.style.display = "none");
 
 				ftd2.innerHTML = '<a href="javascript:;" class="ctrl_move" title="位置移动">&uarr;&darr;</a>';
@@ -5808,7 +5979,7 @@ moduleBuild.prototype = {
 				//预设按钮事件绑定
 				//修改按钮
 				$(ftr).find(".ctrl_edit").each(function(){
-					$(this).addClass("view_item").addClass("bs_btn");
+					$(this).addClass("view_item").addClass("mod-btn");
 
 				}).bind("click",function(e){
 					stopBubble(e);
@@ -5823,7 +5994,7 @@ moduleBuild.prototype = {
 				});
 				//取消按钮
 				$(ftr).find(".ctrl_cancel").each(function(){
-					$(this).addClass("edit_item").addClass("bs_btn");
+					$(this).addClass("edit_item").addClass("mod-btn");
 
 				}).bind("click",function(e){
 					stopBubble(e);
@@ -5840,7 +6011,7 @@ moduleBuild.prototype = {
 
 				//保存按钮
 				$(ftr).find(".ctrl_save").each(function(){
-					$(this).addClass("edit_item").addClass("bs_btn").attr("mod-type","2");
+					$(this).addClass("edit_item").addClass("mod-btn").attr("mod-type","2");
 					this.myAttr = modAssignment(option.editConfig,this);
 					this.myAttr.action = renderPark.string(ftr.chk.data,this.myAttr.action);
 
@@ -5996,7 +6167,7 @@ moduleBuild.prototype = {
 
 				//删除按钮
 				$(ftr).find(".ctrl_del").each(function(){
-					$(this).addClass("bs_btn");
+					$(this).addClass("mod-btn");
 					this.myAttr = modAssignment(option.delConfig,this);
 					this.myAttr.action = renderPark.string(ftr.chk.data,this.myAttr.action);
 
@@ -6074,7 +6245,7 @@ moduleBuild.prototype = {
 				
 				//移动
 				$(ftr).find(".ctrl_move").each(function(){
-					$(this).addClass("bs_btn").addClass("bs_btn_move");
+					$(this).addClass("mod-btn").addClass("mod-btn_move");
 
 				}).bind("mousedown",function(e){
 					var that = this,
@@ -6092,7 +6263,7 @@ moduleBuild.prototype = {
 						that.myScroll = document.documentElement.scrollTop? document.documentElement:document.body;
 
 						that.myMoveTag = document.createElement("div");
-						that.myMoveTag.className = "bs_movetag";
+						that.myMoveTag.className = "mod-movetag";
 						that.myMoveTag.innerHTML = (that.myTr.textContent || that.myTr.innerText).substr(0,6) + "...";
 
 					}
@@ -6111,16 +6282,16 @@ moduleBuild.prototype = {
 						that.myMoveTag.style.left = e.clientX + that.myScroll.scrollLeft - that.myMoveTag.offsetWidth - 10 + "px";
 						that.myMoveTag.style.top = e.clientY + that.myScroll.scrollTop - that.myMoveTag.offsetHeight/2 + "px";
 
-						$(that.myTr).removeClass("bs_move_style").removeClass("bs_move_style_bottom").siblings().removeClass("bs_move_style").removeClass("bs_move_style_bottom");
+						$(that.myTr).removeClass("mod-move_style").removeClass("mod-move_style_bottom").siblings().removeClass("mod-move_style").removeClass("mod-move_style_bottom");
 
 						
 
 						if(srcTr && isBelong(that.myTr.parentNode,srcTr)){
 							that.taTr = srcTr;
-							$(that.taTr).addClass("bs_move_style");
+							$(that.taTr).addClass("mod-move_style");
 						} else if(isBelong(target.tfoot,srcElement)){
 							that.taTr = target.tbody.children[target.tbody.children.length - 1];
-							$(that.taTr).addClass("bs_move_style_bottom");
+							$(that.taTr).addClass("mod-move_style_bottom");
 							
 						} else {
 							that.taTr = null;
@@ -6138,11 +6309,11 @@ moduleBuild.prototype = {
 						fment.appendChild(that.myMoveTag);
 
 						if(that.taTr){
-							if(that.taTr.className.indexOf("bs_move_style_bottom") != -1){
-								$(that.taTr).removeClass("bs_move_style_bottom");
+							if(that.taTr.className.indexOf("mod-move_style_bottom") != -1){
+								$(that.taTr).removeClass("mod-move_style_bottom");
 								that.myTr.parentNode.appendChild(that.myTr);
 							} else {
-								$(that.taTr).removeClass("bs_move_style");
+								$(that.taTr).removeClass("mod-move_style");
 								that.myTr.parentNode.insertBefore(that.myTr,that.taTr);
 							}
 							
@@ -6157,7 +6328,7 @@ moduleBuild.prototype = {
 
 				//添加按钮
 				$(ftr).find(".ctrl_add").each(function(){
-					$(this).addClass("bs_btn").attr("mod-type","1");
+					$(this).addClass("mod-btn").attr("mod-type","1");
 					this.myAttr = modAssignment(option.addConfig,this);
 
 				}).bind("click",function(e){
@@ -6175,7 +6346,7 @@ moduleBuild.prototype = {
 
 				$(ftr).find(".edit_item").css("display","none");
 
-				mod.button($(ftr).find(".bs_btn"));
+				mod.button($(ftr).find(".mod-btn"));
 
 				return ftr;
 			},///}
@@ -6195,7 +6366,7 @@ moduleBuild.prototype = {
 			nodataHandle = function(){///{
 				target.srcCnt.style.width = "auto";
 				//$(target.srcTable).hide();
-				$(target.srcMsg).show().removeClass("bs_tablebox_loading").addClass("bs_tablebox_nodata").children().html('<i></i>噢，没有数据喔！');
+				$(target.srcMsg).show().removeClass("mod-tablebox_loading").addClass("mod-tablebox_nodata").children().html('<i></i>噢，没有数据喔！');
 				target.checkall2.checked = false;
 				target.checkall && (target.checkall.checked = false);
 			},///}
@@ -6206,14 +6377,14 @@ moduleBuild.prototype = {
 			},
 			loadingHandle = function(){
 				//$(target.srcTable).hide();
-				$(target.srcMsg).show().addClass("bs_tablebox_loading").removeClass("bs_tablebox_nodata").children().html('数据加载中...');
+				$(target.srcMsg).show().addClass("mod-tablebox_loading").removeClass("mod-tablebox_nodata").children().html('数据加载中...');
 			},
 			timeoutHandle = function(){
 				errorHandle("噢，加载超时喔！");
 			},
 			errorHandle = function(msg){
 				//$(target.srcTable).hide();
-				$(target.srcMsg).show().addClass("bs_tablebox_loading").removeClass("bs_tablebox_nodata").children().html(msg);
+				$(target.srcMsg).show().addClass("mod-tablebox_loading").removeClass("mod-tablebox_nodata").children().html(msg);
 				target.resize();
 			},
 			resizeHandle = function(){///{
@@ -6329,50 +6500,50 @@ moduleBuild.prototype = {
 
 
 		$(target).html([
-			'<div class="bs_tablebox">',
-				'<div class="bs_tablebox_top"></div>',
-				'<div class="bs_tablebox_hd">',
-					'<div class="h_tl">共有 <strong  class="red bs_table_totalnum"></strong> 条数据</div>',
-					'<div class="h_r bs_leaf"></div>',
+			'<div class="mod-tablebox">',
+				'<div class="mod-tablebox_top"></div>',
+				'<div class="mod-tablebox_hd">',
+					'<div class="h_tl">共有 <strong  class="red mod-table_totalnum"></strong> 条数据</div>',
+					'<div class="h_r mod-leaf"></div>',
 				'</div>',
 				
-				'<div class="bs_tablebox_scroll"><span></span></div>',
+				'<div class="mod-tablebox_scroll"><span></span></div>',
 				
-				'<div class="bs_tablebox_main" style="height:100px;">',
-					'<div class="bs_tablebox_msg"><div class="bs_tablebox_msg_cnt"></div></div>',
-					'<div class="bs_tablebox_cnt" style="width:auto">',
-						'<table class="bs_table_s1" style="display:none;"></table>',
+				'<div class="mod-tablebox_main" style="height:100px;">',
+					'<div class="mod-tablebox_msg"><div class="mod-tablebox_msg_cnt"></div></div>',
+					'<div class="mod-tablebox_cnt" style="width:auto">',
+						'<table class="mod-table_s1" style="display:none;"></table>',
 						
 					'</div>',
-					'<div class="bs_tablebox_colbar" style="display:none;"></div>',
+					'<div class="mod-tablebox_colbar" style="display:none;"></div>',
 				'</div>',
-				'<div class="bs_tablebox_ft">',
-					'<div class="f_l" '+ (!option.checkbox && 'style="display:none"') +'><input type="checkbox" class="bs_checkall" '+ (!option.checkbox && 'disabled="disabled"') +' /> 全选/全不选</div>',
-					'<div class="bs_leaf f_r"></div>',
+				'<div class="mod-tablebox_ft">',
+					'<div class="f_l" '+ (!option.checkbox && 'style="display:none"') +'><input type="checkbox" class="mod-checkall" '+ (!option.checkbox && 'disabled="disabled"') +' /> 全选/全不选</div>',
+					'<div class="mod-leaf f_r"></div>',
 				'</div>',
-				'<div class="bs_tablebox_bottom"></div>',
+				'<div class="mod-tablebox_bottom"></div>',
 			'</div>'
 		].join(""));
 
 		var myExt = {
-			srcBox: $(target).find(".bs_tablebox_main")[0],
-			srcCnt: $(target).find(".bs_tablebox_cnt")[0],
+			srcBox: $(target).find(".mod-tablebox_main")[0],
+			srcCnt: $(target).find(".mod-tablebox_cnt")[0],
 
-			totalNum: $(target).find(".bs_table_totalnum")[0],
+			totalNum: $(target).find(".mod-table_totalnum")[0],
 			srcTable: $(target).find("table")[0],
-			srcMsg: $(target).find(".bs_tablebox_msg")[0],
-			colbar: $(target).find(".bs_tablebox_colbar")[0],
-			scroll: $(target).find(".bs_tablebox_scroll")[0],
-			scrollbar: $(target).find(".bs_tablebox_scroll")[0].children[0],
+			srcMsg: $(target).find(".mod-tablebox_msg")[0],
+			colbar: $(target).find(".mod-tablebox_colbar")[0],
+			scroll: $(target).find(".mod-tablebox_scroll")[0],
+			scrollbar: $(target).find(".mod-tablebox_scroll")[0].children[0],
 
-			srcTop: $(target).find(".bs_tablebox_top")[0],
-			srcBottom: $(target).find(".bs_tablebox_bottom")[0],
+			srcTop: $(target).find(".mod-tablebox_top")[0],
+			srcBottom: $(target).find(".mod-tablebox_bottom")[0],
 
 			thead: document.createElement("thead"),
 			tbody: document.createElement("tbody"),
-			tfoot: $(target).find(".bs_tablebox_ft")[0],
+			tfoot: $(target).find(".mod-tablebox_ft")[0],
 
-			srcLeaf: $(target).find(".bs_leaf"),
+			srcLeaf: $(target).find(".mod-leaf"),
 
 			checkall: undefined,
 			checkall2: undefined,
@@ -6685,18 +6856,18 @@ moduleBuild.prototype = {
 
 		$(myExt.thead).append('<tr></tr>');
 
-		myExt.checkall2 = $(target).find(".f_l .bs_checkall")[0];
+		myExt.checkall2 = $(target).find(".f_l .mod-checkall")[0];
 
 		var ftxt = "";
 
 		if(option.addConfig.batchConfig.enable && option.addConfig.target){
-			ftxt = '<a href="javascript:;" class="bs_btn ctrl_batch_add right10 " mod-type="1">批量'+ option.addConfig.text +'</a>';
+			ftxt = '<a href="javascript:;" class="mod-btn ctrl_batch_add right10 " mod-type="1">批量'+ option.addConfig.text +'</a>';
 			$(myExt.srcTop).append(ftxt);
 			$(myExt.srcBottom).append(ftxt);
 		}
 
 		if(option.delConfig.batchConfig.enable){
-			ftxt = '<a href="javascript:;" class="bs_btn ctrl_batch_del right10 ">批量删除</a>';
+			ftxt = '<a href="javascript:;" class="mod-btn ctrl_batch_del right10 ">批量删除</a>';
 			$(myExt.srcTop).append(ftxt);
 			$(myExt.srcBottom).append(ftxt);
 		}
@@ -6707,8 +6878,8 @@ moduleBuild.prototype = {
 			$(myExt.srcBottom).append(option.hfConfig.html);
 		}
 
-		mod.button($(myExt.srcTop).find(".bs_btn"));
-		mod.button($(myExt.srcBottom).find(".bs_btn"));
+		mod.button($(myExt.srcTop).find(".mod-btn"));
+		mod.button($(myExt.srcBottom).find(".mod-btn"));
 
 		// srcHead srcFoot 事件绑定
 		$(target).find(".ctrl_batch_add").bind("click",function(e){
@@ -6900,7 +7071,7 @@ moduleBuild.prototype = {
 	 * menu
 	 */
 	menu:function(target,op){
-		var $tar = target ? $(target) : $(".bs_menu"),
+		var $tar = target ? $(target) : $(".mod-menu"),
 			option = {
 				//显示checkbox
 				checkbox:false,
@@ -6940,11 +7111,11 @@ moduleBuild.prototype = {
 				return;
 			}
 
-			$(she).addClass("bs_menu");
+			$(she).addClass("mod-menu");
 
 			//设置是否有 icon checkbox
-			attr.checkbox? $(she).removeClass("bs_menu_nochk"): $(she).addClass("bs_menu_nochk");
-			attr.icon? $(she).removeClass("bs_menu_nodoc"): $(she).addClass("bs_menu_nodoc");
+			attr.checkbox? $(she).removeClass("mod-menu_nochk"): $(she).addClass("mod-menu_nochk");
+			attr.icon? $(she).removeClass("mod-menu_nodoc"): $(she).addClass("mod-menu_nodoc");
 
 			$(she).find("a").each(function(){
 				var me = this,
@@ -6954,16 +7125,16 @@ moduleBuild.prototype = {
 				//模块重构
 				if(myLi.tagName == "LI"){
 					box = document.createElement("div");
-					box.className = "bs_box";
+					box.className = "mod-box";
 
 					swh = document.createElement("i");
-					swh.className = "bs_swh";
+					swh.className = "mod-swh";
 
 					chk = document.createElement("i");
-					chk.className = "bs_chk";
+					chk.className = "mod-chk";
 
 					doc = document.createElement("i");
-					doc.className = "bs_doc";
+					doc.className = "mod-doc";
 
 					box.appendChild(swh);
 					box.appendChild(chk);
@@ -6974,11 +7145,11 @@ moduleBuild.prototype = {
 
 					
 
-				} else if(myLi.className.indexOf("bs_box") != -1){
+				} else if(myLi.className.indexOf("mod-box") != -1){
 					box = myLi;
 					myLi = myLi.parentNode;
-					swh = $(box).find(".bs_swh")[0];
-					chk = $(box).find(".bs_chk")[0];
+					swh = $(box).find(".mod-swh")[0];
+					chk = $(box).find(".mod-chk")[0];
 
 				} else {
 					return;
@@ -6990,10 +7161,10 @@ moduleBuild.prototype = {
 				me.title = (me.textContent || me.innerText).replace(/\t|\r|\n/g,' ').replace(/\s+/g,' ');
 
 				//样式调整
-				$(myLi).find("ul").length !== 0 ? $(box).addClass("bs_withsub"): $(box).removeClass("bs_withsub");
+				$(myLi).find("ul").length !== 0 ? $(box).addClass("mod-withsub"): $(box).removeClass("mod-withsub");
 
 				if(attr.checkbox){
-					$(me).attr("mod-checked")? $(chk).parent().addClass("bs_chk_checked"): $(chk).parent().removeClass("bs_chk_checked");
+					$(me).attr("mod-checked")? $(chk).parent().addClass("mod-chk_checked"): $(chk).parent().removeClass("mod-chk_checked");
 
 					me.href = "javascript:;";
 					me.target = "";
@@ -7019,29 +7190,29 @@ moduleBuild.prototype = {
 				swh.onclick = function(){
 					var myBox = this.parentNode;
 
-					if(myBox.className.indexOf("bs_withsub") == -1){
+					if(myBox.className.indexOf("mod-withsub") == -1){
 						return;
 					}
-					myBox.className.indexOf("bs_show") != -1?(
-						$(myBox).removeClass("bs_show").siblings("ul").slideUp(200)
+					myBox.className.indexOf("mod-show") != -1?(
+						$(myBox).removeClass("mod-show").siblings("ul").slideUp(200)
 					):(
-						$(myBox).addClass("bs_show").siblings("ul").slideDown(200)
+						$(myBox).addClass("mod-show").siblings("ul").slideDown(200)
 					);
 				};
 
-				attr.show && swh.parentNode.className.indexOf("bs_show") == -1 && $(swh).trigger("click");
+				attr.show && swh.parentNode.className.indexOf("mod-show") == -1 && $(swh).trigger("click");
 			});
 
 			if(attr.checkbox){
-				$(she).find(".bs_chk").each(function(){
+				$(she).find(".mod-chk").each(function(){
 					var chk = this,
 						box = chk.parentNode,
 						myLi = box.parentNode;
 
 
 					//全选类
-					if(box.className.indexOf("bs_withsub") != -1){
-						chk.myCells = $(box).siblings("ul").find(".bs_chk");
+					if(box.className.indexOf("mod-withsub") != -1){
+						chk.myCells = $(box).siblings("ul").find(".mod-chk");
 
 						chk.check = function(){
 
@@ -7054,16 +7225,16 @@ moduleBuild.prototype = {
 								var i, len, fs;
 								for(i = 0, len = chk.myCells.length; i < len; i++){
 									fs = chk.myCells[i].parentNode;
-									fs.className.indexOf("bs_chk_checked") == -1? checkall = false: have = true;
+									fs.className.indexOf("mod-chk_checked") == -1? checkall = false: have = true;
 
 								}
-								$(chk).parent().removeClass("bs_chk_checked").removeClass("bs_chk_include");
+								$(chk).parent().removeClass("mod-chk_checked").removeClass("mod-chk_include");
 
 								if(checkall){
-									$(chk).parent().addClass("bs_chk_checked");
+									$(chk).parent().addClass("mod-chk_checked");
 
 								} else if(have){
-									$(chk).parent().addClass("bs_chk_include");
+									$(chk).parent().addClass("mod-chk_include");
 
 								}
 
@@ -7074,22 +7245,22 @@ moduleBuild.prototype = {
 						chk.onclick = function(){
 
 							var me = this;
-							if(me.parentNode.className.indexOf("bs_chk_checked") != -1){
-								$(me).parent().removeClass("bs_chk_checked");
+							if(me.parentNode.className.indexOf("mod-chk_checked") != -1){
+								$(me).parent().removeClass("mod-chk_checked");
 
 								$(me.myCells).each(function(){
-									$(this).parent().removeClass("bs_chk_include").removeClass("bs_chk_checked");
+									$(this).parent().removeClass("mod-chk_include").removeClass("mod-chk_checked");
 								});
 
 							} else {
-								$(me).parent().addClass("bs_chk_checked");
+								$(me).parent().addClass("mod-chk_checked");
 								
 								$(me.myCells).each(function(){
-									$(this).parent().removeClass("bs_chk_include").addClass("bs_chk_checked");
+									$(this).parent().removeClass("mod-chk_include").addClass("mod-chk_checked");
 								});
 							}
 
-							$(me).parent().removeClass("bs_chk_include");
+							$(me).parent().removeClass("mod-chk_include");
 							
 						};
 
@@ -7104,12 +7275,12 @@ moduleBuild.prototype = {
 						chk.myParents = [];
 						myUl = myUl.parentNode;
 						while(myUl){
-							if(myUl.className.indexOf("bs_menu") != -1){
+							if(myUl.className.indexOf("mod-menu") != -1){
 								break;
 							}
 
 							if(myUl.tagName == "UL"){
-								fchk = $(myUl).siblings(".bs_box").find(".bs_chk")[0];
+								fchk = $(myUl).siblings(".mod-box").find(".mod-chk")[0];
 								fchk && chk.myParents.push(fchk);
 							}
 
@@ -7124,7 +7295,7 @@ moduleBuild.prototype = {
 
 						chk.onclick = function(){
 							var me = this;
-							$(me).parent().toggleClass("bs_chk_checked");
+							$(me).parent().toggleClass("mod-chk_checked");
 							$(me.myParents).each(function(){
 								this.check();
 							});
@@ -7141,27 +7312,27 @@ moduleBuild.prototype = {
 				switch(type){
 					//所有
 					case "all":
-						$(she).find(".bs_chk").each(function(){
+						$(she).find(".mod-chk").each(function(){
 							this.value && r.push(this.value);
 						});
 						break;
 
 					//选中
 					case "checked":
-						$(she).find(".bs_chk_checked").children('.bs_chk').each(function(){
+						$(she).find(".mod-chk_checked").children('.mod-chk').each(function(){
 							this.value && r.push(this.value);
 						});
 						break;
 
 					//未选中
 					case "unchecked":
-						$(she).find(".bs_chk").each(function(){
-							this.parentNode.className.indexOf("bs_chk_checked") == -1 && this.value && r.push(this.value);
+						$(she).find(".mod-chk").each(function(){
+							this.parentNode.className.indexOf("mod-chk_checked") == -1 && this.value && r.push(this.value);
 						});
 						break;
 
 					default:
-						$(she).find(".bs_chk").each(function(){
+						$(she).find(".mod-chk").each(function(){
 							this.value && r.push(this.value);
 						});
 						break;
@@ -7184,22 +7355,22 @@ moduleBuild.prototype = {
 				};
 
 				$(she).find("a").each(function(){
-					isSameComes(this.href,href)? $(this).parent().addClass("bs_cur"): $(this).parent().removeClass("bs_cur");
+					isSameComes(this.href,href)? $(this).parent().addClass("mod-cur"): $(this).parent().removeClass("mod-cur");
 				});
 
-				$(she).find(".bs_cur").each(function(){
+				$(she).find(".mod-cur").each(function(){
 					//向上递归设置
 					var myUl = this.parentNode,
 						times = 0;
 
 					myUl = myUl.parentNode;
 					while(myUl){
-						if(myUl.className.indexOf("bs_menu") != -1){
+						if(myUl.className.indexOf("mod-menu") != -1){
 							break;
 						}
 
 						if(myUl.tagName == "UL"){
-							$(myUl).slideDown(200).siblings(".bs_box").addClass("bs_show");
+							$(myUl).slideDown(200).siblings(".mod-box").addClass("mod-show");
 						}
 
 						
@@ -7207,7 +7378,7 @@ moduleBuild.prototype = {
 					}
 
 					//向下
-					$(this).siblings("ul").slideDown(200).siblings(".bs_box").addClass("bs_show");
+					$(this).siblings("ul").slideDown(200).siblings(".mod-box").addClass("mod-show");
 				});
 			};
 
@@ -7217,7 +7388,7 @@ moduleBuild.prototype = {
 			}
 			if(attr.checkbox && isArray(attr.defaultValue)){
 				// 等于默认值的 勾上
-				$(she).find(".bs_chk").each(function(){
+				$(she).find(".mod-chk").each(function(){
 					if(attr.defaultValue.indexOf(this.value) != -1){
 						$(this).trigger('click');
 						
@@ -7228,9 +7399,9 @@ moduleBuild.prototype = {
 
 				setTimeout(function(){
 					// 子分类勾上但没全勾上的 展开
-					$(she).find('.bs_withsub.bs_chk_include').addClass('bs_show').siblings('ul').show();
+					$(she).find('.mod-withsub.mod-chk_include').addClass('mod-show').siblings('ul').show();
 					// 子分类都勾上的 收起
-					$(she).find('.bs_withsub.bs_chk_checked').removeClass('bs_show').siblings('ul').hide();
+					$(she).find('.mod-withsub.mod-chk_checked').removeClass('mod-show').siblings('ul').hide();
 
 				},100);
 			}
@@ -7296,7 +7467,7 @@ moduleBuild.prototype = {
 
 			if(!that.menus){
 				that.menus = [];
-				parent.$(".bs_menu a").each(function(){
+				parent.$(".mod-menu a").each(function(){
 					that.menus.push({
 						url:this.href,
 						name:this.innerText || this.textContent
@@ -7346,11 +7517,11 @@ moduleBuild.prototype = {
 			parent.$("#nav").html(html);
 
 			//侧栏渲染
-			parent.$(".bs_menu")[0].current(navData[0].url);
+			parent.$(".mod-menu")[0].current(navData[0].url);
 
 			//地址栏hash设置
 			parent.mod.fn.request.hash("url",encodeURIComponent(navData[0].url));
-			/*parent.$(".bs_menu a").each(function(){
+			/*parent.$(".mod-menu a").each(function(){
 				$(this).removeClass("cur");
 				isSameComes(this.href,navData[0].url) && $(this).addClass("cur");
 			});*/
@@ -7423,7 +7594,7 @@ moduleBuild.prototype = {
 	init: function() {
 		var me = this;
 			me.box('.' + me.box.__modFact.class);
-			me.tab();
+			me.tab('.' + me.tab.__modFact.class);
 			me.button();
 			me.form();
 			me.menu();
@@ -7440,14 +7611,14 @@ function pageInit(){
 		myNodes;
 
 	//外框初始化
-	if(myHtml.className.indexOf("bs_outhtml") != -1){
+	if(myHtml.className.indexOf("mod-outhtml") != -1){
 		$("#switch").bind("click",function(){
-			$("#bodyArea").toggleClass("bs_fullscreen");
+			$("#bodyArea").toggleClass("mod-fullscreen");
 		});
 
 		/*
-		$(".bs_menu a").bind("click",function(){
-		$(".bs_menu a").removeClass("cur");
+		$(".mod-menu a").bind("click",function(){
+		$(".mod-menu a").removeClass("cur");
 		$(this).addClass("cur");
 		});
 		*/
@@ -7457,7 +7628,7 @@ function pageInit(){
 		}
 
 		//左侧菜单初始化
-		$(".bs_menu a").each(function(){
+		$(".mod-menu a").each(function(){
 			
 			this.target = this.target || "mainframe";
 			!firstHref && this.target == "mainframe" && !/^javascript:/g.test(this.href) && (firstHref = this.href);
@@ -7466,27 +7637,27 @@ function pageInit(){
 		//右侧iframe
 		var curHref = mod.nav.get("end").url || firstHref;
 		
-		$("#main").html('<iframe class="bs_main_if" name="mainframe" id="mainframe" src="'+ curHref +'" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>');
+		$("#main").html('<iframe class="mod-main_if" name="mainframe" id="mainframe" src="'+ curHref +'" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>');
 		
 		return;
 	}
 
 	//内页初始化
-	if(myHtml.className.indexOf("bs_inset_html") == -1){
+	if(myHtml.className.indexOf("mod-inset_html") == -1){
 
 		document.onreadystatechange = function(){
 			if(document.readyState == "complete"){
-				$(myHtml).addClass("bs_inset_html");
+				$(myHtml).addClass("mod-inset_html");
 				var d1 = document.createElement("div"),
 					d2 = document.createElement("div");
 					
-				d1.className = "bs_inset_frame";
-				d2.className = "bs_inset_bodyarea";
+				d1.className = "mod-inset_frame";
+				d2.className = "mod-inset_bodyarea";
 
 				myNodes = [];
 				for(i = 0, len = document.body.childNodes.length; i < len; i++){
 					fs = document.body.childNodes[i];
-					(!(fs.nodeType == 1 && fs.tagName == "SCRIPT") || /bs_pop/g.test(fs.className)) && myNodes.push(fs);
+					(!(fs.nodeType == 1 && fs.tagName == "SCRIPT") || /mod-pop/g.test(fs.className)) && myNodes.push(fs);
 				}
 
 				document.body.appendChild(d1);
@@ -7498,7 +7669,7 @@ function pageInit(){
 				document.onreadystatechange = null;
 
                 // 修复表格在此过后 宽度不正常问题
-                $('.bs_tablebox ').each(function(){
+                $('.mod-tablebox ').each(function(){
                     this.parentNode.resize && this.parentNode.resize();
                 });
 			}

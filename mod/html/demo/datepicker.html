@@ -18,7 +18,7 @@
 
 </head>
 <body>
-<div class="bs_mod01" mod-title="日历控件说明文档" mod-title-left='组件地址：<a href="../../js/jns_calendar_v.1.js">js/jns_calendar_v.1.js</a>'>
+<div class="mod-module" mod-title="日历控件说明文档" mod-title-left='组件地址：<a href="../../js/jns_calendar_v.1.js">js/jns_calendar_v.1.js</a>'>
 	
 	<h2 class="ins">调用方法</h2>
 	<h3 class="ins">单一日历-日期选择：</h3>
@@ -305,7 +305,7 @@ jnsCalendar("#txtbox01",{
 	vDistance:20,
 	dateRangeStart:"2012-1-1",
 	dateRangeEnd:"2119-1-1",
-	appendTarget:'.bs_inset_frame',
+	appendTarget:'.mod-inset_frame',
 	callback:function(date){alert(date)}
 }).init();
 
@@ -315,7 +315,7 @@ jnsCalendar("#txtbox02",{
 	vDistance:20,
 	dateRangeStart:"2012-1-1",
 	dateRangeEnd:"2119-1-1",
-	appendTarget:'.bs_inset_frame',
+	appendTarget:'.mod-inset_frame',
 	callback:function(date){alert(date)}
 }).init();
 
@@ -328,20 +328,20 @@ jnsCalendar("#txtbox03,#txtbox04",{
 	startDateInput:"#txtbox03",
 	endDateInput:"#txtbox04",
 	selectSameDate:true,
-	appendTarget:'.bs_inset_frame',
+	appendTarget:'.mod-inset_frame',
 	callback:function(date,date2){alert(date); alert(date2)}
 }).init();
 
 jnsCalendar("#txtbox05",{
 	type:"date",
 	format:"YYYY-MM-DD",
-	appendTarget:'.bs_inset_frame'
+	appendTarget:'.mod-inset_frame'
 }).init();
 
 jnsCalendar("#txtbox06",{
 	type:"dateTime",
 	format:"YYYY-MM-DD",
-	appendTarget:'.bs_inset_frame'
+	appendTarget:'.mod-inset_frame'
 }).init();
 
 jnsCalendar("#txtbox07,#txtbox08",{
@@ -355,7 +355,7 @@ jnsCalendar("#txtbox09",{
 	type:"date",
 	format:"YYYY-MM-DD",
 	dateRangeStart:"2013-2-25",
-	appendTarget:'.bs_inset_frame'
+	appendTarget:'.mod-inset_frame'
 }).init();
 jnsCalendar("#txtbox10",{
 	type:"date",
@@ -369,7 +369,7 @@ jnsCalendar("#txtbox11,#txtbox12",{
 	startDateInput:"#txtbox11",
 	endDateInput:"#txtbox12",
 	selectSameDate:false,
-	appendTarget:'.bs_inset_frame'
+	appendTarget:'.mod-inset_frame'
 }).init();
 
 jnsCalendar("#btn13",{
@@ -381,7 +381,7 @@ jnsCalendar("#btn13",{
 	onclean:function(date){
 		document.getElementById("txtbox13").value = "";
 	},
-	appendTarget:'.bs_inset_frame'
+	appendTarget:'.mod-inset_frame'
 }).init();
 
 jnsCalendar("#btn14",{
@@ -393,7 +393,7 @@ jnsCalendar("#btn14",{
 	onclean:function(date1,date2){
 		document.getElementById("txtbox14").value = "";
 	},
-	appendTarget:'.bs_inset_frame'
+	appendTarget:'.mod-inset_frame'
 }).init();
 
 var myCld = jnsCalendar("",{
@@ -405,7 +405,7 @@ var myCld = jnsCalendar("",{
 	onclean:function(date1,date2){
 		document.getElementById("txtbox15").value = "";
 	},
-	appendTarget:'.bs_inset_frame'
+	appendTarget:'.mod-inset_frame'
 }).init();
 
 document.getElementById("btn15").onclick = function(){

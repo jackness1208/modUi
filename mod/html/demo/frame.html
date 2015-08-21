@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div class="bs_mod01" mod-title="主体界面" mod-title-left='文件地址：<a href="../frame.html" target="_blank">html/frame.html</a>'>
+<div class="mod-module" mod-title="主体界面" mod-title-left='文件地址：<a href="../frame.html" target="_blank">html/frame.html</a>'>
 	<!-- 整体预览 -->
 	<h2 class="ins">模块介绍：</h2>
 	<p class="ins">分为 head 头部区域、nav 面包屑区域、main 内页区域、side 菜单区域 4部分区域。<br></p>
@@ -19,17 +19,17 @@
 	<h3 class="ins">页面源代码：</h3>
 	<pre class="brush:xml;">
 &lt;!doctype html&gt;
-&lt;html lang="en" class="bs_outhtml"&gt;
+&lt;html lang="en" class="mod-outhtml"&gt;
 &lt;head&gt;
 &lt;meta charset="UTF-8"&gt;
 &lt;title&gt;ModUi Admin&lt;/title&gt;
 &lt;link rel="stylesheet" href="../css/base.css?201407161047"&gt;
 &lt;/head&gt;
-&lt;body class="bs_outbody"&gt;
+&lt;body class="mod-outbody"&gt;
 &lt;!-- head --&gt;
-&lt;div class="bs_head"&gt;
-	&lt;h1 class="bs_logo"&gt;modUi For Admin&lt;/h1&gt;
-	&lt;div class="bs_head_ctrl"&gt;
+&lt;div class="mod-head"&gt;
+	&lt;h1 class="mod-logo"&gt;modUi For Admin&lt;/h1&gt;
+	&lt;div class="mod-head_ctrl"&gt;
 		你好，admin&lt;br/&gt;
 		&lt;a href="#"&gt;退出登录&lt;/a&gt;
 	&lt;/div&gt;
@@ -37,17 +37,17 @@
 &lt;!--/head --&gt;
 
 &lt;!-- nav --&gt;
-&lt;div class="bs_nav"&gt;当前位置:&lt;span id="nav" class="bs_nav_cnt"&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;div class="mod-nav"&gt;当前位置:&lt;span id="nav" class="mod-nav_cnt"&gt;&lt;/span&gt;&lt;/div&gt;
 &lt;!--/nav --&gt;
 
 &lt;!-- body --&gt;
-&lt;div class="bs_bodyarea" id="bodyArea"&gt;
-	&lt;div class="bs_main"&gt;
-		&lt;div class="bs_main_cnt" id="main"&gt;
+&lt;div class="mod-bodyarea" id="bodyArea"&gt;
+	&lt;div class="mod-main"&gt;
+		&lt;div class="mod-main_cnt" id="main"&gt;
 		&lt;/div&gt;
 	&lt;/div&gt;
-	&lt;div class="bs_side"&gt;
-		&lt;div class="bs_menu"&gt;
+	&lt;div class="mod-side"&gt;
+		&lt;div class="mod-menu"&gt;
 			&lt;ul&gt;
 				&lt;li&gt;&lt;a href="page.html"&gt;一级标题&lt;/a&gt;&lt;/li&gt;
 				&lt;li&gt;
@@ -72,7 +72,7 @@
 			&lt;/ul&gt;
 		&lt;/div&gt;
 	&lt;/div&gt;
-	&lt;div class="bs_side_switch" id="switch"&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
+	&lt;div class="mod-side_switch" id="switch"&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
 	&lt;div class="clear"&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;!--/body --&gt;
@@ -87,13 +87,13 @@
 	<h3 class="ins">head 头部区域</h3>
 	<p class="ins">这个区域中可定义的主要是 后台logo，<strong class="blue">png24格式</strong></p>
 
-	<div class="ins" style="background:#474747"><img src="../../images/bs_logo.png" width="275" height="50" alt=""></div>
+	<div class="ins" style="background:#474747"><img src="../../images/mod-logo.png" width="275" height="50" alt=""></div>
 	
 	<h4 class="ins">文件地址</h4>
-	<p class="ins"><a href="../../images/bs_logo.png" target="_blank">images/bs_logo.png</a></p>
+	<p class="ins"><a href="../../images/mod-logo.png" target="_blank">images/mod-logo.png</a></p>
 	
 	<h4 class="ins">psd源文件</h4>
-	<p class="ins">psd源文件<a href="../../psd/bs_logo.psd" target="_blank">psd/bs_logo.psd</a></p>
+	<p class="ins">psd源文件<a href="../../psd/mod-logo.psd" target="_blank">psd/mod-logo.psd</a></p>
 	<!--/head 头部区域 -->
 
 	<!-- nav 面包屑区域 -->
@@ -101,7 +101,7 @@
 	<p class="ins"><strong class="gray">非自定义区域</strong>，由后台 <strong class="blue">根据内页 title标签</strong> 自动生成，支持多层级。</p>
 	<pre class="brush:xml;">
 &lt;!-- nav --&gt;
-&lt;div class="bs_nav"&gt;当前位置:&lt;span id="nav" class="bs_nav_cnt"&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;div class="mod-nav"&gt;当前位置:&lt;span id="nav" class="mod-nav_cnt"&gt;&lt;/span&gt;&lt;/div&gt;
 &lt;!--/nav --&gt;
 	</pre>
 
@@ -114,7 +114,7 @@
 	
 	<h4 class="ins">模块效果</h4>
 	<div class="ins" style="width:190px">
-		<div class="bs_menu">
+		<div class="mod-menu">
 
 			<ul>
 				<li><a href="#">一级标题</a></li>
@@ -144,7 +144,7 @@
 	</div>
 
 	<pre class="brush:xml;">
-&lt;div class="bs_menu"&gt;
+&lt;div class="mod-menu"&gt;
 	&lt;ul&gt;
 		&lt;li&gt;&lt;a href="#"&gt;一级标题&lt;/a&gt;&lt;/li&gt;
 		&lt;li&gt;
@@ -187,7 +187,7 @@
 
 &lt;/head&gt;
 &lt;body&gt;
-&lt;div class="bs_mod01" mod-title="内页模板"&gt;
+&lt;div class="mod-module" mod-title="内页模板"&gt;
 	内页的内容
 &lt;/div&gt;
 &lt;script type="text/javascript" src="../js/mod-config.js?201502261750"&gt;&lt;/script&gt;

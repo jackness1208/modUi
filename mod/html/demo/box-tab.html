@@ -17,7 +17,7 @@
 		<h2 class="ins">选项卡</h2>
 		<h3 class="ins">模块效果</h3>
 		<div class="ins">
-			<div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-onchange="document.getElementById(this.getAttribute('href').split('#').pop()).innerHTML += '{' + arguments[0] + '变！}'">
+			<div class="mod-tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-onchange="document.getElementById(this.getAttribute('href').split('#').pop()).innerHTML += '{' + arguments[0] + '变！}'">
 				<ul>
 					<li><a href="#tabs01">标签01</a></li>
 					<li><a href="#tabs02">标签02</a></li>
@@ -34,7 +34,7 @@
 		<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
 		<pre class="brush:xml;">
 	&lt;!-- html --&gt;
-	&lt;div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-onchange="document.getElementById(this.getAttribute("href").split("#").pop()).innerHTML += '{' + arguments[0] + '变！}'"&gt;
+	&lt;div class="mod-tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-onchange="document.getElementById(this.getAttribute("href").split("#").pop()).innerHTML += '{' + arguments[0] + '变！}'"&gt;
 		&lt;ul&gt;
 			&lt;li&gt;&lt;a href="#tabs01"&gt;标签01&lt;/a&gt;&lt;/li&gt;
 			&lt;li&gt;&lt;a href="#tabs02"&gt;标签02&lt;/a&gt;&lt;/li&gt;
@@ -61,7 +61,7 @@
 		</div>
 		<pre class="brush:xml;">
 	&lt;!-- html --&gt;
-	&lt;div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字"&gt;
+	&lt;div class="mod-tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字"&gt;
 	&lt;ul&gt;
 		&lt;li&gt;&lt;a href="#tabs04"&gt;标签01&lt;/a&gt;&lt;/li&gt;
 		&lt;li&gt;&lt;a href="#tabs05"&gt;标签02&lt;/a&gt;&lt;/li&gt;
@@ -86,7 +86,7 @@
 		<h2 class="ins">选项卡-自动轮播</h2>
 		<h3 class="ins">模块效果</h3>
 		<div class="ins">
-			<div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-auto-play="true" mod-timeout="3000" mod-onchange="document.getElementById(this.getAttribute('href').split('#').pop()).innerHTML += '{' + arguments[0] + '变！}'">
+			<div class="mod-tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-auto-play="true" mod-timeout="3000" mod-onchange="document.getElementById(this.getAttribute('href').split('#').pop()).innerHTML += '{' + arguments[0] + '变！}'">
 				<ul>
 					<li><a href="#tabs07">标签01</a></li>
 					<li><a href="#tabs08">标签02</a></li>
@@ -103,7 +103,7 @@
 		<p class="ins">使用 HTML模板编写 不用再执行JS,填上适当的参数即可自动生成。其中 <strong class="blue">mod-xxx</strong> 为 js方法中的参数，根据 "-"来区分单词 <br><span class="red">如 titleLeft 在html中为 mod-title-left 属性。</span></p>
 		<pre class="brush:xml;">
 	&lt;!-- html --&gt;
-	&lt;div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-auto-play="true" mod-timeout="3000" mod-onchange="document.getElementById(this.getAttribute("href").split("#").pop()).innerHTML += '{' + arguments[0] + '变！}'"&gt;
+	&lt;div class="mod-tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字" mod-auto-play="true" mod-timeout="3000" mod-onchange="document.getElementById(this.getAttribute("href").split("#").pop()).innerHTML += '{' + arguments[0] + '变！}'"&gt;
 		&lt;ul&gt;
 			&lt;li&gt;&lt;a href="#tabs07"&gt;标签01&lt;/a&gt;&lt;/li&gt;
 			&lt;li&gt;&lt;a href="#tabs08"&gt;标签02&lt;/a&gt;&lt;/li&gt;
@@ -130,7 +130,7 @@
 		</div>
 		<pre class="brush:xml;">
 	&lt;!-- html --&gt;
-	&lt;div class="bs_tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字"&gt;
+	&lt;div class="mod-tab" mod-seted="false" mod-title="一级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字"&gt;
 	&lt;ul&gt;
 		&lt;li&gt;&lt;a href="#tabs10"&gt;标签01&lt;/a&gt;&lt;/li&gt;
 		&lt;li&gt;&lt;a href="#tabs11"&gt;标签02&lt;/a&gt;&lt;/li&gt;
@@ -203,14 +203,14 @@
 									<td>模块标题右侧 html内容 </td>
 								</tr>
 								<tr>
-									<td>index  <i class="bs_new_icon"></i></td>
+									<td>index  <i class="mod-new_icon"></i></td>
 									<td>{number}</td>
 									<td><strong class="blue">&gt;= 1.0</strong></td>
 									<td>tab初始位置</td>
 								</tr>
 								
 								<tr>
-									<td>timeout  <i class="bs_new_icon"></i></td>
+									<td>timeout  <i class="mod-new_icon"></i></td>
 									<td>{number}</td>
 									<td><strong class="blue">&gt;= 1.0</strong></td>
 									<td>切换停留时间</td>
@@ -222,13 +222,13 @@
 									<td>tab发生改变时回调的函数。this指向 触发的 a对象， index为当前tab的 位置。 </td>
 								</tr>
 								<tr>
-									<td>autoPlay  <i class="bs_new_icon"></i></td>
+									<td>autoPlay  <i class="mod-new_icon"></i></td>
 									<td>{boolean}</td>
 									<td><strong class="blue">&gt;= 1.21</strong></td>
 									<td>是否自动切换</td>
 								</tr>
 								<tr>
-									<td>hide  <i class="bs_new_icon"></i></td>
+									<td>hide  <i class="mod-new_icon"></i></td>
 									<td>{boolean}</td>
 									<td><strong class="blue">&gt;= 1.25</strong></td>
 									<td>模块初始化时是否处于收起状态。默认为false</td>
@@ -241,7 +241,7 @@
 			</tbody>
 		</table>
 
-		<h2 class="ins">mod.tab(target,op) 返回： <i class="bs_new_icon"></i></h2>
+		<h2 class="ins">mod.tab(target,op) 返回： <i class="mod-new_icon"></i></h2>
 		<table class="ins">
 			<thead>
 				<tr>
@@ -319,8 +319,8 @@
 		<h2 class="ins">嵌套样式</h2>
 		<p class="ins">假如模块是嵌套在 区域控件之内，样式为：</p>
 		<div class="ins">
-			<div class="bs_mod01">
-				<div class="bs_tab" mod-seted="false" mod-title="二级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字">
+			<div class="mod-module">
+				<div class="mod-tab" mod-seted="false" mod-title="二级tab模板" mod-title-left="左侧文字" mod-title-right="右侧文字">
 					<ul>
 						<li><a href="#tabs13">标签01</a></li>
 						<li><a href="#tabs14">标签02</a></li>
