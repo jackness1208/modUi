@@ -1902,6 +1902,80 @@ var renderPark = {
             data = target.__modOptions,
             context = modFact.template;
         
+        // 先让含有 v-repeat 的 标签 转化成不被渲染的模块
+        context = (function(ctx){
+            var 
+                // 属性值匹配
+                val = "((\\\"[^\"]*\\\")|(\\'[^']*\\')|(\\w+))",
+                // 标签内属性匹配
+                attr = "(\\s*[a-zA-Z\\-_]+\\s*\\=\\s*"+ val +"\\s*)",
+                // 标签匹配
+                specialTags = "(img|br|base|input|hr|area|link|nobr)",
+                // v-repeat 属性匹配
+                vRepeat = "(v-repeat\\s*=\\s*" + val + ")",
+                // 自闭合标签匹配
+                singleTag = "(<\\w+" + attr + '*' + vRepeat + attr + '*' +'/>)',
+                // 特殊自闭合标签匹配
+                specialTag = "(<"+ specialTags + attr + "*" + vRepeat + attr +"*" + "/?>)"
+                // 成对标签匹配
+                twinsTag = "(<\\w+"+ attr +"*" + vRepeat + ""+ attr +"*" + '>'+ '\.*' + "<\/\\w+>)",
+                // v-repeat标签匹配
+                vRepeatReg = new RegExp(singleTag +"|"+ specialTag +"|"+ twinsTag, 'g');  
+            
+            
+            return ctx.replace(vRepeatReg, function(c){
+                var markage = {};
+
+                return c.replace(new RegExp("<\\w+("+ attr +")*>(?!<\/\\w+>)*", "g"), function(str){
+                    var index = arguments[arguments.length - 2];
+                    if(!new RegExp("^<" + specialTags + "\s*", "g").test(str)){
+                        markage[index] = 1;
+                    }
+
+
+                    return str;
+                // match close tags
+                }).replace(new RegExp("<\/\\w+>", "g"), function(str){
+                    var index = arguments[arguments.length - 2];
+                    markage[index] = -1;
+
+
+                    return str;
+                }).replace(/^.*$/, function(str){
+                    // console.log('work- start -----------')
+                    // console.log(str)
+                    // console.log('work- end   -----------')
+                    var splitIndex = -1,
+                        matchCount = 0,
+                        attr = '',
+                        afterStr = '';
+                        r = '';
+
+                    for(var index in markage){
+                        if(markage.hasOwnProperty(index)){
+                            matchCount += markage[index];
+                            // console.log('matchCount', matchCount)
+                            if(!matchCount){
+                                splitIndex = index;
+                                break;
+                            }
+                        }
+                    }
+
+                    if(~splitIndex){
+                        attr = str.substr(0, splitIndex - 1);
+                        afterStr = str.substr(splitIndex);
+                    } else {
+                        attr = str;
+                    }
+
+                    r = '<br repeat-code="' + escape(attr) +'" />' + afterStr;
+                    return r;
+                });
+            });
+
+        })(context);
+
         $(target).html(she.string(context, data, modFact));
         $(target).find('*').each(function(){
             var item = this,
@@ -1955,52 +2029,53 @@ var renderPark = {
             var2Str = she.var2Str;
 
         //普通变量
-        return str.replace(/[{]\$[^{}]*\}/g,function(t){
-            var attr = t.replace("{$",'').replace("}",''),
-                r = data[attr] || "";
+        return str.replace(/\<w+\s(\s*w+\s*\=\s*("[^"]*"|'[^']*'|w+)\s*)*v-repeat=("[^"]*"|'[^']*')/g,function(t){
+            }).replace(/[{]\$[^{}]*\}/g,function(t){
+                var attr = t.replace("{$",'').replace("}",''),
+                    r = data[attr] || "";
 
-            return typeof r == "number"
-                ? r
-                : r.replace(/\r|\n/g,'');
+                return typeof r == "number"
+                    ? r
+                    : r.replace(/\r|\n/g,'');
 
-        // js 方法执行 模板 {js:: xx}
-        }).replace(/\{js::[^{}]*\}/g,function(t){
-            var r = t.replace("{js::",'').replace("}",'');
-            return she.eval(var2Str(r, data));
+            // js 方法执行 模板 {js:: xx}
+            }).replace(/\{js::[^{}]*\}/g,function(t){
+                var r = t.replace("{js::",'').replace("}",'');
+                return she.eval(var2Str(r, data));
 
-        // if else 模板 {if xx} xx {else if xx} xx {else} xx {/if}
-        // 必须最后替换，否则会被其他替换规则影响
-        }).replace(/\{if.+?\{\/if\}/g,function(str){
+            // if else 模板 {if xx} xx {else if xx} xx {else} xx {/if}
+            // 必须最后替换，否则会被其他替换规则影响
+            }).replace(/\{if.+?\{\/if\}/g,function(str){
 
-            // if
-            var r = str.replace(/\{if\s[^{}]*\}/g,function(t){
-                return 'if('+ t.replace("{if ",'').replace("}",'') +'){';
-            // else if
-            }).replace(/\{else\sif\s[^{}]*\}/g,function(t){
-                return '}else if('+ t.replace("{else if",'').replace("}",'') +'){';
+                // if
+                var r = str.replace(/\{if\s[^{}]*\}/g,function(t){
+                    return 'if('+ t.replace("{if ",'').replace("}",'') +'){';
+                // else if
+                }).replace(/\{else\sif\s[^{}]*\}/g,function(t){
+                    return '}else if('+ t.replace("{else if",'').replace("}",'') +'){';
 
-            // else
-            }).replace(/\{else[^{}]*\}/g,function(t){
-                return "}else{";
+                // else
+                }).replace(/\{else[^{}]*\}/g,function(t){
+                    return "}else{";
 
-            //if结尾
-            }).replace(/\{\/if\}/g,function(t){
-                return "}";
+                //if结尾
+                }).replace(/\{\/if\}/g,function(t){
+                    return "}";
 
-            // 替换{}中的内容
-            }).replace(/\)\{[^{}]*\}/g,function(t){
-                var ft = t.substr(0,t.indexOf("{"));
-                return ft + '{return "' + t.substr(t.indexOf("{")).replace("{",'').replace("}",'').replace(/"/g,'\\"') + '";}';
+                // 替换{}中的内容
+                }).replace(/\)\{[^{}]*\}/g,function(t){
+                    var ft = t.substr(0,t.indexOf("{"));
+                    return ft + '{return "' + t.substr(t.indexOf("{")).replace("{",'').replace("}",'').replace(/"/g,'\\"') + '";}';
 
-            }).replace(/\}else\{[^{}]*\}/g,function(t){
-                var ft = t.substr(0,t.indexOf("{"));
-                return ft + '{return "' + t.substr(t.indexOf("{")).replace("{",'').replace("}",'').replace(/"/g,'\\"') + '";}';
+                }).replace(/\}else\{[^{}]*\}/g,function(t){
+                    var ft = t.substr(0,t.indexOf("{"));
+                    return ft + '{return "' + t.substr(t.indexOf("{")).replace("{",'').replace("}",'').replace(/"/g,'\\"') + '";}';
 
+                });
+                
+                return she.eval(var2Str(r, data));
+                
             });
-            
-            return she.eval(var2Str(r, data));
-            
-        });
     }///}
 };
 /**
