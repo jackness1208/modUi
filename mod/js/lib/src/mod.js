@@ -1844,7 +1844,7 @@ function getObjByKey(obj,str){///{
 	return r === obj? undefined:r;
 }///}
 
-var renderPark = {
+var renderPark = window.renderPark = {
     keyEvent: {
         'mod-if': function(target, data, context, component){
             if(!renderPark.eval(renderPark.var2Str(context, data))){
@@ -1893,17 +1893,55 @@ var renderPark = {
                     ;
             });
             
+        },
+        'mod-with': function(target, data, context, conponent){
+
+
+        },
+        'mod-repeat': function(target, data, context, conponent){
+            var modFact = conponent.__modFact,
+                iDatas = renderPark.eval(renderPark.var2Str(context, data, modFact));
+
+            iDatas.forEach(function(item, i){
+                var iItem = target.cloneNode(true);
+            });
+
+        },
+        'mod-repeat-code': function(target, data, context, conponent){
+            var iHtml = unescape(context),
+                iFrag = document.createDocumentFragment(),
+                modFact = conponent.__modFact,
+                modOptions = conponent.__modOptions,
+                tmp = document.createElement('div');
+
+            iFrag.appendChild(tmp);
+            tmp.innerHTML = iHtml;
+            
+
+            $(tmp.childNodes).each(function(i, item){
+                if(item.nodeType == 1){
+                    iVal = item.getAttribute('mod-repeat');
+                    iVal && renderPark.keyEvent['mod-repeat'](item, modOptions, iVal, component);
+                }
+
+                target.parentNode.insertBefore(item, target);
+            });
+            
+            renderPark.elements(tmp, modFact, modOptions);
+
+
+            target.parentNode.removeChild(target);
         }
     },
-    elements: function(target){
+    elements: function(target, modFact, modOptions){
         var she = this,
             keyEvent = she.keyEvent,
-            modFact = target.__modFact,
-            data = target.__modOptions,
+            modFact = modFact || target.__modFact,
+            data = modOptions || target.__modOptions,
             context = modFact.template;
         
         // 先让含有 v-repeat 的 标签 转化成不被渲染的模块
-        context = (function(ctx){
+        context = (function(ctx){///{
             var 
                 // 属性值匹配
                 val = "((\\\"[^\"]*\\\")|(\\'[^']*\\')|(\\w+))",
@@ -1942,9 +1980,6 @@ var renderPark = {
 
                     return str;
                 }).replace(/^.*$/, function(str){
-                    // console.log('work- start -----------')
-                    // console.log(str)
-                    // console.log('work- end   -----------')
                     var splitIndex = -1,
                         matchCount = 0,
                         attr = '',
@@ -1954,7 +1989,6 @@ var renderPark = {
                     for(var index in markage){
                         if(markage.hasOwnProperty(index)){
                             matchCount += markage[index];
-                            // console.log('matchCount', matchCount)
                             if(!matchCount){
                                 splitIndex = index;
                                 break;
@@ -1969,12 +2003,12 @@ var renderPark = {
                         attr = str;
                     }
 
-                    r = '<br repeat-code="' + escape(attr) +'" />' + afterStr;
+                    r = '<br mod-repeat-code="' + escape(attr) +'" />' + afterStr;
                     return r;
                 });
             });
 
-        })(context);
+        })(context);///}
 
         $(target).html(she.string(context, data, modFact));
         $(target).find('*').each(function(){
@@ -1983,35 +2017,65 @@ var renderPark = {
             for(var key in keyEvent){
                 if(keyEvent.hasOwnProperty(key)){
                     myVal = $(item).attr(key);
-                    myVal && (
-                        keyEvent[key](item, data, myVal, target),
-                        item.removeAttribute(key)
-                    );
+                    if(myVal){
+                        keyEvent[key](item, data, myVal, target);
+                        item.removeAttribute(key);
+                    }
                 }
             }
 
         });
 
     },
-    var2Str: function(rtx, data){
-        return rtx.replace(/\$\w+/g,function(t){
-            var attr = t.replace("$",""),
-                r = data[attr] || "";
-            
-            
-            return typeof r == "number"
-                ? r
-                : '"' + r.replace(/["]/g,'\\"').replace(/\r|\n/g,"") + '"';
+
+    var2Str: function(ctx, data, globalData){
+        var dataStringify = function(str, data){
+                var iArr = str.split(/\.+/g),
+                    r = data;
+                for(var i = 0, item, len = iArr.length; i < len; i++){
+                    item = iArr[i];
+                    r = r[item];
+                    if(!r){
+                        r = '';
+                        break;
+                    }
+                }
+                switch(mod.fn.type(r)){
+                    case 'number':
+                        break;
+                    case 'array':
+                    case 'object':
+                        r = mod.fn.JSON.stringify(r);
+                        break;
+
+                    case 'string':
+                        r = '"' + r.replace(/([^\\]*)["]/g,'$1\\"').replace(/\r|\n/g,"") + '"';
+                        break;
+
+                    default:
+                        break;
+                }
+                return r;
+            };
+        // 替换 $\w+ 变量
+        ctx = ctx.replace(/([^\$]+|^)\$((\w|\.)+)/g,function(str, $1, val){
+            return $1 + dataStringify(val, data);
+        });
         
-        }).replace(/return\s".+?";/g,function(t){
-            return [
-                t.replace(/^return\s"/g,"").replace(/";$/g,"").replace(/[^\\]"/g,function(w){
-                    
-                    return w.substr(0,1) + '\\"';
-                })
-            ].join("");
+        if(globalData){
+            // 替换 $$\w+ 变量
+            ctx = ctx.replace(/\$\$((\w|\.)+)/g, function(str, val){
+                return dataStringify(val, globalData);
+            });
+        }
+        
+
+        // 替换 将 return xxx 改为 xxx
+        ctx = ctx.replace(/(return\s")(.+?)(";)/g,function(t, $1, val, $3){
+            return val.replace(/([^\\])"/g,'$1\\"');
         
         });
+        return ctx;
     },
     eval: function(ctx){
         try{
@@ -2078,6 +2142,7 @@ var renderPark = {
             });
     }///}
 };
+
 /**
  * define mod main fn
  *******************************/
@@ -3226,7 +3291,13 @@ moduleBuild.prototype = {
 					(myParent = myParent.parentNode);
 				}
 
-				
+				// 查找相邻的元素是否存在 type 一样的 detectbox
+                
+                $(mySiblings).each(function(i, item){
+                    if(~item.className.indexOf('bs_detectbox') && item.type == myType && item != elm){
+                        myParent = item;
+                    }
+                });
 
 				if(myParent && myParent.className.indexOf("mod-detectbox") != -1){
 					box = myParent;
@@ -4065,7 +4136,7 @@ moduleBuild.prototype = {
 						checkboxCnt = document.createElement("span");
 						checkboxCnt.className = "cnt";
 
-						that.parentNode.insertBefore(checkbox,that);
+						that.srcBox.appendChild(checkbox);
 						checkbox.appendChild(that);
 					}
 					
