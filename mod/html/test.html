@@ -7,29 +7,18 @@
 
 </head>
 <body>
+<div class="mod-tab" mod-title="tab demo">
     <ul>
-        <li mod-repeat="$$extends.tabs" mod-class="cur: $$index == $$data.index">{$name}</li>
+        <li><a href="#tab1">tab1</a></li>
+        <li><a href="#tab2">tab2</a></li>
     </ul>
+    <div id="tab1">11</div>
+    <div id="tab2">22</div>
+</div>
+
 <script type="text/javascript" src="../js/mod-config.js?201502261750"></script>
 <script>
-var 
-    iLi = document.getElementsByTagName('li')[0],
-    iUl = document.getElementsByTagName('ul')[0];
 
-iUl.__modFact = {
-    data: {
-        index: 0
-    },
-    extends: {
-        tabs: [
-            {name:'小米'},
-            {name:'小美'},
-            {name:'小妹'},
-            {name:'小梅'}
-        ]
-    }
-}
-renderPark.keyEvent['mod-repeat'](iLi, iUl.__modFact.data, iLi.getAttribute('mod-repeat'), iUl);
 </script>
 </body>
 </html>

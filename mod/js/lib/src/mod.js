@@ -1845,7 +1845,7 @@ function getObjByKey(obj,str){///{
 }///}
 
 var renderPark = window.renderPark = {
-    keyEvent: {
+    attrParse: {
         'mod-if': function(target, data, context, component){
             if(!renderPark.eval(renderPark.var2Str(context, data))){
                 target.parentNode.removeChild(target);
@@ -1853,9 +1853,12 @@ var renderPark = window.renderPark = {
 
         },
 
-        'mod-component': function(target, data, context, component){
-            var modFact = component.__modFact;
+        'mod-component': function(target, data, context, component, modFact){
+            var 
+                modFact = modFact || component.__modFact,
                 childComponent = modFact.component[context];
+
+
             if(/^document/g.test(mod.fn.type(childComponent))){
                 target.appendChild(childComponent);
 
@@ -1866,9 +1869,10 @@ var renderPark = window.renderPark = {
 
         },
 
-        'mod-on': function(target, data, context, component){
-            var ctxArr = context.replace(/\s+/g,'').split(','),
-                modFact = component.__modFact,
+        'mod-on': function(target, data, context, component, modFact){
+            var 
+                modFact = modFact || component.__modFact,
+                ctxArr = context.replace(/\s+/g,'').split(','),
                 ctxMap = {};
 
             ctxArr.forEach(function(item, i){
@@ -1882,9 +1886,11 @@ var renderPark = window.renderPark = {
             });
         },
 
-        'mod-class': function(target, data, context, conponent){
-            var ctxArr = context.replace(/\s+/g,'').split(','),
+        'mod-class': function(target, data, context, conponent, modFact){
+            var 
+                ctxArr = context.replace(/\s+/g,'').split(','),
                 ctxMap = {};
+
             ctxArr.forEach(function(item, i){
                 var sArr = item.split(':');
                 sArr.length > 1
@@ -1894,24 +1900,36 @@ var renderPark = window.renderPark = {
             });
             
         },
-        'mod-with': function(target, data, context, conponent){
-
+        'mod-with': function(target, data, context, conponent, modFact){
+            //TODO
 
         },
-        'mod-repeat': function(target, data, context, conponent){
-            var modFact = conponent.__modFact,
-                iDatas = renderPark.eval(renderPark.var2Str(context, data, modFact));
+        'mod-repeat': function(target, data, context, conponent, modFact){
+            var iDatas = renderPark.eval(renderPark.var2Str(context, data, modFact));
 
-            iDatas.forEach(function(item, i){
+            iDatas && iDatas.forEach(function(item, i){
                 var iItem = target.cloneNode(true);
+                console.log(iDatas[i])
+                iItem.removeAttribute('mod-repeat');
+                renderPark.template(
+                    iItem, 
+                    iDatas[i],
+                    iItem.innerHTML, 
+                    conponent,
+                    mod.fn.extend(undefined, modFact, {'index': i})
+                );
+                target.parentNode.insertBefore(iItem, target);
             });
-
+            target.parentNode.removeChild(target);
         },
-        'mod-repeat-code': function(target, data, context, conponent){
-            var iHtml = unescape(context),
+        'mod-repeat-code': function(target, data, context, conponent, modFact){
+            console.log('------------------')
+            console.log('match mod-repeat-code')
+            console.log('------------------')
+            var 
+                modFact = modFact || conponent.__modFact,
+                iHtml = unescape(context),
                 iFrag = document.createDocumentFragment(),
-                modFact = conponent.__modFact,
-                modOptions = conponent.__modOptions,
                 tmp = document.createElement('div');
 
             iFrag.appendChild(tmp);
@@ -1921,25 +1939,41 @@ var renderPark = window.renderPark = {
             $(tmp.childNodes).each(function(i, item){
                 if(item.nodeType == 1){
                     iVal = item.getAttribute('mod-repeat');
-                    iVal && renderPark.keyEvent['mod-repeat'](item, modOptions, iVal, component);
+                    iVal && renderPark.attrParse['mod-repeat'](item, data, iVal, component, modFact);
                 }
 
                 target.parentNode.insertBefore(item, target);
             });
             
-            renderPark.elements(tmp, modFact, modOptions);
 
 
             target.parentNode.removeChild(target);
         }
     },
-    elements: function(target, modFact, modOptions){
-        var she = this,
-            keyEvent = she.keyEvent,
-            modFact = modFact || target.__modFact,
-            data = modOptions || target.__modOptions,
-            context = modFact.template;
-        
+    element: function(target, data, component, modFact){
+        var 
+            she = this,
+            modFact = modFact || component.__modFact,
+            attrParse = she.attrParse,
+            myVal;
+        for(var key in attrParse){
+            if(attrParse.hasOwnProperty(key)){
+                myVal = $(target).attr(key);
+                if(myVal){
+                    attrParse[key](target, data, myVal, component, modFact);
+                    target.removeAttribute(key);
+                }
+            }
+        }
+    },
+    template: function(target, data, template, component, modFact){
+        var 
+            she = this,
+            attrParse = she.attrParse,
+            component = component || target,
+            modFact = modFact || component.__modFact,
+            data = data || component.__modOptions,
+            context = template || modFact.template,
         // 先让含有 v-repeat 的 标签 转化成不被渲染的模块
         context = (function(ctx){///{
             var 
@@ -1950,7 +1984,7 @@ var renderPark = window.renderPark = {
                 // 标签匹配
                 specialTags = "(img|br|base|input|hr|area|link|nobr)",
                 // v-repeat 属性匹配
-                vRepeat = "(v-repeat\\s*=\\s*" + val + ")",
+                vRepeat = "(mod-repeat\\s*=\\s*" + val + ")",
                 // 自闭合标签匹配
                 singleTag = "(<\\w+" + attr + '*' + vRepeat + attr + '*' +'/>)',
                 // 特殊自闭合标签匹配
@@ -1960,8 +1994,9 @@ var renderPark = window.renderPark = {
                 // v-repeat标签匹配
                 vRepeatReg = new RegExp(singleTag +"|"+ specialTag +"|"+ twinsTag, 'g');  
             
-            
+                console.log('match?', ctx.match(attr))
             return ctx.replace(vRepeatReg, function(c){
+                console.log('match!!!!!!!!!!!!!')
                 var markage = {};
 
                 return c.replace(new RegExp("<\\w+("+ attr +")*>(?!<\/\\w+>)*", "g"), function(str){
@@ -2009,21 +2044,11 @@ var renderPark = window.renderPark = {
             });
 
         })(context);///}
+        console.log(context);
 
         $(target).html(she.string(context, data, modFact));
         $(target).find('*').each(function(){
-            var item = this,
-                myVal;
-            for(var key in keyEvent){
-                if(keyEvent.hasOwnProperty(key)){
-                    myVal = $(item).attr(key);
-                    if(myVal){
-                        keyEvent[key](item, data, myVal, target);
-                        item.removeAttribute(key);
-                    }
-                }
-            }
-
+            she.element(this, data, component, modFact);
         });
 
     },
@@ -2312,7 +2337,7 @@ mod.box.__modFact = mod.fn.extend( undefined, modFactory, {///{
             content: myFrag
         });
 
-        renderPark.elements(target);
+        renderPark.template(target);
 
         next(target, attr);
     },
@@ -2372,7 +2397,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
             '<div class="h_l" mod-if="$titleLeft">{$titleLeft}</div>',
             '<div class="h_r"  mod-if="$titleRight">{$titleRight}</div>',
         '</div>',
-        '<div class="mod-tab_bd" mod-component="$content"></div>'
+        '<div class="mod-tab_bd" mod-component="content"></div>'
     ].join(''),
     build: function(target, attr, next){
 
@@ -2382,7 +2407,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
         modFact.attributes.index = attr.index;
 
         if(!attr.tabs.length){
-            $(she).children("ul").find('a').each(function(index){
+            $(target).children("ul").find('a').each(function(index){
                 var item = this,
                     iParent = item.parentNode,
                     iHref = $(item).attr('href');
@@ -2399,7 +2424,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
             tabsArr = mod.fn.extend(undefined, attr.tabs);
         }
 
-        
+        console.log(tabsArr)
         mod.fn.extend(modFact.component, {
             content: document.createDocumentFragment(),
         });
@@ -2421,9 +2446,9 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
         });
         
 
-        $(target).addClass("mod-tab");
-
-        renderPark.elements(target);
+        $(target).addClass(modFact.class);
+        
+        renderPark.template(target);
          
         // 自定义数据
         var As = [];
