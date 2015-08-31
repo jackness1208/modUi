@@ -1894,7 +1894,7 @@ var renderPark = window.renderPark = {
             ctxArr.forEach(function(item, i){
                 var sArr = item.split(':');
                 sArr.length > 1
-                    && renderPark.eval(renderPark.var2Str(sArr[1], data))
+                    && renderPark.eval(renderPark.var2Str(sArr[1], data, modFact))
                     && $(target).addClass(sArr[0])
                     ;
             });
@@ -1906,46 +1906,55 @@ var renderPark = window.renderPark = {
         },
         'mod-repeat': function(target, data, context, conponent, modFact){
             var iDatas = renderPark.eval(renderPark.var2Str(context, data, modFact));
-
+            
             iDatas && iDatas.forEach(function(item, i){
-                var iItem = target.cloneNode(true);
-                console.log(iDatas[i])
+                var 
+                    iItem = target.cloneNode(true),
+                    iModFact = mod.fn.extend(
+                        undefined, 
+                        modFact, {
+                            'index': i
+                        }
+                    );
+
                 iItem.removeAttribute('mod-repeat');
+                renderPark.element(iItem, iDatas[i], conponent, iModFact);
                 renderPark.template(
                     iItem, 
                     iDatas[i],
                     iItem.innerHTML, 
                     conponent,
-                    mod.fn.extend(undefined, modFact, {'index': i})
+                    iModFact
                 );
                 target.parentNode.insertBefore(iItem, target);
             });
+
             target.parentNode.removeChild(target);
         },
         'mod-repeat-code': function(target, data, context, conponent, modFact){
-            console.log('------------------')
-            console.log('match mod-repeat-code')
-            console.log('------------------')
             var 
                 modFact = modFact || conponent.__modFact,
                 iHtml = unescape(context),
                 iFrag = document.createDocumentFragment(),
                 tmp = document.createElement('div');
-
-            iFrag.appendChild(tmp);
+            
+            // iFrag.appendChild(tmp);
             tmp.innerHTML = iHtml;
             
-
+            // 增值处理
             $(tmp.childNodes).each(function(i, item){
                 if(item.nodeType == 1){
                     iVal = item.getAttribute('mod-repeat');
-                    iVal && renderPark.attrParse['mod-repeat'](item, data, iVal, component, modFact);
+                    iVal && renderPark.attrParse['mod-repeat'](item, data, iVal, conponent, modFact);
                 }
 
-                target.parentNode.insertBefore(item, target);
+                // target.parentNode.insertBefore(item, target);
             });
             
-
+            // 增值后数据导入
+            $(tmp.childNodes).each(function(i, item){
+                target.parentNode.insertBefore(item, target);
+            });
 
             target.parentNode.removeChild(target);
         }
@@ -1983,34 +1992,34 @@ var renderPark = window.renderPark = {
                 attr = "(\\s*[a-zA-Z\\-_]+\\s*\\=\\s*"+ val +"\\s*)",
                 // 标签匹配
                 specialTags = "(img|br|base|input|hr|area|link|nobr)",
-                // v-repeat 属性匹配
-                vRepeat = "(mod-repeat\\s*=\\s*" + val + ")",
+                // mod-repeat 属性匹配
+                modRepeat = "(mod\-repeat\\s*=\\s*" + val + ")",
+
+                attrMatch = attr + "*" + modRepeat + attr +"*",
                 // 自闭合标签匹配
-                singleTag = "(<\\w+" + attr + '*' + vRepeat + attr + '*' +'/>)',
+                singleTag = "(<\\w+ " + attrMatch +'/>)',
                 // 特殊自闭合标签匹配
-                specialTag = "(<"+ specialTags + attr + "*" + vRepeat + attr +"*" + "/?>)"
+                specialTag = "(<"+ specialTags + ' ' + attrMatch + "/?>)"
                 // 成对标签匹配
-                twinsTag = "(<\\w+"+ attr +"*" + vRepeat + ""+ attr +"*" + '>'+ '\.*' + "<\/\\w+>)",
+                twinsTag = "(<\\w+ "+ attrMatch + '>'+ '\.*' + "<\/\\w+>)",
                 // v-repeat标签匹配
-                vRepeatReg = new RegExp(singleTag +"|"+ specialTag +"|"+ twinsTag, 'g');  
+                modRepeatReg = new RegExp(singleTag +"|"+ specialTag +"|"+ twinsTag, 'g');  
             
-                console.log('match?', ctx.match(attr))
-            return ctx.replace(vRepeatReg, function(c){
-                console.log('match!!!!!!!!!!!!!')
+
+            return ctx.replace(modRepeatReg, function(c){
                 var markage = {};
 
-                return c.replace(new RegExp("<\\w+("+ attr +")*>(?!<\/\\w+>)*", "g"), function(str){
+                return c.replace(new RegExp("<\\w+ ("+ attr +")*>(?!<\/\\w+>)*", "g"), function(str){
                     var index = arguments[arguments.length - 2];
                     if(!new RegExp("^<" + specialTags + "\s*", "g").test(str)){
-                        markage[index] = 1;
+                        markage[index] = str.length;
                     }
-
 
                     return str;
                 // match close tags
                 }).replace(new RegExp("<\/\\w+>", "g"), function(str){
                     var index = arguments[arguments.length - 2];
-                    markage[index] = -1;
+                    markage[index] = -str.length;
 
 
                     return str;
@@ -2020,19 +2029,17 @@ var renderPark = window.renderPark = {
                         attr = '',
                         afterStr = '';
                         r = '';
-
                     for(var index in markage){
                         if(markage.hasOwnProperty(index)){
-                            matchCount += markage[index];
+                            matchCount += markage[index] > 0?1: -1;
                             if(!matchCount){
                                 splitIndex = index;
                                 break;
                             }
                         }
                     }
-
                     if(~splitIndex){
-                        attr = str.substr(0, splitIndex - 1);
+                        attr = str.substr(0, splitIndex - markage[splitIndex]);
                         afterStr = str.substr(splitIndex);
                     } else {
                         attr = str;
@@ -2044,7 +2051,6 @@ var renderPark = window.renderPark = {
             });
 
         })(context);///}
-        console.log(context);
 
         $(target).html(she.string(context, data, modFact));
         $(target).find('*').each(function(){
@@ -2211,8 +2217,8 @@ var modFactory = {///{
                 modFact.build(she, attr, next);
 
             }).then(function(she, attr, next){ // 对外方法绑定
-                for(var key in modFact.events){
-                    if(modFact.events.hasOwnProperty(key)){
+                for(var key in modFact.attributes){
+                    if(modFact.attributes.hasOwnProperty(key)){
                         she[key] = she.__modAttributes[key] = modFact.attributes[key];
                     }
                 }
@@ -2391,7 +2397,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
             '<h3 class="h_tl" mod-if="$title" mod-on="click: onToggle"><i class="mod-toggle_icon"></i>{$title}</h3>',
             '<div class="mod-tab_tablist">',
                 '<ul>',
-                    '<li mod-repeat="$$extends.tabs" mod-class="cur: $$index == $$data.index"><a href="javascript:;" mod-on="click: tabClick">{$text}</a></li>',
+                    '<li mod-repeat="$$extends.tabs" mod-class="cur: $$index == $$attributes.index"><a href="javascript:;" mod-on="click: tabClick">{$text}</a></li>',
                 '</ul>',
             '</div>',
             '<div class="h_l" mod-if="$titleLeft">{$titleLeft}</div>',
@@ -2423,8 +2429,8 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
         } else {
             tabsArr = mod.fn.extend(undefined, attr.tabs);
         }
+        modFact.attributes.index == -1 && (modFact.attributes.index = 0);
 
-        console.log(tabsArr)
         mod.fn.extend(modFact.component, {
             content: document.createDocumentFragment(),
         });
@@ -2434,7 +2440,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
         });
 
         tabsArr = modFact.extends.tabs;
-        
+        var cnts = [];
         modFact.extends.tabs.forEach(function(item, index){
             if(mod.fn.type(item) != 'object' || !item.link){
                 return;
@@ -2442,7 +2448,11 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
             
             var iTarget = $('#' + item.link)[0];
 
-            iTarget && modFact.component.content.appendChild(iTarget);
+            if(iTarget){
+                iTarget.style.display = 'none';
+                modFact.component.content.appendChild(iTarget);
+                cnts.push(iTarget);
+            }
         });
         
 
@@ -2457,7 +2467,8 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
         });
         
         mod.fn.extend(modFact.extends, {
-            tabAs: As
+            tabAs: As,
+            tabCnts: cnts
         });
 
         // 事件绑定
@@ -2486,7 +2497,9 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
                 isHover = false;
             });
         }
-		
+	    
+        // tab 切换触发
+        modFact.attributes.current.call(target, modFact.attributes.index);
         next(target, attr);
     },
     methods: {
@@ -2498,11 +2511,16 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
                 ;
         },
         tabClick: function(){
-            var component = this.__modParentComponent,
+            var 
+                component = this.__modParentComponent,
+                modFact = component.__modFact,
+                iExtends = modFact.extends,
+                iTabs = iExtends.tabs,
                 iLi = this.parentNode,
                 index = $(iLi).parent().children().index(iLi);
 
             $(iLi).addClass('cur').siblings('li').removeClass('cur');
+            $(iExtends.tabCnts).eq(index).show().siblings().hide();
             component.index = index;
         }
     },
