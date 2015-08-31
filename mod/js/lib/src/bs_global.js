@@ -2,8 +2,8 @@
  * $Copyright: 2015, jackness.org $
  * $Creator: Jackness Lau $
  * $Author: Jackness Lau $
- * $Date: Thu Aug 20 2015 15:24:03 GMT+0800 (中国标准时间) $
- * $Version: 1.4.9 $
+ * $Date: Mon Aug 31 2015 11:37:52 GMT+0800 (中国标准时间) $
+ * $Version: 1.4.10 $
  */
 !function(global,undefined){
  
@@ -2577,18 +2577,26 @@ moduleBuild.prototype = {
 				
 				var box,
 					myParent = elm.parentNode,
+                    mySiblings = myParent.children,
 					myType = elm.type,
 					stu,msgbox,msgboxTri;
 
 				if((myType == "button" && /bs_btn_s0/.test(myParent.className)) || (/checkbox|radio/.test(myType) && /bs_checkarea/.test(myParent.className))){ 
-					(myParent = myParent.parentNode);
+					myParent = myParent.parentNode;
+                    mySiblings = myParent.children;
 				}
 
-				
+                // 查找相邻的元素是否存在 type 一样的 detectbox
+                
+                $(mySiblings).each(function(i, item){
+                    if(~item.className.indexOf('bs_detectbox') && item.type == myType && item != elm){
+                        myParent = item;
+                    }
+                });
 
 				if(myParent && myParent.className.indexOf("bs_detectbox") != -1){
 					box = myParent;
-
+                    console.log('this way', box)
 
 				} else {
 					
@@ -2596,6 +2604,7 @@ moduleBuild.prototype = {
 
 					box = document.createElement("div");
 					box.className = "bs_detectbox";
+                    box.type = myType;
 					while(myParent.children.length > 0){
 						box.appendChild(myParent.children[0]);
 					}
@@ -3255,7 +3264,7 @@ moduleBuild.prototype = {
 							}
 						});
 					}
-					
+				    
 					that.parentNode.insertBefore(tagsArea,that);
 					tagsArea.appendChild(tagsInput);
 					that.style.display = "none";
@@ -3404,6 +3413,8 @@ moduleBuild.prototype = {
 				checkbox:function(elm,attr){
 					var that = elm,
 						myType = elm.type.toLowerCase(),
+                        myParent = elm.parentNode,
+                        mySiblings = myParent.children,
 						checkbox, checkboxCnt, checkboxImg, checkboxIpt, onchangeHandle;
 
 
@@ -3412,8 +3423,9 @@ moduleBuild.prototype = {
 					
 
 					$(that).addClass(myType == "checkbox"?"bs_chkbox":"bs_rdobox");
-
-					if(that.parentNode.className.indexOf('bs_checkarea') != -1){
+					
+                    
+                    if(that.parentNode.className.indexOf('bs_checkarea') != -1){
 						checkbox = that.parentNode;
 						checkboxCnt = $(checkbox).find('.cnt')[0];
 
@@ -3424,7 +3436,7 @@ moduleBuild.prototype = {
 						checkboxCnt = document.createElement("span");
 						checkboxCnt.className = "cnt";
 
-						that.parentNode.insertBefore(checkbox,that);
+                        that.srcBox.appendChild(checkbox);
 						checkbox.appendChild(that);
 					}
 					

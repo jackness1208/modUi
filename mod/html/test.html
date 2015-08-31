@@ -7,30 +7,33 @@
 
 </head>
 <body>
-<div class="bs_mod01" mod-title="内页模板">
-    <div id="tb">
-        
-    </div>	
+<div class="bs_mod01" mod-title="呵呵来一发">
+    <table class="bs_table_s0">
+        <tr>
+            <th>input</th>
+            <td><input class="bs_btn" type="button" name="btn" value="ADD" id="btn"></td>
+            <td id="cnt">
+                <input type="radio" name="radio" value='0' mod-title="0"/>
+                <input type="radio" name="radio" value='1' mod-title="1"/>
+            </td>
+        </tr>
+    </table>
 </div>
 <script type="text/javascript" src="../js/bs_config.js?201502261750"></script>
 <script>
-// 初始化方法放这里
-mod.grid('#tb', {
-    statusKey: 'status',
-    dataKey:'data.data',
-    totalKey:'data.count',
-    data:[{"uid":"20","username":"\u6447\u554a","update_time":"2015-08-18 21:22:02","phone":"13452342341","email":"13@163.com","is_effective":"1","comment":"222\nasdf","appid":"wx14a1aa1a1393bc79","public_name":"\u6447\u554a","headface_url":"http:\/\/wx.qlogo.cn\/mmopen\/ibKHP1TZZeXKamplTxInSltdoV5EicyjM23SKT6JfSRk3N4SbGkllotUicUc8mRfBklK7K1eibqibVluosb7Q5gCtEImXicb9F2Ub0\/0","func_info":"2,3,4,8,12,13","verify_type":"0","type":"2","type_name":"\u670d\u52a1\u53f7","verify_type_name":"\u5df2\u8ba4\u8bc1","func_info_list":"\u7528\u6237\u7ba1\u7406\u6743\u9650\u96c6<br>\u5e10\u53f7\u7ba1\u7406\u6743\u9650\u96c6<br>\u7f51\u9875\u6388\u6743\u6743\u9650\u96c6<br>\u5fae\u4fe1\u5361\u5238\u6743\u9650\u96c6<br>\u5fae\u4fe1\u8fdeWIFI\u6743\u9650\u96c6<br>\u672a\u77e5"}],
-    layout:[
-        {
-            name:"审核状态",
-            width : 170,
-            /*
-             *html : "{if $is_effective == 0}未通过<br/>{else if $is_effective ==1}通过{else}<div style='text-align:left'>审核中</div><a href='javascript:;' class='bs_btn sh_a' data-type='1' data-uid='{$uid}'>通过</a><a href='javascript:;' class='bs_btn sh_a' data-type='0' data-uid='{$uid}'>不通过</a>{/if}"
-             */
-            html : "{if $is_effective == 0}未通过<br/>___{$comment}___{else if $is_effective ==1}通过{else}<div style='text-align:left'>审核中</div><a href='javascript:;' class='bs_btn sh_a' data-type='1' data-uid='{$uid}'>通过</a><a href='javascript:;' class='bs_btn sh_a' data-type='0' data-uid='{$uid}'>不通过</a>{/if}"
-        }
-    ]
-});
+!function(){
+    var index = 1;
+    var radioRender = function(){
+            mod.widget('#cnt input');
+        };
+    $("#btn").click(function(){
+        index++;
+        $('#cnt').append('<input type="radio" name="radio" value="'+ index +'" mod-title="'+ index +'"/>')
+        radioRender();
+    });
+
+    radioRender();
+}();
 </script>
 </body>
 </html>
