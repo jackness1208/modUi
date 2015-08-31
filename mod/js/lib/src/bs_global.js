@@ -2,7 +2,7 @@
  * $Copyright: 2015, jackness.org $
  * $Creator: Jackness Lau $
  * $Author: Jackness Lau $
- * $Date: Mon Aug 31 2015 11:46:02 GMT+0800 (中国标准时间) $
+ * $Date: Mon Aug 31 2015 11:56:43 GMT+0800 (中国标准时间) $
  * $Version: 1.4.10 $
  */
 !function(global,undefined){
@@ -2516,7 +2516,6 @@ moduleBuild.prototype = {
 					return true;
 				}
                 
-                console.log(input.oValue)
                 if((input.oValue == input.value)){
                     
                     return input.isOk;
@@ -2596,7 +2595,6 @@ moduleBuild.prototype = {
 
 				if(myParent && myParent.className.indexOf("bs_detectbox") != -1){
 					box = myParent;
-                    console.log('this way', box)
 
 				} else {
 					
@@ -2704,7 +2702,6 @@ moduleBuild.prototype = {
 						box.clear();
 						$(box).addClass("bs_detectbox_error");
 						$(box.tips).addClass("bs_detectbox_error");
-                        console.log('thisway', box.tips.cnt)
 						box.tips.cnt.innerHTML = txt;
 						box.tips.status = "error";
 						box.tips.show(2000);
@@ -3596,7 +3593,6 @@ moduleBuild.prototype = {
 													msg: getObjByKey(json,attr.messageKey)
 												};
 
-                                                console.log(myAttr);
 
                                                 if(myAttr.status == attr.successCode){
 													drawbox.myAutos = myAttr.data;
