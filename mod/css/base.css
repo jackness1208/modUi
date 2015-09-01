@@ -356,8 +356,7 @@ i.mod-toggle_icon_cur,
 .mod-tab_tablist li a:hover{ text-decoration:none; color:#333;}
 .mod-tab_tablist li.cur a,
 .mod-tab_tablist li.cur:hover a{ background: #fff; color: #333; border-color:#bbb; margin-top:0; padding-top:4px;}
-.mod-tab_bd{}
-.mod-tab_bd_item{ padding:20px; border-radius:0 0 5px 5px;}
+.mod-tab_bd{ padding:20px; border-radius:0 0 5px 5px;}
 
 .mod-module_bd .mod-tab,
 .mod-pop_bd .mod-tab{ border:none; border-radius:none; box-shadow:none; background:none;}

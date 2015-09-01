@@ -52,7 +52,7 @@ mod.fn.type = function (obj) {
 };
 
 mod.fn.isPlainObject = function (obj) {
-    var she = this,
+    var she = mod.fn,
         key,
         hasOwn = Object.prototype.hasOwnProperty;
 
@@ -469,7 +469,8 @@ function isArray(obj){
 }
 
 //对象克隆
-function clone(obj){///{
+mod.fn.clone = function(obj){///{
+    var she = mod;
 	if(typeof(obj) != 'object' || obj === null){
 		return obj;
 	}
@@ -477,7 +478,7 @@ function clone(obj){///{
 	var r = Array.prototype.splice === obj.splice?[]:{};
 	for(var i in obj){
 		if(obj.hasOwnProperty(i)){
-			r[i] = clone(obj[i]);
+			r[i] = she.fn.clone(obj[i]);
 
 		}
 	}
@@ -1765,7 +1766,7 @@ function modAssignment(o1,o2){///{
 	}
 	o2 = o2 || {};
 
-	var r = clone(o1) || {},
+	var r = mod.fn.clone(o1) || {},
 		isElm = o2.nodeType == 1,
 		fAttr,
 		modAttr;
@@ -1814,7 +1815,7 @@ function modAssignment(o1,o2){///{
 		}
 	}
 
-	return clone(r);
+	return mod.fn.clone(r);
 }///}
 
 /**
@@ -1886,7 +1887,7 @@ var renderPark = window.renderPark = {
             });
         },
 
-        'mod-class': function(target, data, context, conponent, modFact){
+        'mod-class': function(target, data, context, component, modFact){
             var 
                 ctxArr = context.replace(/\s+/g,'').split(','),
                 ctxMap = {};
@@ -1900,11 +1901,11 @@ var renderPark = window.renderPark = {
             });
             
         },
-        'mod-with': function(target, data, context, conponent, modFact){
+        'mod-with': function(target, data, context, component, modFact){
             //TODO
 
         },
-        'mod-repeat': function(target, data, context, conponent, modFact){
+        'mod-repeat': function(target, data, context, component, modFact){
             var iDatas = renderPark.eval(renderPark.var2Str(context, data, modFact));
             
             iDatas && iDatas.forEach(function(item, i){
@@ -1918,12 +1919,12 @@ var renderPark = window.renderPark = {
                     );
 
                 iItem.removeAttribute('mod-repeat');
-                renderPark.element(iItem, iDatas[i], conponent, iModFact);
+                renderPark.element(iItem, iDatas[i], component, iModFact);
                 renderPark.template(
                     iItem, 
                     iDatas[i],
                     iItem.innerHTML, 
-                    conponent,
+                    component,
                     iModFact
                 );
                 target.parentNode.insertBefore(iItem, target);
@@ -1931,9 +1932,9 @@ var renderPark = window.renderPark = {
 
             target.parentNode.removeChild(target);
         },
-        'mod-repeat-code': function(target, data, context, conponent, modFact){
+        'mod-repeat-code': function(target, data, context, component, modFact){
             var 
-                modFact = modFact || conponent.__modFact,
+                modFact = modFact || component.__modFact,
                 iHtml = unescape(context),
                 iFrag = document.createDocumentFragment(),
                 tmp = document.createElement('div');
@@ -1945,7 +1946,7 @@ var renderPark = window.renderPark = {
             $(tmp.childNodes).each(function(i, item){
                 if(item.nodeType == 1){
                     iVal = item.getAttribute('mod-repeat');
-                    iVal && renderPark.attrParse['mod-repeat'](item, data, iVal, conponent, modFact);
+                    iVal && renderPark.attrParse['mod-repeat'](item, data, iVal, component, modFact);
                 }
 
                 // target.parentNode.insertBefore(item, target);
@@ -2198,38 +2199,43 @@ var modFactory = {///{
             option = modAssignment(modFact.data, op);
 
         $tar.each(function(){
-            var she = this,
-                attr = modAssignment(option, she);
+            var 
+                she = this,
+                attr = modAssignment(option, she),
+                iModFact = mod.fn.clone(modFact);
 
             if(isEqual(she.__modOptions, attr)){
                 return;
             }
             
-            mod.fn.extend(she, {
-                __modFact: modFact,
-                __modOptions: attr,
-                __modChildren: [],
-                __modAttributes: {},
-                __modTimeouts: {}
-            });
             
-            new mod.fn.Promise().then(function(next){
-                modFact.build(she, attr, next);
+            new mod.fn.Promise().then(function(next){ // 私有属性初始化
+                mod.fn.extend(she, {
+                    __modFact: iModFact,
+                    __modOptions: attr,
+                    __modChildren: [],
+                    __modAttributes: {},
+                    __modTimeouts: {}
+                });
+                next(she, attr);
 
             }).then(function(she, attr, next){ // 对外方法绑定
-                for(var key in modFact.attributes){
-                    if(modFact.attributes.hasOwnProperty(key)){
-                        she[key] = she.__modAttributes[key] = modFact.attributes[key];
+                for(var key in iModFact.attributes){
+                    if(iModFact.attributes.hasOwnProperty(key)){
+                        she[key] = she.__modAttributes[key] = iModFact.attributes[key];
                     }
                 }
                 next(she, attr);
+
+            }).then(function(she, attr, next){ // 构造
+                iModFact.build(she, attr, next);
 
             }).then(function(she, attr, next){
                 $(she).show();
                 next(she, attr);
 
             }).then(function(she, attr, next){
-                modFact.ready(she, attr, next);
+                iModFact.ready(she, attr, next);
 
             }).start();
         });
@@ -2331,9 +2337,7 @@ mod.box.__modFact = mod.fn.extend( undefined, modFactory, {///{
         
         $(target).addClass(modFact.class);
 
-        attr.hide 
-            && modFact.attributes.hide.call(target)
-            ;
+        attr.hide && target.hide();
 
         while(target.childNodes.length > 0){
             myFrag.appendChild(target.childNodes[0]);
@@ -2371,12 +2375,20 @@ mod.box.__modFact = mod.fn.extend( undefined, modFactory, {///{
     }
 });///}
 
-
+/**
+ * 选项卡初始化
+ * @param  {object} target 需要执行模块化的对象
+ * @param  {object} op     参数设置
+ *
+ *                  - title      [string] 模块标题 
+ *                  - titleLeft  [string] 模块标题左侧 html内容 
+ *                  - titleRight [string] 模块标题右侧 html内容
+ * @return {void} 
+ */
 mod.tab = function(context, op){
     return mod.tab.__modFact.init(mod.tab, context, op);
 };
-
-mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
+mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
     class: 'mod-tab',
     data: {
         title:"",
@@ -2397,7 +2409,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
             '<h3 class="h_tl" mod-if="$title" mod-on="click: onToggle"><i class="mod-toggle_icon"></i>{$title}</h3>',
             '<div class="mod-tab_tablist">',
                 '<ul>',
-                    '<li mod-repeat="$$extends.tabs" mod-class="cur: $$index == $$attributes.index"><a href="javascript:;" mod-on="click: tabClick">{$text}</a></li>',
+                    '<li mod-repeat="$$extends.tabs" mod-class="cur: $$index == $$attributes.index"><a href="#{$link}" mod-on="click: tabClick">{$text}</a></li>',
                 '</ul>',
             '</div>',
             '<div class="h_l" mod-if="$titleLeft">{$titleLeft}</div>',
@@ -2408,9 +2420,11 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
     build: function(target, attr, next){
 
         var modFact = target.__modFact,
-            tabsArr = [];
+            tabsArr = [],
+            tabCnts = [];
          
         modFact.attributes.index = attr.index;
+        
 
         if(!attr.tabs.length){
             $(target).children("ul").find('a').each(function(index){
@@ -2440,7 +2454,6 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
         });
 
         tabsArr = modFact.extends.tabs;
-        var cnts = [];
         modFact.extends.tabs.forEach(function(item, index){
             if(mod.fn.type(item) != 'object' || !item.link){
                 return;
@@ -2451,7 +2464,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
             if(iTarget){
                 iTarget.style.display = 'none';
                 modFact.component.content.appendChild(iTarget);
-                cnts.push(iTarget);
+                tabCnts.push(iTarget);
             }
         });
         
@@ -2465,10 +2478,9 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
         $(target).find('.mod-tab_tablist a').each(function(){
             As.push(this);
         });
-        
         mod.fn.extend(modFact.extends, {
             tabAs: As,
-            tabCnts: cnts
+            tabCnts: tabCnts
         });
 
         // 事件绑定
@@ -2489,11 +2501,11 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
                 }
             }();
 
-            $(myExt.toggleCnt).bind("mouseenter",function(){
+            $(tabCnts).bind("mouseenter",function(){
                 isHover = true;
             });
 
-            $(myExt.toggleCnt).bind("mouseleave",function(){
+            $(tabCnts).bind("mouseleave",function(){
                 isHover = false;
             });
         }
@@ -2510,18 +2522,25 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
                 : component.hide()
                 ;
         },
-        tabClick: function(){
+        tabClick: function(e){
+            e = e || window.event;
             var 
                 component = this.__modParentComponent,
                 modFact = component.__modFact,
+                op = component.__modOptions,
                 iExtends = modFact.extends,
                 iTabs = iExtends.tabs,
                 iLi = this.parentNode,
                 index = $(iLi).parent().children().index(iLi);
 
+
             $(iLi).addClass('cur').siblings('li').removeClass('cur');
             $(iExtends.tabCnts).eq(index).show().siblings().hide();
             component.index = index;
+            op.onchange.call(this, index);
+
+            e.preventDefault && e.preventDefault();
+            e.returnValue = false;
         }
     },
     
@@ -2540,11 +2559,12 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
         index: 0,
 
         current: function(index){
-            var component = this;
-            var tabAs = component.__modFact.extends.tabAs;
+            var 
+                component = this,
+                tabAs = component.__modFact.extends.tabAs;
+
             iIndex = (index % tabAs.length + tabAs.length) % tabAs.length;
             $(tabAs[iIndex]).trigger('click');
-
         },
 
         next: function(){
@@ -2559,7 +2579,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {
         }
     }
     
-});
+}); ///}
 
 
 
@@ -2575,199 +2595,7 @@ moduleBuild.prototype = {
 	
 	
 
-	/**
-	 * 选项卡初始化
-	 * @param  {object} target 需要执行模块化的对象
-	 * @param  {object} op     参数设置
-	 *
-	 *                  - title      [string] 模块标题 
-	 *                  - titleLeft  [string] 模块标题左侧 html内容 
-	 *                  - titleRight [string] 模块标题右侧 html内容
-	 * @return {void} 
-	 */
-	_tab: function(target,op) {
-		var $tar = target ? $(target) : $(".mod-tab"),
-			option = {
-				title:"",
-				titleLeft:"",
-				titleRight:"",
-				index:0,
-				onchange:function(){},
-				//是否自动切换
-				autoPlay:false,
-				//自动切换停留时间
-				timeout:2000,
-
-				hide:false
-			},
-			key;
-
-		
-		//赋值
 	
-		option = modAssignment(option,op);
-
-		
-		//重构
-		$tar.each(function() {
-			var she = this,
-				attr = modAssignment(option,she);
-
-
-			if(isEqual(she.opAttr,attr)){
-				return;
-			}
-
-			var myTabs = {},
-				myUl = $(she).children("ul")[0],
-				myFrag = document.createDocumentFragment();
-				
-
-
-			
-			$(target).addClass("mod-tab");
-
-			
-
-			$(myUl).find("a").each(function(i) {
-				var that = this,
-					tarId = $(that).attr("href").split("#").pop();
-				var myTarget = $("#" + tarId)[0];
-				
-				myTarget && myFrag.appendChild(myTarget);
-
-			});
-			
-
-			myFrag.appendChild(myUl);
-
-			she.innerHTML = [
-				'<div class="mod-tab_hd">',
-				attr.title ? ('<h3 class="h_tl"><i class="mod-toggle_icon '+ (attr.hide?'mod-toggle_icon_cur':'') +'"></i>' + attr.title + '</h3>') : "",
-				'<div class="mod-tab_tablist"></div>',
-				attr.titleLeft ? ('<div class="h_l">' + attr.titleLeft + '</div>') : "",
-				attr.titleRight ? ('<div class="h_r">' + attr.titleRight + '</div>') : "",
-				'</div>',
-				'<div class="mod-tab_bd '+ (attr.hide?'style="display:none;"':'') +'"></div>'
-			].join("");
-
-			$(she).children(".mod-tab_hd").children(".mod-tab_tablist").append(myUl);
-			$(she).children(".mod-tab_bd").append(myFrag).children().addClass("mod-tab_bd_item").hide();
-
-			
-			she.style.display = "block";
-			
-			
-			//事件绑定
-			$(she).children(".mod-tab_hd").children(".mod-tab_tablist").find("a").each(function() {
-				var that = this,
-					clickHandle = function(e){
-						e = e || window.event;
-						var that = this,
-							myIndex = $(that).parent().parent().children().index($(that).parent()),
-							tarId = $(that).attr("href").split("#").pop();
-
-						e.preventDefault && e.preventDefault();
-						e.returnValue = false;
-						$(that).parent().addClass("cur").siblings().removeClass("cur");
-						$("#" + tarId).show().siblings().hide();
-
-						she.index = myIndex;
-
-						attr.onchange && attr.onchange.call(that,myIndex);
-					},
-					i, len;
-
-				!that.clickEvents && (that.clickEvents = []);
-					
-				for(i = 0, len = that.clickEvents.length; i < len; i++){
-					$(that).unbind("click",that.clickEvents[i]);
-				}
-
-				that.clickEvents = [];
-
-				$(that).bind("click",clickHandle);
-
-				that = null;
-			});
-
-			var myExt = {
-					toggleIco:$(she).children(".mod-tab_hd").find(".mod-toggle_icon")[0],
-					toggleCnt:$(she).children(".mod-tab_bd")[0]
-				},
-				toggleArea = myExt.toggleIco ? myExt.toggleIco.parentNode: null;
-			
-
-			toggleArea && (toggleArea.onclick = function(){
-				var toggleIco = myExt.toggleIco,
-					toggleCnt = myExt.toggleCnt;
-
-				toggleIco.className.indexOf("mod-toggle_icon_cur") == -1 ? (
-					$(toggleIco).addClass("mod-toggle_icon_cur"),
-					$(toggleCnt).slideUp(200)
-				) : (
-					$(toggleIco).removeClass("mod-toggle_icon_cur"),
-					$(toggleCnt).slideDown(200)
-				);
-
-			});
-
-			var curIndex = isNaN(attr.index)? 0: attr.index,
-				tabAs = $(she).children(".mod-tab_hd").children(".mod-tab_tablist").find("a"),
-				i, len;
-
-			curIndex < 0 && (curIndex = 0);
-			curIndex > tabAs.length && (curIndex = tabAs.length);
-
-			she.index = curIndex;
-
-			she.current = function(index){
-				index = index % tabAs.length;
-
-				$(tabAs).eq(index).trigger("click");
-			};
-
-			she.prev = function(){
-				she.current(she.index - 1);
-			};
-
-			she.next = function(){
-				she.current(she.index + 1);
-			};
-
-			she.current(she.index);
-
-			if(attr.autoPlay && attr.timeout){
-				!function aniMove(){
-					clearTimeout(she.hoverKey);
-					clearTimeout(she.timeoutKey);
-
-					if(she.isHover){
-						she.hoverKey = setTimeout(aniMove,20);
-
-					} else {
-						she.next();
-						she.timeoutKey = setTimeout(aniMove,attr.timeout);
-					}
-				}();
-
-				$(myExt.toggleCnt).bind("mouseenter",function(){
-					she.isHover = true;
-				});
-
-				$(myExt.toggleCnt).bind("mouseleave",function(){
-					she.isHover = false;
-				});
-			}
-			
-			she.opAttr = attr;
-			toggleArea = null;
-
-
-		});
-
-		return $tar[0];
-	},
 
 	/**
 	 * 表单初始化
@@ -5838,7 +5666,7 @@ moduleBuild.prototype = {
 											if(myValue == fs.value){
 												fo.selected = true;
 												if(f.view.html){
-													fdata = clone(data);
+													fdata = mod.fn.clone(data);
 													fdata[flayout.field] = fo.value;
 													f.view.innerHTML = renderPark.string(fdata,f.view.html);
 
@@ -6758,7 +6586,7 @@ moduleBuild.prototype = {
 
 				option.mark && mod.fn.historyManage.add(target.id + "Cur",page);
 
-				var fParam = clone(option.actionParam);
+				var fParam = mod.fn.clone(option.actionParam);
 
 				fParam[option.pageKey] += option.pageStart;
 				fParam._ = new Date().getTime();
@@ -6823,7 +6651,7 @@ moduleBuild.prototype = {
 					
 			}:function(page, source){
 				if(source){
-					option.data = clone(source);
+					option.data = mod.fn.clone(source);
 				}
 				//搜索结果输出
 				target.totalNum.innerHTML = option.data.length;
