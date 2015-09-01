@@ -247,8 +247,8 @@ i.bs_toggle_icon_cur,
 
 .bs_menu .bs_doc{ float:left;  margin:7px 5px 0 0; display:inline; height:12px; padding-left:12px; overflow:hidden; background-position:-275px -50px;}
 
-.bs_menu .bs_chk_checked{ background-position:-325px -50px;}
-.bs_menu .bs_chk_include{ background-position:-350px -50px;}
+.bs_menu .bs_chk_checked .bs_chk{ background-position:-325px -50px;}
+.bs_menu .bs_chk_include .bs_chk{ background-position:-350px -50px;}
 
 .bs_menu a{ color:#666; display: block; height:26px; line-height:26px; padding:0px 8px; font-size:14px; white-space: nowrap;}
 
