@@ -247,8 +247,8 @@ i.mod-toggle_icon_cur,
 
 .mod-menu .mod-doc{ float:left;  margin:7px 5px 0 0; display:inline; height:12px; padding-left:12px; overflow:hidden; background-position:-275px -50px;}
 
-.mod-menu .mod-chk_checked{ background-position:-325px -50px;}
-.mod-menu .mod-chk_include{ background-position:-350px -50px;}
+.mod-menu .mod-chk_checked .mod-chk{ background-position:-325px -50px;}
+.mod-menu .mod-chk_include .mod-chk{ background-position:-350px -50px;}
 
 .mod-menu a{ color:#666; display: block; height:26px; line-height:26px; padding:0px 8px; font-size:14px; white-space: nowrap;}
 
