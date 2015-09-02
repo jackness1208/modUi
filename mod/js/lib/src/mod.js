@@ -1846,7 +1846,7 @@ function getObjByKey(obj,str){///{
 }///}
 
 var renderPark = window.renderPark = {
-    attrParse: {
+    attrParse: { ///{
         'mod-if': function(target, data, context, component){
             if(!renderPark.eval(renderPark.var2Str(context, data))){
                 target.parentNode.removeChild(target);
@@ -1857,9 +1857,20 @@ var renderPark = window.renderPark = {
         'mod-component': function(target, data, context, component, modFact){
             var 
                 modFact = modFact || component.__modFact,
-                childComponent = modFact.component[context];
+                childComponent = renderPark.eval(renderPark.var2Str(context, data)),
+                $_REG = /(^\$)([^\$]*)$/g,
+                $$_REG = /(^\${2,})(.*)$/g;
 
+            if(context.match($_REG)){
+                childComponent = renderPark.str2Data(context.replace($_REG,'$2'), data);
 
+            } else if(context.match($$_REG)){
+                childComponent = renderPark.str2Data(context.replace($$_REG,'$2'), modFact);
+
+            } else {
+                childComponent = modFact[context];
+            }
+            
             if(/^document/g.test(mod.fn.type(childComponent))){
                 target.appendChild(childComponent);
 
@@ -1959,7 +1970,7 @@ var renderPark = window.renderPark = {
 
             target.parentNode.removeChild(target);
         }
-    },
+    },///}
     element: function(target, data, component, modFact){
         var 
             she = this,
@@ -2060,18 +2071,27 @@ var renderPark = window.renderPark = {
 
     },
 
+    str2Data: function(ctx, data){
+        var iArr = ctx.split(/\.+/g),
+                r = data;
+        for(var i = 0, item, len = iArr.length; i < len; i++){
+            item = iArr[i];
+            r = r[item];
+            if(!r){
+                r = '';
+                break;
+            }
+        }
+
+        return r;
+    },
+
     var2Str: function(ctx, data, globalData){
-        var dataStringify = function(str, data){
-                var iArr = str.split(/\.+/g),
-                    r = data;
-                for(var i = 0, item, len = iArr.length; i < len; i++){
-                    item = iArr[i];
-                    r = r[item];
-                    if(!r){
-                        r = '';
-                        break;
-                    }
-                }
+        var 
+            she = renderPark,
+            dataStringify = function(str, data){
+                var r = she.str2Data(str, data);
+
                 switch(mod.fn.type(r)){
                     case 'number':
                         break;
@@ -2089,6 +2109,7 @@ var renderPark = window.renderPark = {
                 }
                 return r;
             };
+
         // 替换 $\w+ 变量
         ctx = ctx.replace(/([^\$]+|^)\$((\w|\.)+)/g,function(str, $1, val){
             return $1 + dataStringify(val, data);
@@ -2180,7 +2201,11 @@ var renderPark = window.renderPark = {
  *******************************/
 var modFactory = {///{
     class: '',
-    data: {},
+    data: {
+
+        // 组件初始化完成后回调函数
+        onload: function(){}
+    },
     template: '',
     methods: {},
 
@@ -2193,17 +2218,18 @@ var modFactory = {///{
     // 初始化
     init: function(handle ,context, op){///{
         var 
-            modFact = handle.__modFact,
+            modFact = mod.fn.extend(true, {}, modFactory, handle.__modFact),
             $tar = $(context || modFact.class),
             //赋值
             option = modAssignment(modFact.data, op);
-
+        
         $tar.each(function(){
+            
             var 
                 she = this,
                 attr = modAssignment(option, she),
                 iModFact = mod.fn.clone(modFact);
-
+            
             if(isEqual(she.__modOptions, attr)){
                 return;
             }
@@ -2232,12 +2258,13 @@ var modFactory = {///{
 
             }).then(function(she, attr, next){
                 $(she).show();
+                attr.onload.call(she);
                 next(she, attr);
 
             }).then(function(she, attr, next){
                 iModFact.ready(she, attr, next);
 
-            }).start();
+            }).start(); 
         });
 
         return $tar[0];
@@ -2313,7 +2340,7 @@ mod.box = function(context, op){
     return mod.box.__modFact.init(mod.box, context, op);
 };
 
-mod.box.__modFact = mod.fn.extend( undefined, modFactory, {///{
+mod.box.__modFact = mod.fn.extend(undefined, modFactory, {///{
     class: 'mod-module',
     data: {
         title: '',
@@ -2327,7 +2354,7 @@ mod.box.__modFact = mod.fn.extend( undefined, modFactory, {///{
                 '<div class="h_l" mod-if="$titleLeft">{$titleLeft}</div>',
                 '<div class="h_r"  mod-if="$titleRight">{$titleRight}</div>',
         '</div>',
-        '<div class="mod-module_bd" mod-component="content"></div>'
+        '<div class="mod-module_bd" mod-component="$$component.content"></div>'
     ].join(''),
     build: function(target, attr, next){
 
@@ -2415,7 +2442,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
             '<div class="h_l" mod-if="$titleLeft">{$titleLeft}</div>',
             '<div class="h_r"  mod-if="$titleRight">{$titleRight}</div>',
         '</div>',
-        '<div class="mod-tab_bd" mod-component="content"></div>'
+        '<div class="mod-tab_bd" mod-component="$$component.content"></div>'
     ].join(''),
     build: function(target, attr, next){
 
@@ -2511,7 +2538,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
         }
 	    
         // tab 切换触发
-        modFact.attributes.current.call(target, modFact.attributes.index);
+        target.current(target.index);
         next(target, attr);
     },
     methods: {
@@ -2582,9 +2609,57 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
 }); ///}
 
 
+mod.menu = function(context, op){
+    return mod.menu.__modFact.init(mod.menu, context, op);
+};
 
+mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
+    class: 'mod-menu',
+    data: {
+        //显示checkbox
+        checkbox:false,
+        //显示图标
+        icon:true,
 
+        //链接打开方式
+        hrefTarget:"",
 
+        //是否默认展示全部
+        show:false,
+
+        //默认值
+        defaultValue: [],
+
+        //强制重置
+        reset: false
+    },
+    template: [
+        '<ul mod-with="$$extends.menuData">',
+            '<li mod-repeat="$data">',
+                '<div class="mod-box">',
+                    '<i class="mod-swh"></i>',
+                    '<i class="mod-chk"></i>',
+                    '<i class="mod-doc"></i>',
+                    '<span mod-component="$tagA" mod-replace="true"></span>',
+                '</div>',
+                '<ul mod-component="$$template" mod-with="$subMenu" mod-replace="true"></ul>',
+            '</li>',
+        '</ul>'
+    ].join(''),
+    build: function(target, attr, next){
+
+        
+        next(target, attr);
+    },
+    methods: {
+        
+    },
+    
+    attributes: {
+        
+    }
+    
+}); ///}
 
 //模板初始化用函数
 function moduleBuild() {
@@ -7087,7 +7162,7 @@ moduleBuild.prototype = {
 	/**
 	 * menu
 	 */
-	menu:function(target,op){
+	_menu:function(target,op){
 		var $tar = target ? $(target) : $(".mod-menu"),
 			option = {
 				//显示checkbox
