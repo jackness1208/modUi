@@ -144,6 +144,41 @@ mod.fn.extend = function(){
     return target;
 };
 
+mod.fn.makeArray = function(ctx){
+    var iType = mod.fn.type(ctx),
+        r = [],
+        iConcat = Array.prototype.concat;
+
+    switch(iType){
+        case 'array':
+        case 'string':
+            return iConcat.apply(r, ctx);
+
+        case 'object':
+            for(var key in ctx){
+                if(ctx.hasOwnProperty(key)){
+                    r.push(ctx[key])
+                }
+            }
+            return r;
+
+        case 'undefined':
+        case 'null':
+            return r;
+
+        default:
+            if(~iType.indexOf('fragment')){
+                return iConcat.apply(r, ctx.childNodes);
+
+            } else if(~iType.indexOf('html') && ctx.length){
+                return iConcat.apply(r, ctx);
+
+            } else {
+                return iConcat.apply(r, ctx);
+            }
+            
+    }
+};
 
 /**
  * promise 模块
@@ -1857,20 +1892,8 @@ var renderPark = window.renderPark = {
         'mod-component': function(target, data, context, component, modFact){
             var 
                 modFact = modFact || component.__modFact,
-                childComponent = renderPark.eval(renderPark.var2Str(context, data)),
-                $_REG = /(^\$)([^\$]*)$/g,
-                $$_REG = /(^\${2,})(.*)$/g;
+                childComponent = renderPark.var2Data(context, data, modFact);
 
-            if(context.match($_REG)){
-                childComponent = renderPark.str2Data(context.replace($_REG,'$2'), data);
-
-            } else if(context.match($$_REG)){
-                childComponent = renderPark.str2Data(context.replace($$_REG,'$2'), modFact);
-
-            } else {
-                childComponent = modFact[context];
-            }
-            
             if(/^document/g.test(mod.fn.type(childComponent))){
                 target.appendChild(childComponent);
 
@@ -1913,36 +1936,14 @@ var renderPark = window.renderPark = {
             
         },
         'mod-with': function(target, data, context, component, modFact){
-            //TODO
-
-        },
-        'mod-repeat': function(target, data, context, component, modFact){
-            var iDatas = renderPark.eval(renderPark.var2Str(context, data, modFact));
+            var iData = renderPark.str2Data(context, data, modFact);
             
-            iDatas && iDatas.forEach(function(item, i){
-                var 
-                    iItem = target.cloneNode(true),
-                    iModFact = mod.fn.extend(
-                        undefined, 
-                        modFact, {
-                            'index': i
-                        }
-                    );
-
-                iItem.removeAttribute('mod-repeat');
-                renderPark.element(iItem, iDatas[i], component, iModFact);
-                renderPark.template(
-                    iItem, 
-                    iDatas[i],
-                    iItem.innerHTML, 
-                    component,
-                    iModFact
-                );
-                target.parentNode.insertBefore(iItem, target);
+            $(target).find('*').each(function(){
+                renderPark.element(this, iData, component, modFact);
             });
-
-            target.parentNode.removeChild(target);
         },
+        
+        
         'mod-repeat-code': function(target, data, context, component, modFact){
             var 
                 modFact = modFact || component.__modFact,
@@ -1969,7 +1970,46 @@ var renderPark = window.renderPark = {
             });
 
             target.parentNode.removeChild(target);
-        }
+        },
+        'mod-repeat': function(target, data, context, component, modFact){
+            var iDatas = renderPark.var2Data(context, data, modFact);
+            iDatas && iDatas.forEach(function(item, i){
+                var 
+                    iItem = target.cloneNode(true),
+                    iModFact = mod.fn.extend(
+                        undefined, 
+                        modFact, {
+                            'index': i
+                        }
+                    );
+
+                iItem.removeAttribute('mod-repeat');
+                renderPark.element(iItem, iDatas[i], component, iModFact);
+                renderPark.template(
+                    iItem, 
+                    iDatas[i],
+                    iItem.innerHTML, 
+                    component,
+                    iModFact
+                );
+                target.parentNode.insertBefore(iItem, target);
+            });
+
+            target.parentNode.removeChild(target);
+        },
+        // 必须放在最后一个渲染
+        'mod-replace': function(target, data, context, component, modFact){
+            if(context == 'true'){
+                var iFrag = document.createDocumentFragment();
+                while(target.childNodes.length){
+                    iFrag.appendChild(target.childNodes[0]);
+                }
+
+            }
+            target.parentNode.insertBefore(iFrag, target);
+            target.parentNode.removeChild(target);
+
+        },
     },///}
     element: function(target, data, component, modFact){
         var 
@@ -2082,7 +2122,25 @@ var renderPark = window.renderPark = {
                 break;
             }
         }
+        return r;
+    },
 
+    var2Data: function(ctx, data, globalData){
+        var
+            $_REG = /(^\$)([^\$]*)$/g,
+            $$_REG = /(^\${2,})(.*)$/g,
+            r;
+
+            if(ctx.match($_REG)){
+                r = renderPark.str2Data(ctx.replace($_REG,'$2'), data);
+
+            } else if(ctx.match($$_REG)){
+                r = renderPark.str2Data(ctx.replace($$_REG,'$2'), globalData);
+                console.log(ctx.replace($$_REG,'$2'), r);
+
+            } else {
+                r = data[ctx];
+            }
         return r;
     },
 
@@ -2436,7 +2494,9 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
             '<h3 class="h_tl" mod-if="$title" mod-on="click: onToggle"><i class="mod-toggle_icon"></i>{$title}</h3>',
             '<div class="mod-tab_tablist">',
                 '<ul>',
-                    '<li mod-repeat="$$extends.tabs" mod-class="cur: $$index == $$attributes.index"><a href="#{$link}" mod-on="click: tabClick">{$text}</a></li>',
+                    '<li mod-repeat="$$extends.tabs" mod-class="cur: $$index == $$attributes.index">',
+                        '<component mod-component="$$extends.tab[$$index]" mod-replace="true"></component>',
+                    '</li>',
                 '</ul>',
             '</div>',
             '<div class="h_l" mod-if="$titleLeft">{$titleLeft}</div>',
@@ -2447,29 +2507,46 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
     build: function(target, attr, next){
 
         var modFact = target.__modFact,
-            tabsArr = [],
+            els = document.createDocumentFragment(),
+            iType = mod.fn.type(attr.tabs),
             tabCnts = [];
          
         modFact.attributes.index = attr.index;
         
-
+        // [
+        //      {text:'文字', link: 'module01'}
+        // ]
+            
         if(!attr.tabs.length){
-            $(target).children("ul").find('a').each(function(index){
-                var item = this,
-                    iParent = item.parentNode,
-                    iHref = $(item).attr('href');
-                tabsArr.push({
-                    text: item.innerHTML,
-                    link: ~iHref.indexOf('#') ? iHref.split('#').pop(): ''
-                });
-
-                if(~iParent.className.indexOf('cur') && modFact.attributes.index == -1){
-                    modFact.attributes.index = index;
-                }
+            $(target).children('ul').find('a').each(function(){
+                els.appendChild(this);
             });
         } else {
-            tabsArr = mod.fn.extend(undefined, attr.tabs);
+            if(iType == 'array'){
+                attr.tabs.forEach(function(item, i){
+                    var iType = mod.fn.type(item);
+                    if(iType == 'object'){
+                        var iA = document.createElement('a');
+                        iA.href = item.link || 'javascript:;';
+                        iA.innerHTML = item.text;
+                        els.appendChild(iA);
+
+                    } else if(~iType.indexOf('html') && item.tagName == 'A'){
+                        els.appendChild(item);
+
+                    } else if(iType == 'string'){
+                        $(attr.tabs).each(function(){
+                            els.appendChild(this);
+                        });
+                    }
+                });
+            } else if(~iType.indexOf('html')){
+                $(attr.tabs).each(function(){
+                    els.appendChild(this);
+                });
+            }
         }
+        
         modFact.attributes.index == -1 && (modFact.attributes.index = 0);
 
         mod.fn.extend(modFact.component, {
@@ -2477,10 +2554,8 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
         });
 
         mod.fn.extend(modFact.extends, {
-            tabs: tabsArr
+            tabs: mod.fn.makeArray(els)
         });
-
-        tabsArr = modFact.extends.tabs;
         modFact.extends.tabs.forEach(function(item, index){
             if(mod.fn.type(item) != 'object' || !item.link){
                 return;
@@ -2633,22 +2708,37 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
         //强制重置
         reset: false
     },
+    // [
+    //      tag: {text: 'abc', link: 'http://www.baidu.com'},
+    //      checked: true,
+    //      childs: [
+    //              {
+    //                  tag: ...
+    //                  childs: ...
+    //              }
+    //      ]
+    //      
+    // ]
     template: [
-        '<ul mod-with="$$extends.menuData">',
+        '<ul mod-with="$$extends.datas">',
             '<li mod-repeat="$data">',
                 '<div class="mod-box">',
                     '<i class="mod-swh"></i>',
                     '<i class="mod-chk"></i>',
                     '<i class="mod-doc"></i>',
-                    '<span mod-component="$tagA" mod-replace="true"></span>',
+                    '<component mod-component="$tagA" mod-replace="true"></component>',
                 '</div>',
-                '<ul mod-component="$$template" mod-with="$subMenu" mod-replace="true"></ul>',
+                '<component mod-component="$$template" mod-with="$subMenu" mod-replace="true"></component>',
             '</li>',
         '</ul>'
     ].join(''),
     build: function(target, attr, next){
 
-        
+        if(attr.datas){
+            
+        } else {
+
+        }
         next(target, attr);
     },
     methods: {
