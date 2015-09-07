@@ -1882,68 +1882,15 @@ function getObjByKey(obj,str){///{
 
 var renderPark = window.renderPark = {
     attrParse: { ///{
+        // 优先级 赛高 判断
         'mod-if': function(target, data, context, component){
             if(!renderPark.eval(renderPark.var2Str(context, data))){
                 target.parentNode.removeChild(target);
             }
 
         },
-
-        'mod-component': function(target, data, context, component, modFact){
-            var 
-                modFact = modFact || component.__modFact,
-                childComponent = renderPark.var2Data(context, data, modFact);
-
-            if(/^document/g.test(mod.fn.type(childComponent))){
-                target.appendChild(childComponent);
-
-            } else if(mod.fn.type(childComponent) == 'string'){
-                target.innerHTML = childComponent;
-
-            }
-
-        },
-
-        'mod-on': function(target, data, context, component, modFact){
-            var 
-                modFact = modFact || component.__modFact,
-                ctxArr = context.replace(/\s+/g,'').split(','),
-                ctxMap = {};
-
-            ctxArr.forEach(function(item, i){
-                var sArr = item.split(':');
-
-                if(sArr.length > 1 && modFact.methods[sArr[1]]){
-                    target.__modParentComponent = component;
-                    component.__modChildren.push(target);
-                    $(target).bind(sArr[0], modFact.methods[sArr[1]]);
-                }
-            });
-        },
-
-        'mod-class': function(target, data, context, component, modFact){
-            var 
-                ctxArr = context.replace(/\s+/g,'').split(','),
-                ctxMap = {};
-
-            ctxArr.forEach(function(item, i){
-                var sArr = item.split(':');
-                sArr.length > 1
-                    && renderPark.eval(renderPark.var2Str(sArr[1], data, modFact))
-                    && $(target).addClass(sArr[0])
-                    ;
-            });
-            
-        },
-        'mod-with': function(target, data, context, component, modFact){
-            var iData = renderPark.str2Data(context, data, modFact);
-            
-            $(target).find('*').each(function(){
-                renderPark.element(this, iData, component, modFact);
-            });
-        },
         
-        
+        // 优先级 较高的 mod-repeat
         'mod-repeat-code': function(target, data, context, component, modFact){
             var 
                 modFact = modFact || component.__modFact,
@@ -1997,6 +1944,90 @@ var renderPark = window.renderPark = {
 
             target.parentNode.removeChild(target);
         },
+
+        'mod-component': function(target, data, context, component, modFact){
+            var 
+                modFact = modFact || component.__modFact,
+                childComponent = renderPark.var2Data(context, data, modFact);
+            if(/^html/g.test(mod.fn.type(childComponent))){
+                target.appendChild(childComponent);
+            
+
+            } else if(/fragment/g.test(mod.fn.type(childComponent))){
+                while(childComponent.firstChild){
+                    console.log(childComponent.firstChild)
+                    target.appendChild(childComponent.firstChild);
+                }
+
+            } else if(mod.fn.type(childComponent) == 'string'){
+                target.innerHTML = childComponent;
+
+            }
+
+        },
+
+        'mod-on': function(target, data, context, component, modFact){
+
+            var 
+                isReplace = target.getAttribute('mod-replace') == "true",
+                iFn = arguments.callee,
+                modFact = modFact || component.__modFact,
+                ctxArr = context.replace(/\s+/g,'').split(','),
+                ctxMap = {};
+
+            if(isReplace){
+                $(target).children().each(function(i, item){
+                    iFn(item, data, context, component, modFact);
+                });
+                return;
+            }
+
+            ctxArr.forEach(function(item, i){
+                var sArr = item.split(':');
+
+                if(sArr.length > 1 && modFact.methods[sArr[1]]){
+                    target.__modParentComponent = component;
+                    component.__modChildren.push(target);
+                    $(target).bind(sArr[0], modFact.methods[sArr[1]]);
+                }
+            });
+        },
+
+        'mod-class': function(target, data, context, component, modFact){
+            var 
+                isReplace = target.getAttribute('mod-replace') == "true",
+                iFn = arguments.callee,
+                ctxArr = context.replace(/\s+/g,'').split(','),
+                ctxMap = {};
+            
+            if(isReplace){
+                $(target).children().each(function(i, item){
+                    iFn(item, data, context, component, modFact);
+                });
+                return;
+            }
+
+            ctxArr.forEach(function(item, i){
+                var sArr = item.split(':');
+                sArr.length > 1
+                    && renderPark.eval(renderPark.var2Str(sArr[1], data, modFact))
+                    && $(target).addClass(sArr[0])
+                    ;
+            });
+            
+        },
+        'mod-with': function(target, data, context, component, modFact){
+            var 
+                isReplace = target.getAttribute('mod-replace') == "true",
+                iData = renderPark.str2Data(context, data, modFact);
+            
+            $(target).find('*').each(function(){
+                renderPark.element(this, iData, component, modFact);
+            });
+        },
+        
+        
+        
         // 必须放在最后一个渲染
         'mod-replace': function(target, data, context, component, modFact){
             if(context == 'true'){
@@ -2006,6 +2037,7 @@ var renderPark = window.renderPark = {
                 }
 
             }
+
             target.parentNode.insertBefore(iFrag, target);
             target.parentNode.removeChild(target);
 
@@ -2113,11 +2145,31 @@ var renderPark = window.renderPark = {
 
     str2Data: function(ctx, data){
         var iArr = ctx.split(/\.+/g),
-                r = data;
+            r = data,
+            iAttr,
+            MID_KUO_REG = /(\[)(\w+)(\])/g,
+            MID_KUO_ATTR_REG = /(^.+)(\[)(\w+)(\]$)/g
+
         for(var i = 0, item, len = iArr.length; i < len; i++){
             item = iArr[i];
-            r = r[item];
-            if(!r){
+            if(item.match(MID_KUO_REG)){
+                iAttr = item.replace(MID_KUO_ATTR_REG, '$3');
+                !isNaN(iAttr) && (iAttr = Number(iAttr));
+                item = item.replace(MID_KUO_REG, '');
+                r = r[item];
+                if(typeof r != 'object'){
+                    r = '';
+
+                } else {
+                    r = r[iAttr];
+
+                }
+
+            } else {
+                r = r[item];
+
+            }
+            if(!r && r !== 0){
                 r = '';
                 break;
             }
@@ -2129,14 +2181,21 @@ var renderPark = window.renderPark = {
         var
             $_REG = /(^\$)([^\$]*)$/g,
             $$_REG = /(^\${2,})(.*)$/g,
+            STATIC_REG = /([^\$]+)(\$+)((\w|\.)*)/g,
             r;
+            
+            // ctx 预处理， 将字符串里面的 number | string 变量进行实例化
+            ctx = ctx.replace(STATIC_REG, function(str, $1, $2, $3){
+                var r = renderPark.var2Str($2 + $3, data, globalData);
+                return $1 + renderPark.var2Str($2 + $3, data, globalData);
+            });
+
 
             if(ctx.match($_REG)){
                 r = renderPark.str2Data(ctx.replace($_REG,'$2'), data);
 
             } else if(ctx.match($$_REG)){
                 r = renderPark.str2Data(ctx.replace($$_REG,'$2'), globalData);
-                console.log(ctx.replace($$_REG,'$2'), r);
 
             } else {
                 r = data[ctx];
@@ -2495,7 +2554,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
             '<div class="mod-tab_tablist">',
                 '<ul>',
                     '<li mod-repeat="$$extends.tabs" mod-class="cur: $$index == $$attributes.index">',
-                        '<component mod-component="$$extends.tab[$$index]" mod-replace="true"></component>',
+                        '<component mod-component="$$extends.tabs[$$index]" mod-replace="true" mod-on="click:tabClick"></component>',
                     '</li>',
                 '</ul>',
             '</div>',
@@ -2513,10 +2572,7 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
          
         modFact.attributes.index = attr.index;
         
-        // [
-        //      {text:'文字', link: 'module01'}
-        // ]
-            
+        
         if(!attr.tabs.length){
             $(target).children('ul').find('a').each(function(){
                 els.appendChild(this);
@@ -2557,11 +2613,11 @@ mod.tab.__modFact = mod.fn.extend(undefined, modFactory, {///{
             tabs: mod.fn.makeArray(els)
         });
         modFact.extends.tabs.forEach(function(item, index){
-            if(mod.fn.type(item) != 'object' || !item.link){
+            if(!mod.fn.type(item).match(/html/g)){
                 return;
             }
-            
-            var iTarget = $('#' + item.link)[0];
+            var iLink = $(item).attr('href').split('#').pop(),
+                iTarget = $('#' + iLink)[0];
 
             if(iTarget){
                 iTarget.style.display = 'none';

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>内页模板</title>
+<link rel="stylesheet" href="../css/base.css?201502261750">
+
+</head>
+<body>
+<div id="menu">
+    <ul>
+        <li><a href="#">一级标题</a></li>
+        <li>
+            <a href="javascript:;">一级标题</a>
+            <ul>
+                <li><a href="#">二级标题</a></li>
+                <li><a href="#">二级标题</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">一级标题</a>
+            <ul>
+                <li><a href="#">二级标题</a></li>
+                <li>
+                    <a href="#">二级标题</a>
+                    <ul>
+                        <li><a href="#">三级标题</a></li>
+                        <li><a href="#" mod-checked="true">三级标题</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div> 
+
+<script type="text/javascript" src="../js/mod-config.js?201502261750"></script>
+<script>
+mod.menu('#menu');
+</script>
+</body>
+</html>
