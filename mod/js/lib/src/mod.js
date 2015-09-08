@@ -2181,6 +2181,7 @@ var renderPark = window.renderPark = {
         var
             $_REG = /(^\$)([^\$]*)$/g,
             $$_REG = /(^\${2,})(.*)$/g,
+            $$_SELF_REG = /(^\$\$self)(\W?.*$)/g,
             STATIC_REG = /([^\$]+)(\$+)((\w|\.)*)/g,
             r;
             
@@ -2194,6 +2195,13 @@ var renderPark = window.renderPark = {
             if(ctx.match($_REG)){
                 r = renderPark.str2Data(ctx.replace($_REG,'$2'), data);
 
+            } else if(ctx.match($$_SELF_REG)){
+                r = renderPark.str2Data(ctx.replace($$_SELF_REG, 'data$2'), {
+                    'data': data
+                });
+                console.log('data', data)
+                console.log('r', r)
+            
             } else if(ctx.match($$_REG)){
                 r = renderPark.str2Data(ctx.replace($$_REG,'$2'), globalData);
 
@@ -2752,6 +2760,8 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
         //显示图标
         icon:true,
 
+        menus: [],
+
         //链接打开方式
         hrefTarget:"",
 
@@ -2776,25 +2786,118 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
     //      
     // ]
     template: [
-        '<ul mod-with="$$extends.datas">',
-            '<li mod-repeat="$data">',
+        '<ul>',
+            '<li mod-repeat="$$self">',
                 '<div class="mod-box">',
                     '<i class="mod-swh"></i>',
                     '<i class="mod-chk"></i>',
                     '<i class="mod-doc"></i>',
-                    '<component mod-component="$tagA" mod-replace="true"></component>',
+                    '<component mod-component="$tag" mod-replace="true"></component>',
                 '</div>',
-                '<component mod-component="$$template" mod-with="$subMenu" mod-replace="true"></component>',
+                '<component mod-if="$childs" mod-component="$$template" mod-with="$childs" mod-replace="true"></component>',
             '</li>',
         '</ul>'
     ].join(''),
     build: function(target, attr, next){
+        
+        var 
+            modFact = target.__modFact,
+            iFrag = document.createDocumentFragment(),
+            iAs = [];
+        // 数据校验
+        if(attr.menus.length){
+            modFact.extends.menus = mod.fn.extend([], attr.menus);
+            (function deepMe(arr){
+                if(arr && arr.length){
+                    arr.forEach(function(item, i){
+                        if(typeof item.tag == 'object'){
+                            if(!item.tag.nodeType == 1){
+                                var iTag = document.createElement('a');
+                                iTag.innerHTML = item.tag.text || '';
+                                iTag.href = item.tag.link || 'javascript:;';
+                                item.tag = iTag;
 
-        if(attr.datas){
+                            }
+                            iAs.push(item.tag);
+
+                        } else {
+                            delete item.childs;
+                        }
+
+                        deepMe(item.childs);
+                    });
+
+                }
+                
+            })(modFact.extends.menus);
             
+        // 程序捕捉 dom   
         } else {
+            // a tags initial
+            target.__modMenu_childs = [];
+            
+            $(target).find('a').each(function(index, item){
+                var 
+                    pos = item,
+                    $iSiblings = $(item).siblings('a');
 
+                while(pos){
+                    if(pos == target){
+                        target.__modMenu_childs.push(item);
+                        break;
+                    }
+
+                    if($iSiblings.length){
+                        $iSiblings.each(function(){
+                            !this.__modMenu_childs 
+                                && (this.__modMenu_childs = []);
+
+                            this.__modMenu_childs.push(item);
+                        });
+                        break;
+                    }
+
+                    pos = pos.parentNode;
+                    $iSiblings = $(pos).siblings('a');
+                }
+
+                iAs.push(item);
+            });
+
+            // data fills
+            modFact.extends.menus = (function deepIt(iTar){
+                var r;
+                if(!iTar.__modMenu_childs || !iTar.__modMenu_childs.length){
+                    r = undefined;
+
+                } else {
+                    r = [];
+                    iTar.__modMenu_childs.forEach(function(item, i){
+                        
+                        var param = {
+                            tag: item,
+                            childs: deepIt(item)
+                        }
+                        r.push(param);
+                    });
+                }
+                return r;
+
+            })(target);
+            
         }
+
+        iAs.forEach(function(item){
+            iFrag.appendChild(item);
+        });
+
+        console.log(modFact.extends.menus)
+        
+        $(target).addClass(modFact.class);
+        renderPark.template(target, {
+            'childs': modFact.extends.menus
+        });
+
         next(target, attr);
     },
     methods: {
