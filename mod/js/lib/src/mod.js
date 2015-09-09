@@ -1885,6 +1885,12 @@ var renderPark = window.renderPark = {
         // 优先级 赛高 判断
         'mod-if': function(target, data, context, component){
             if(!renderPark.eval(renderPark.var2Str(context, data))){
+                // 清除 所有 模板渲染用属性 以免造成资源浪费 + 死循环
+                for(var key in renderPark.attrParse){
+                    if(renderPark.attrParse.hasOwnProperty(key)){
+                        target.removeAttribute(key);
+                    }
+                }
                 target.parentNode.removeChild(target);
             }
 
@@ -1955,7 +1961,6 @@ var renderPark = window.renderPark = {
 
             } else if(/fragment/g.test(mod.fn.type(childComponent))){
                 while(childComponent.firstChild){
-                    console.log(childComponent.firstChild)
                     target.appendChild(childComponent.firstChild);
                 }
 
@@ -2009,6 +2014,7 @@ var renderPark = window.renderPark = {
 
             ctxArr.forEach(function(item, i){
                 var sArr = item.split(':');
+
                 sArr.length > 1
                     && renderPark.eval(renderPark.var2Str(sArr[1], data, modFact))
                     && $(target).addClass(sArr[0])
@@ -2019,8 +2025,7 @@ var renderPark = window.renderPark = {
         'mod-with': function(target, data, context, component, modFact){
             var 
                 isReplace = target.getAttribute('mod-replace') == "true",
-                iData = renderPark.str2Data(context, data, modFact);
-            
+                iData = renderPark.var2Data(context, data, modFact);
             $(target).find('*').each(function(){
                 renderPark.element(this, iData, component, modFact);
             });
@@ -2067,7 +2072,7 @@ var renderPark = window.renderPark = {
             modFact = modFact || component.__modFact,
             data = data || component.__modOptions,
             context = template || modFact.template,
-        // 先让含有 v-repeat 的 标签 转化成不被渲染的模块
+        // 先让含有 v-repeat 的 标签 转化成不被渲染的模块, 防止被下面的节点渲染掉里面其中的参数变量如 <li>{$data}</li>
         context = (function(ctx){///{
             var 
                 // 属性值匹配
@@ -2199,8 +2204,6 @@ var renderPark = window.renderPark = {
                 r = renderPark.str2Data(ctx.replace($$_SELF_REG, 'data$2'), {
                     'data': data
                 });
-                console.log('data', data)
-                console.log('r', r)
             
             } else if(ctx.match($$_REG)){
                 r = renderPark.str2Data(ctx.replace($$_REG,'$2'), globalData);
@@ -2347,6 +2350,7 @@ var modFactory = {///{
             $tar = $(context || modFact.class),
             //赋值
             option = modAssignment(modFact.data, op);
+
         
         $tar.each(function(){
             
@@ -2358,7 +2362,7 @@ var modFactory = {///{
             if(isEqual(she.__modOptions, attr)){
                 return;
             }
-            
+            mod.fn.extend(iModFact.data, attr);
             
             new mod.fn.Promise().then(function(next){ // 私有属性初始化
                 mod.fn.extend(she, {
@@ -2407,11 +2411,30 @@ var modFactory = {///{
 
     // 对外事件接口
     events: {},
+    
+    // 回收站
+    recycle: {
+        source: [];
+        add: function(anything){
+            this.source.push(anything);
+        },
+
+        clear: function(){
+            this.source.forEach(function(item){
+                delete item
+            });
+            this.source.length = 0;
+        }
+    }
 
     // 摧毁
     destroy: function(){
         var component = this,
             key;
+        
+        // 清除回收站里面内容
+        component.__modFact.recyle.clear();
+
         delete component.__modFact;
         delete component.__modOptions;
 
@@ -2756,17 +2779,17 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
     class: 'mod-menu',
     data: {
         //显示checkbox
-        checkbox:false,
+        checkbox: false,
         //显示图标
-        icon:true,
+        icon: true,
 
         menus: [],
 
         //链接打开方式
-        hrefTarget:"",
+        hrefTarget: "",
 
         //是否默认展示全部
-        show:false,
+        show: false,
 
         //默认值
         defaultValue: [],
@@ -2775,7 +2798,13 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
         reset: false
     },
     // [
-    //      tag: {text: 'abc', link: 'http://www.baidu.com'},
+    //      tag: {
+    //          text: 'abc', 
+    //          link: 'http://www.baidu.com', 
+    //          target: '_blank',
+    //          value: '1',
+    //          checked:
+    //      },
     //      checked: true,
     //      childs: [
     //              {
@@ -2788,13 +2817,13 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
     template: [
         '<ul>',
             '<li mod-repeat="$$self">',
-                '<div class="mod-box">',
-                    '<i class="mod-swh"></i>',
-                    '<i class="mod-chk"></i>',
+                '<div class="mod-box" mod-class="mod-withsub: $childs.length, mod-menu_nochk: !$$data.checkbox, mod-menu_nodoc: !$$data.icon">',
+                    '<i class="mod-swh" mod-on="click: swhClick"></i>',
+                    '<i class="mod-chk" mod-on="click: chkClick"></i>',
                     '<i class="mod-doc"></i>',
-                    '<component mod-component="$tag" mod-replace="true"></component>',
+                    '<component mod-component="$tag" mod-replace="true" mod-on="click: tagClick"></component>',
                 '</div>',
-                '<component mod-if="$childs" mod-component="$$template" mod-with="$childs" mod-replace="true"></component>',
+                '<component mod-if="$childs.length" mod-component="$$template" mod-with="$childs" mod-replace="true""></component>',
             '</li>',
         '</ul>'
     ].join(''),
@@ -2803,7 +2832,21 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
         var 
             modFact = target.__modFact,
             iFrag = document.createDocumentFragment(),
-            iAs = [];
+            iAs = [],
+            aTag2Data = function(el){
+                var
+                    chk = el.getAttribute('mod-checked'),
+                    val = el.getAttribute('mod-value');
+
+                return {
+                    value: val,
+                    checked: chk && chk.match(/true|checked/)
+                        ? true
+                        : false
+                };
+            };
+
+
         // 数据校验
         if(attr.menus.length){
             modFact.extends.menus = mod.fn.extend([], attr.menus);
@@ -2815,9 +2858,17 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
                                 var iTag = document.createElement('a');
                                 iTag.innerHTML = item.tag.text || '';
                                 iTag.href = item.tag.link || 'javascript:;';
+
+                                if(item.tag.target){
+                                    iTag.target = item.tag.target;
+                                }
+
                                 item.tag = iTag;
 
+                            } else {
+                                mod.fn.extend(item, aTag2Data(item.tag));
                             }
+
                             iAs.push(item.tag);
 
                         } else {
@@ -2877,7 +2928,9 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
                         var param = {
                             tag: item,
                             childs: deepIt(item)
-                        }
+                        };
+
+                        mod.fn.extend(param, aTag2Data(item));
                         r.push(param);
                     });
                 }
@@ -2891,17 +2944,66 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
             iFrag.appendChild(item);
         });
 
-        console.log(modFact.extends.menus)
-        
         $(target).addClass(modFact.class);
-        renderPark.template(target, {
-            'childs': modFact.extends.menus
-        });
+        
 
+        renderPark.template(target, modFact.extends.menus);
+        
+        // 初始化
+        $(target).find('mod-chk').each(function(i,chk){
+            var 
+                box = chk.parentNode,
+                iLi = box.parentNode;
+
+            if(~box.className.indexOf('mod-withsub')){
+                
+            }
+        });
         next(target, attr);
     },
     methods: {
-        
+        chkClick: function(){
+            var 
+                component = this.__modParentComponent,
+                attr = component.__modOptions,
+                chk = this,
+                iBox = chk.parentNode,
+                iLi = box.parentNode;
+
+            if(!attr.checkbox){
+                return;
+            }
+
+            if(~box.className.indexOf('mod-withsub')){
+                
+            }
+
+
+        },
+        swhClick: function(){
+            var 
+                component = this.__modParentComponent,
+                iBox = this.parentNode;
+
+            if(iBox.className.indexOf("mod-withsub") == -1){
+                return;
+            }
+            iBox.className.indexOf("mod-show") != -1?(
+                $(iBox).removeClass("mod-show").siblings("ul").slideUp(200)
+            ):(
+                $(iBox).addClass("mod-show").siblings("ul").slideDown(200)
+            );
+
+        },
+        tagClick: function(){
+            var 
+                component = this.__modParentComponent,
+                attr = component.__modOptions;
+
+            if(attr.checkbox){
+                $(this).siblings('.mod-chk').trigger('click');
+            }
+        }
     },
     
     attributes: {
