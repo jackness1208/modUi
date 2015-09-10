@@ -13,7 +13,7 @@
         <li>
             <a href="javascript:;">一级标题</a>
             <ul>
-                <li><a href="#">二级标题</a></li>
+                <li><a href="#" mod-checked="checked">二级标题</a></li>
                 <li><a href="#">二级标题</a></li>
             </ul>
         </li>
@@ -38,6 +38,7 @@
 <script>
 mod.menu('#menu');
 
+console.log($('#menu')[0].get());
 // mod.menu('#menu2', {
 //     menus: [{
 //         tag: {text:'一级菜单', link:'#'},

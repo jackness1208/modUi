@@ -2022,6 +2022,33 @@ var renderPark = window.renderPark = {
             });
             
         },
+        'mod-attr': function(target, data, context, component, modFact){
+            var 
+                isReplace = target.getAttribute('mod-replace') == "true",
+                iFn = arguments.callee,
+                ctxArr = context.replace(/\s+/g,'').split(','),
+                ctxMap = {};
+            
+            if(isReplace){
+                $(target).children().each(function(i, item){
+                    iFn(item, data, context, component, modFact);
+                });
+                return;
+            }
+
+            ctxArr.forEach(function(item, i){
+                var 
+                    sArr = item.split(':'),
+                    val;
+
+                if(sArr.length){
+                    val = renderPark.eval(renderPark.var2Str(sArr[1], data, modFact));
+                    if(typeof val != 'object'){
+                        target.setAttribute(sArr[0], val);
+                    }
+                }
+            });
+        },
         'mod-with': function(target, data, context, component, modFact){
             var 
                 isReplace = target.getAttribute('mod-replace') == "true",
@@ -2410,22 +2437,60 @@ var modFactory = {///{
     },
 
     // 对外事件接口
-    events: {},
+    attributes: {
+        remove: function(){
+            var modFact = this.__modFact;
+            modFact.destroy.call(this);
+        }
+    },
     
     // 回收站
     recycle: {
-        source: [];
-        add: function(anything){
-            this.source.push(anything);
+        source: [],
+        add: function(el, source, val){
+            var iType = mod.fn.type(source),
+                iAttrs = [];
+
+            switch( iType ){
+                case 'array':
+                    iAttrs = source;
+                    break;
+
+                case 'object':
+                    for(var key in source){
+                        if(source.hasOwnProperty(key)){
+                            iAttrs.push(key);
+                            el[key] = source[key];
+                        }
+                    }
+                    break;
+
+                case 'string':
+                    iAttrs.push(source);
+                    if(val){
+                        el[source] = val;
+                    }
+
+                    break;
+            }
+            
+            this.source.push({
+                'el': el,
+                'attrs': iAttrs
+            });
         },
 
         clear: function(){
             this.source.forEach(function(item){
-                delete item
+                if(item.el){
+                    item.attrs.forEach(function(attr){
+                        delete item.el[attr];
+                    });
+                }
             });
             this.source.length = 0;
         }
-    }
+    },
 
     // 摧毁
     destroy: function(){
@@ -2433,7 +2498,8 @@ var modFactory = {///{
             key;
         
         // 清除回收站里面内容
-        component.__modFact.recyle.clear();
+        console.log(component.__modFact)
+        component.__modFact.recycle.clear();
 
         delete component.__modFact;
         delete component.__modOptions;
@@ -2460,6 +2526,9 @@ var modFactory = {///{
         }
 
         delete component.__modTimeouts;
+
+        // 清除元素
+        $(component).remove();
     }
 };///}
 
@@ -2817,9 +2886,14 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
     template: [
         '<ul>',
             '<li mod-repeat="$$self">',
-                '<div class="mod-box" mod-class="mod-withsub: $childs.length, mod-menu_nochk: !$$data.checkbox, mod-menu_nodoc: !$$data.icon">',
+                '<div class="mod-box" mod-class="',
+                    'mod-withsub: $childs.length, ',
+                    'mod-menu_nochk: !$$data.checkbox, ',
+                    'mod-menu_nodoc: !$$data.icon, ',
+                    'mod-chk_checked: $checked',
+                '">',
                     '<i class="mod-swh" mod-on="click: swhClick"></i>',
-                    '<i class="mod-chk" mod-on="click: chkClick"></i>',
+                    '<i class="mod-chk" mod-on="click: chkClick" mod-attr="value: $value, checked: $checked"></i>',
                     '<i class="mod-doc"></i>',
                     '<component mod-component="$tag" mod-replace="true" mod-on="click: tagClick"></component>',
                 '</div>',
@@ -2858,9 +2932,13 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
                                 var iTag = document.createElement('a');
                                 iTag.innerHTML = item.tag.text || '';
                                 iTag.href = item.tag.link || 'javascript:;';
+                                
+                                if(attr.hrefTarget){
+                                    iTag.target = attr.hrefTarget;
 
-                                if(item.tag.target){
+                                } else if(item.tag.target){
                                     iTag.target = item.tag.target;
+
                                 }
 
                                 item.tag = iTag;
@@ -2885,12 +2963,16 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
         // 程序捕捉 dom   
         } else {
             // a tags initial
-            target.__modMenu_childs = [];
+            modFact.recycle.add(target, '__modMenu_childs', []);
             
             $(target).find('a').each(function(index, item){
                 var 
                     pos = item,
                     $iSiblings = $(item).siblings('a');
+
+                if(attr.hrefTarget){
+                    item.target = attr.hrefTarget
+                }
 
                 while(pos){
                     if(pos == target){
@@ -2927,7 +3009,9 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
                         
                         var param = {
                             tag: item,
-                            childs: deepIt(item)
+                            childs: deepIt(item),
+                            value: item.getAttribute('mod-value') || '',
+                            checked: item.getAttribute('mod-checked') || ''
                         };
 
                         mod.fn.extend(param, aTag2Data(item));
@@ -2950,34 +3034,143 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
         renderPark.template(target, modFact.extends.menus);
         
         // 初始化
-        $(target).find('mod-chk').each(function(i,chk){
+        $(target).find('.mod-chk').each(function(i, chk){
             var 
                 box = chk.parentNode,
                 iLi = box.parentNode;
 
             if(~box.className.indexOf('mod-withsub')){
-                
+                modFact.recycle.add(chk, {
+                    iCells: $(box).siblings("ul").find('.mod-chk'),
+                    delayKey: undefined,
+
+                    check: function(){
+                        clearTimeout(chk.delayKey);
+
+                        var have = false,
+                            checkall = true;
+
+                        chk.delayKey = setTimeout(function(){
+                            var 
+                                i, len, fs;
+
+                            for(i = 0, len = chk.iCells.length; i < len; i++){
+                                fs = chk.iCells[i].parentNode;
+                                !~fs.className.indexOf("mod-chk_checked")
+                                    ? checkall = false
+                                    : have = true 
+                                    ;
+                            }
+
+                            $(chk).parent().removeClass("mod-chk_checked").removeClass("mod-chk_include");
+
+                            if(checkall){
+                                $(chk).parent().addClass("mod-chk_checked");
+
+                            } else if(have){
+                                $(chk).parent().addClass("mod-chk_include");
+
+                            }
+
+                        },40);
+                    }
+                });
+
+                chk.check();
+
+            } else {
+                var iUl = iLi,
+                    times = 0,
+                    fchk;
+
+                modFact.recycle.add(chk, 'iParent', []);
+
+                iUl = iUl.parentNode;
+                while(iUl){
+                    if(iUl.className.indexOf("mod-menu") != -1){
+                        break;
+                    }
+
+                    if(iUl.tagName == "UL"){
+                        fchk = $(iUl).siblings(".mod-box").find(".mod-chk")[0];
+                        fchk && chk.iParent.push(fchk);
+                    }
+
+
+                    times++;
+                    if(times > 1000){
+                        break;
+                    }
+
+                    iUl = iUl.parentNode;
+                }
             }
+
         });
+
+        //设置默认值
+        var iDefaultVal;
+        if(typeof attr.defaultValue == 'string'){
+            iDefaultVal = attr.defaultValue.split(',');
+
+        } else {
+            iDefaultVal = attr.defaultValue;
+        }
+
+        if(attr.checkbox && mod.fn.type(iDefaultVal) == 'array'){
+            // 等于默认值的 勾上
+            $(target).find(".mod-chk").each(function(){
+                if(~attr.defaultValue.indexOf(this.value)){
+                    $(this).trigger('click');
+
+                }
+            });
+
+            setTimeout(function(){
+                // 子分类勾上但没全勾上的 展开
+                $(target).find('.mod-withsub.mod-chk_include').addClass('mod-show').siblings('ul').show();
+                // 子分类都勾上的 收起
+                $(target).find('.mod-withsub.mod-chk_checked').removeClass('mod-show').siblings('ul').hide();
+
+            },100);
+        }
+
         next(target, attr);
     },
     methods: {
         chkClick: function(){
+            
             var 
                 component = this.__modParentComponent,
                 attr = component.__modOptions,
-                chk = this,
-                iBox = chk.parentNode,
-                iLi = box.parentNode;
+                chk = this;
 
-            if(!attr.checkbox){
-                return;
+            if(chk.check){ //包含子级
+                if(chk.parentNode.className.indexOf("mod-chk_checked") != -1){
+                    $(chk).parent().removeClass("mod-chk_checked");
+
+                    $(chk.iCells).each(function(){
+                        $(this).parent().removeClass("mod-chk_include").removeClass("mod-chk_checked");
+                    });
+
+                } else {
+                    $(chk).parent().addClass("mod-chk_checked");
+                    
+                    $(chk.iCells).each(function(){
+                        $(this).parent().removeClass("mod-chk_include").addClass("mod-chk_checked");
+                    });
+                }
+
+                $(chk).parent().removeClass("mod-chk_include");
+
+            } else { // 没有子级
+                $(chk).parent().toggleClass("mod-chk_checked");
+                $(chk.iParent).each(function(){
+                    this.check();
+                });
             }
 
-            if(~box.className.indexOf('mod-withsub')){
-                
-            }
-
+            
 
         },
         swhClick: function(){
@@ -3007,7 +3200,86 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
     },
     
     attributes: {
-        
+        get: function(type){
+            // TODO 无效
+            // var 
+            //     r = [],
+            //     she = this;
+
+            // switch(type){
+            //     //所有
+            //     case "all":
+            //         $(she).find(".mod-chk").each(function(){
+            //             this.value && r.push(this.value);
+            //         });
+            //         break;
+
+            //     //选中
+            //     case "checked":
+            //         $(she).find(".mod-chk_checked").children('.mod-chk').each(function(){
+            //             this.value && r.push(this.value);
+            //         });
+            //         break;
+
+            //     //未选中
+            //     case "unchecked":
+            //         $(she).find(".mod-chk").each(function(){
+            //             this.parentNode.className.indexOf("mod-chk_checked") == -1 && this.value && r.push(this.value);
+            //         });
+            //         break;
+
+            //     default:
+            //         $(she).find(".mod-chk").each(function(){
+            //             this.value && r.push(this.value);
+            //         });
+            //         break;
+            // }
+
+            // return r;
+
+        },
+        current: function(href){
+            // TODO 未测试
+            // var 
+            //     she = this,
+            //     isSameComes = function(url1,url2){
+            //         if(!url1 || !url2){
+            //             return false;
+            //         }
+
+            //         var u1 = url1.split("#")[0],
+            //             u2 = url2.split("#")[0];
+            //         return u1 == u2;
+            //     };
+
+            // $(she).find("a").each(function(){
+            //     isSameComes(this.href,href)? $(this).parent().addClass("mod-cur"): $(this).parent().removeClass("mod-cur");
+            // });
+
+            // $(she).find(".mod-cur").each(function(){
+            //     //向上递归设置
+            //     var myUl = this.parentNode,
+            //         times = 0;
+
+            //     myUl = myUl.parentNode;
+            //     while(myUl){
+            //         if(myUl.className.indexOf("mod-menu") != -1){
+            //             break;
+            //         }
+
+            //         if(myUl.tagName == "UL"){
+            //             $(myUl).slideDown(200).siblings(".mod-box").addClass("mod-show");
+            //         }
+
+                    
+            //         myUl = myUl.parentNode;
+            //     }
+
+            //     //向下
+            //     $(this).siblings("ul").slideDown(200).siblings(".mod-box").addClass("mod-show");
+            // });
+            
+        },
     }
     
 }); ///}
@@ -7510,351 +7782,6 @@ moduleBuild.prototype = {
 		return bsPopup(type,op);
 	},
 
-	/**
-	 * menu
-	 */
-	_menu:function(target,op){
-		var $tar = target ? $(target) : $(".mod-menu"),
-			option = {
-				//显示checkbox
-				checkbox:false,
-				//显示图标
-				icon:true,
-
-				//链接打开方式
-				hrefTarget:"",
-
-				//是否默认展示全部
-				show:false,
-
-				//默认值
-				defaultValue: [],
-
-				//强制重置
-				reset: false
-
-			};
-
-		
-		//赋值
-		option = modAssignment(option,op);
-
-
-
-		//重构
-		$tar.each(function() {
-
-			var she = this,
-				myClass = "",
-				attr = modAssignment(option,she);
-
-
-
-			if(isEqual(she.opAttr,attr) && !option.reset){
-				return;
-			}
-
-			$(she).addClass("mod-menu");
-
-			//设置是否有 icon checkbox
-			attr.checkbox? $(she).removeClass("mod-menu_nochk"): $(she).addClass("mod-menu_nochk");
-			attr.icon? $(she).removeClass("mod-menu_nodoc"): $(she).addClass("mod-menu_nodoc");
-
-			$(she).find("a").each(function(){
-				var me = this,
-					myLi = me.parentNode,
-					box, swh, chk, doc;
-
-				//模块重构
-				if(myLi.tagName == "LI"){
-					box = document.createElement("div");
-					box.className = "mod-box";
-
-					swh = document.createElement("i");
-					swh.className = "mod-swh";
-
-					chk = document.createElement("i");
-					chk.className = "mod-chk";
-
-					doc = document.createElement("i");
-					doc.className = "mod-doc";
-
-					box.appendChild(swh);
-					box.appendChild(chk);
-					box.appendChild(doc);
-
-					me.parentNode.insertBefore(box,me);
-					box.appendChild(me);
-
-					
-
-				} else if(myLi.className.indexOf("mod-box") != -1){
-					box = myLi;
-					myLi = myLi.parentNode;
-					swh = $(box).find(".mod-swh")[0];
-					chk = $(box).find(".mod-chk")[0];
-
-				} else {
-					return;
-
-				}
-
-				//a标签调整
-				attr.hrefTarget && (me.target = attr.hrefTarget);
-				me.title = (me.textContent || me.innerText).replace(/\t|\r|\n/g,' ').replace(/\s+/g,' ');
-
-				//样式调整
-				$(myLi).find("ul").length !== 0 ? $(box).addClass("mod-withsub"): $(box).removeClass("mod-withsub");
-
-				if(attr.checkbox){
-					$(me).attr("mod-checked")? $(chk).parent().addClass("mod-chk_checked"): $(chk).parent().removeClass("mod-chk_checked");
-
-					me.href = "javascript:;";
-					me.target = "";
-
-					chk.value = $(me).attr("mod-value");
-
-					me.onclick = function(){
-						$(chk).trigger("click");
-					};
-
-
-				} else {
-					me.onclick = chk.onclick = null;
-					if(/^javascript:/ig.test(me.href)){
-						me.target = "";
-						me.onclick = function(){
-							$(swh).trigger("click");
-						};
-					}
-				}
-
-				//事件绑定
-				swh.onclick = function(){
-					var myBox = this.parentNode;
-
-					if(myBox.className.indexOf("mod-withsub") == -1){
-						return;
-					}
-					myBox.className.indexOf("mod-show") != -1?(
-						$(myBox).removeClass("mod-show").siblings("ul").slideUp(200)
-					):(
-						$(myBox).addClass("mod-show").siblings("ul").slideDown(200)
-					);
-				};
-
-				attr.show && swh.parentNode.className.indexOf("mod-show") == -1 && $(swh).trigger("click");
-			});
-
-			if(attr.checkbox){
-				$(she).find(".mod-chk").each(function(){
-					var chk = this,
-						box = chk.parentNode,
-						myLi = box.parentNode;
-
-
-					//全选类
-					if(box.className.indexOf("mod-withsub") != -1){
-						chk.myCells = $(box).siblings("ul").find(".mod-chk");
-
-						chk.check = function(){
-
-							clearTimeout(chk.delayKey);
-
-							var have = false,
-								checkall = true;
-
-							chk.delayKey = setTimeout(function(){
-								var i, len, fs;
-								for(i = 0, len = chk.myCells.length; i < len; i++){
-									fs = chk.myCells[i].parentNode;
-									fs.className.indexOf("mod-chk_checked") == -1? checkall = false: have = true;
-
-								}
-								$(chk).parent().removeClass("mod-chk_checked").removeClass("mod-chk_include");
-
-								if(checkall){
-									$(chk).parent().addClass("mod-chk_checked");
-
-								} else if(have){
-									$(chk).parent().addClass("mod-chk_include");
-
-								}
-
-							},40);
-							
-						};
-
-						chk.onclick = function(){
-
-							var me = this;
-							if(me.parentNode.className.indexOf("mod-chk_checked") != -1){
-								$(me).parent().removeClass("mod-chk_checked");
-
-								$(me.myCells).each(function(){
-									$(this).parent().removeClass("mod-chk_include").removeClass("mod-chk_checked");
-								});
-
-							} else {
-								$(me).parent().addClass("mod-chk_checked");
-								
-								$(me.myCells).each(function(){
-									$(this).parent().removeClass("mod-chk_include").addClass("mod-chk_checked");
-								});
-							}
-
-							$(me).parent().removeClass("mod-chk_include");
-							
-						};
-
-						chk.check();
-
-					//子选类
-					} else {
-						var myUl = myLi,
-							times = 0,
-							fchk;
-
-						chk.myParents = [];
-						myUl = myUl.parentNode;
-						while(myUl){
-							if(myUl.className.indexOf("mod-menu") != -1){
-								break;
-							}
-
-							if(myUl.tagName == "UL"){
-								fchk = $(myUl).siblings(".mod-box").find(".mod-chk")[0];
-								fchk && chk.myParents.push(fchk);
-							}
-
-
-							times++;
-							if(times > 1000){
-								break;
-							}
-
-							myUl = myUl.parentNode;
-						}
-
-						chk.onclick = function(){
-							var me = this;
-							$(me).parent().toggleClass("mod-chk_checked");
-							$(me.myParents).each(function(){
-								this.check();
-							});
-						};
-					}
-
-					
-				});
-			}
-		
-			//获取结果
-			she.get = function(type){
-				var r = [];
-				switch(type){
-					//所有
-					case "all":
-						$(she).find(".mod-chk").each(function(){
-							this.value && r.push(this.value);
-						});
-						break;
-
-					//选中
-					case "checked":
-						$(she).find(".mod-chk_checked").children('.mod-chk').each(function(){
-							this.value && r.push(this.value);
-						});
-						break;
-
-					//未选中
-					case "unchecked":
-						$(she).find(".mod-chk").each(function(){
-							this.parentNode.className.indexOf("mod-chk_checked") == -1 && this.value && r.push(this.value);
-						});
-						break;
-
-					default:
-						$(she).find(".mod-chk").each(function(){
-							this.value && r.push(this.value);
-						});
-						break;
-				}
-
-				return r;
-
-			};
-
-			//设定选中的菜单
-			she.current = function(href){
-				var isSameComes = function(url1,url2){
-					if(!url1 || !url2){
-						return false;
-					}
-
-					var u1 = url1.split("#")[0],
-						u2 = url2.split("#")[0];
-					return u1 == u2;
-				};
-
-				$(she).find("a").each(function(){
-					isSameComes(this.href,href)? $(this).parent().addClass("mod-cur"): $(this).parent().removeClass("mod-cur");
-				});
-
-				$(she).find(".mod-cur").each(function(){
-					//向上递归设置
-					var myUl = this.parentNode,
-						times = 0;
-
-					myUl = myUl.parentNode;
-					while(myUl){
-						if(myUl.className.indexOf("mod-menu") != -1){
-							break;
-						}
-
-						if(myUl.tagName == "UL"){
-							$(myUl).slideDown(200).siblings(".mod-box").addClass("mod-show");
-						}
-
-						
-						myUl = myUl.parentNode;
-					}
-
-					//向下
-					$(this).siblings("ul").slideDown(200).siblings(".mod-box").addClass("mod-show");
-				});
-			};
-
-			//设置默认值
-			if(typeof attr.defaultValue == 'string'){
-				attr.defaultValue = attr.defaultValue.split(',');
-			}
-			if(attr.checkbox && isArray(attr.defaultValue)){
-				// 等于默认值的 勾上
-				$(she).find(".mod-chk").each(function(){
-					if(attr.defaultValue.indexOf(this.value) != -1){
-						$(this).trigger('click');
-						
-
-						
-					}
-				});
-
-				setTimeout(function(){
-					// 子分类勾上但没全勾上的 展开
-					$(she).find('.mod-withsub.mod-chk_include').addClass('mod-show').siblings('ul').show();
-					// 子分类都勾上的 收起
-					$(she).find('.mod-withsub.mod-chk_checked').removeClass('mod-show').siblings('ul').hide();
-
-				},100);
-			}
-			
-			
-			she.opAttr = attr;
-		});
-
-		return $tar[0];
-	},
 
 	/**
 	 * 
