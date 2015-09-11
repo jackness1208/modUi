@@ -3278,6 +3278,175 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
     
 }); ///}
 
+mod.dialog = function(context, op){
+    return mod.dialog.__modFact.init(mod.dialog, context, op);
+};
+
+mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
+    class: 'mod-dialog',
+    data: {
+        //标题
+        title: "温馨提示",
+        //内容
+        content: "",
+        //显示时间
+        timeout: 2000,
+        //必须先确认
+        mustConfirm: false,
+        //回调函数
+        callback: function() {},
+        //取消操作的时候回调的函数
+        cancelCallback: function() {},
+
+        //加载完成时候
+        onload:function(){},
+
+        type:"normal",
+
+        width:"",
+        height:"auto",
+        zIndex:mod.options.popup.zIndex,
+
+        //默认显示
+        show:true,
+
+        //是否置顶
+        top:false,
+
+        //允许调整宽高
+        resize:mod.options.popup.resize,
+
+        //允许最小化
+        minimize:mod.options.popup.minimize,
+
+        //弹窗默认显示状态：normal|max
+        sizingType:"normal",
+
+        //是否显示关闭按钮
+        close:true,
+
+        //loading 用参数
+        overtime: 8000,
+        delay: 1000,
+        appendTarget: document.body,
+        onovertime: function() {}
+    },
+    
+    template: [
+        
+    ].join(''),
+
+    init: function(handle, context, op){
+        var she = this;
+
+        if(!document.body){
+            she.readyKey = setTimeout(function(){
+                she(handle, context, op);
+            }, 200);
+            return;
+        } else {
+            clearTimeout(she.readyKey);
+        }
+
+        var 
+            modFact = mod.fn.extend(true, {}, modFactory, handle.__modFact),
+            $tar = $(context),
+            //赋值
+            option = modAssignment(modFact.data, op),
+            initHandle;
+
+        if(!$tar.length){
+            var el = document.createElement('div');
+            el.id = context;
+            $tar = $(el);
+
+        }
+
+        $tar.each(function(){
+            
+            var 
+                she = this,
+                attr = modAssignment(option, she),
+                iModFact = mod.fn.clone(modFact);
+            
+            if(isEqual(she.__modOptions, attr)){
+                return;
+            }
+            mod.fn.extend(iModFact.data, attr);
+            
+            new mod.fn.Promise().then(function(next){ // 私有属性初始化
+                mod.fn.extend(she, {
+                    __modFact: iModFact,
+                    __modOptions: attr,
+                    __modChildren: [],
+                    __modAttributes: {},
+                    __modTimeouts: {}
+                });
+                next(she, attr);
+
+            }).then(function(she, attr, next){ // 对外方法绑定
+                for(var key in iModFact.attributes){
+                    if(iModFact.attributes.hasOwnProperty(key)){
+                        she[key] = she.__modAttributes[key] = iModFact.attributes[key];
+                    }
+                }
+                next(she, attr);
+
+            }).then(function(she, attr, next){ // 构造
+                iModFact.build(she, attr, next);
+
+            }).then(function(she, attr, next){
+                $(she).show();
+                attr.onload.call(she);
+                next(she, attr);
+
+            }).then(function(she, attr, next){
+                iModFact.ready(she, attr, next);
+
+            }).start(); 
+        });
+        // initHandle = function(){
+
+        // };
+        return $tar[0];
+        
+
+
+    },
+
+    build: function(target, attr, next){
+        
+        var 
+            modFact = target.__modFact;
+          
+
+        $(target).addClass(modFact.class);
+        
+        //..TODO
+
+        renderPark.template(target, modFact.extends.menus);
+        
+        next(target, attr);
+    },
+    methods: {
+        
+    },
+    
+    attributes: {
+        show: function(){
+            //TODO...
+        },
+
+        hide: function(){
+            //TODO...
+        },
+
+        fixed: function(){
+            //TODO...
+        }
+    }
+});
+
 //模板初始化用函数
 function moduleBuild() {
 	//this.init();
@@ -7772,7 +7941,7 @@ moduleBuild.prototype = {
 	 *                  - pop.show()     弹窗显示
 	 *                  - pop.hide()     弹窗隐藏
 	 */
-	dialog:function(type,op){
+	_dialog:function(type,op){
 		return bsPopup(type,op);
 	},
 
