@@ -9,23 +9,23 @@
 <body>
 <div id="menu" class="mod-menu" mod-checkbox="true">
     <ul>
-        <li><a href="#">一级标题</a></li>
+        <li><a href="http://www.baidu.com/">一级标题</a></li>
         <li>
-            <a href="javascript:;">一级标题</a>
+            <a href="http://www.56.com/">一级标题</a>
             <ul>
-                <li><a href="#" mod-checked="checked">二级标题</a></li>
-                <li><a href="#">二级标题</a></li>
+                <li><a href="http://www.aa.com" mod-checked="checked" mod-value="123">二级标题</a></li>
+                <li><a href="http://www.bb.com">二级标题</a></li>
             </ul>
         </li>
         <li>
-            <a href="#">一级标题</a>
+            <a href="javascript:;">一级标题</a>
             <ul>
-                <li><a href="#">二级标题</a></li>
+                <li><a href="http://www.cc.cm">二级标题</a></li>
                 <li>
-                    <a href="#">二级标题</a>
+                    <a href="http://www.dd.com">二级标题</a>
                     <ul>
-                        <li><a href="#">三级标题</a></li>
-                        <li><a href="#" mod-checked="true">三级标题</a></li>
+                        <li><a href="http://www.ee.com">三级标题</a></li>
+                        <li><a href="http://www.ff.com" mod-checked="true">三级标题</a></li>
                     </ul>
                 </li>
             </ul>
@@ -39,6 +39,7 @@
 mod.menu('#menu');
 
 console.log($('#menu')[0].get());
+$('#menu')[0].current('http://www.aa.com/')
 // mod.menu('#menu2', {
 //     menus: [{
 //         tag: {text:'一级菜单', link:'#'},

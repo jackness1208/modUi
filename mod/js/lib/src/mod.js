@@ -2498,7 +2498,6 @@ var modFactory = {///{
             key;
         
         // 清除回收站里面内容
-        console.log(component.__modFact)
         component.__modFact.recycle.clear();
 
         delete component.__modFact;
@@ -2893,7 +2892,7 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
                     'mod-chk_checked: $checked',
                 '">',
                     '<i class="mod-swh" mod-on="click: swhClick"></i>',
-                    '<i class="mod-chk" mod-on="click: chkClick" mod-attr="value: $value, checked: $checked"></i>',
+                    '<i class="mod-chk" mod-on="click: chkClick" mod-attr="data-value: $value, data-checked: $checked"></i>',
                     '<i class="mod-doc"></i>',
                     '<component mod-component="$tag" mod-replace="true" mod-on="click: tagClick"></component>',
                 '</div>',
@@ -3152,6 +3151,7 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
                     $(chk.iCells).each(function(){
                         $(this).parent().removeClass("mod-chk_include").removeClass("mod-chk_checked");
                     });
+                    $(chk).attr('data-checked', false);
 
                 } else {
                     $(chk).parent().addClass("mod-chk_checked");
@@ -3159,6 +3159,7 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
                     $(chk.iCells).each(function(){
                         $(this).parent().removeClass("mod-chk_include").addClass("mod-chk_checked");
                     });
+                    $(chk).attr('data-checked', true);
                 }
 
                 $(chk).parent().removeClass("mod-chk_include");
@@ -3202,82 +3203,75 @@ mod.menu.__modFact = mod.fn.extend(undefined, modFactory, {///{
     attributes: {
         get: function(type){
             // TODO 无效
-            // var 
-            //     r = [],
-            //     she = this;
+            var 
+                r = [],
+                ctx,
+                she = this;
 
-            // switch(type){
-            //     //所有
-            //     case "all":
-            //         $(she).find(".mod-chk").each(function(){
-            //             this.value && r.push(this.value);
-            //         });
-            //         break;
+            switch(type){
+                //选中
+                case "checked":
+                    ctx = '.mod-chk[data-checked=true]';
+                    break;
 
-            //     //选中
-            //     case "checked":
-            //         $(she).find(".mod-chk_checked").children('.mod-chk').each(function(){
-            //             this.value && r.push(this.value);
-            //         });
-            //         break;
+                //未选中
+                case "unchecked":
+                    ctx = '.mod-chk[data-checked=false]'
+                    break;
 
-            //     //未选中
-            //     case "unchecked":
-            //         $(she).find(".mod-chk").each(function(){
-            //             this.parentNode.className.indexOf("mod-chk_checked") == -1 && this.value && r.push(this.value);
-            //         });
-            //         break;
+                //所有
+                case "all":
+                default:
+                    ctx = '.mod-chk';
+                    break;
+            }
+            $(ctx).each(function(i, item){
+                var val = item.getAttribute('data-value');
+                val && r.push(val);
+            });
 
-            //     default:
-            //         $(she).find(".mod-chk").each(function(){
-            //             this.value && r.push(this.value);
-            //         });
-            //         break;
-            // }
-
-            // return r;
+            return r;
 
         },
         current: function(href){
-            // TODO 未测试
-            // var 
-            //     she = this,
-            //     isSameComes = function(url1,url2){
-            //         if(!url1 || !url2){
-            //             return false;
-            //         }
+            var 
+                she = this,
+                isSameComes = function(url1,url2){
+                    if(!url1 || !url2){
+                        return false;
+                    }
 
-            //         var u1 = url1.split("#")[0],
-            //             u2 = url2.split("#")[0];
-            //         return u1 == u2;
-            //     };
+                    var u1 = url1.split("#")[0],
+                        u2 = url2.split("#")[0];
+                    return u1 == u2;
+                };
 
-            // $(she).find("a").each(function(){
-            //     isSameComes(this.href,href)? $(this).parent().addClass("mod-cur"): $(this).parent().removeClass("mod-cur");
-            // });
+            $(she).find("a").each(function(){
+                isSameComes(this.href,href)? $(this).parent().addClass("mod-cur"): $(this).parent().removeClass("mod-cur");
+            });
 
-            // $(she).find(".mod-cur").each(function(){
-            //     //向上递归设置
-            //     var myUl = this.parentNode,
-            //         times = 0;
+            $(she).find(".mod-cur").each(function(){
+                //向上递归设置
+                var myUl = this.parentNode,
+                    times = 0;
 
-            //     myUl = myUl.parentNode;
-            //     while(myUl){
-            //         if(myUl.className.indexOf("mod-menu") != -1){
-            //             break;
-            //         }
+                myUl = myUl.parentNode;
+                while(myUl){
+                    if(myUl.className.indexOf("mod-menu") != -1){
+                        break;
+                    }
 
-            //         if(myUl.tagName == "UL"){
-            //             $(myUl).slideDown(200).siblings(".mod-box").addClass("mod-show");
-            //         }
+                    if(myUl.tagName == "UL"){
+                        $(myUl).slideDown(200).siblings(".mod-box").addClass("mod-show");
+                    }
 
                     
-            //         myUl = myUl.parentNode;
-            //     }
+                    myUl = myUl.parentNode;
+                }
 
-            //     //向下
-            //     $(this).siblings("ul").slideDown(200).siblings(".mod-box").addClass("mod-show");
-            // });
+                //向下
+                $(this).siblings("ul").slideDown(200).siblings(".mod-box").addClass("mod-show");
+            });
             
         },
     }
