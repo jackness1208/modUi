@@ -3332,9 +3332,27 @@ mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
         onovertime: function() {}
     },
     
-    template: [
-        
-    ].join(''),
+    template: {
+        // confirm
+        'confirm': [
+
+        ].join(''),
+
+        // error success
+        'status': [
+
+        ].join(''),
+
+        // 自定义
+        'custom': [
+
+        ].join(''),
+
+        // loading
+        'loading': [
+            
+        ].join('')
+    },
 
     init: function(handle, context, op){
         var she = this;
