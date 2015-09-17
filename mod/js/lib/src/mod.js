@@ -3283,7 +3283,7 @@ mod.dialog = function(context, op){
 };
 
 mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
-    class: 'mod-dialog',
+    class: 'mod-pop',
     data: {
         //标题
         title: "温馨提示",
@@ -3335,22 +3335,114 @@ mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
     template: {
         // confirm
         'confirm': [
-
+            '<div class="mod-pop_hd">',
+                '<h3 class="h_tl"></h3>',
+                '<div class="h_ctrl">',
+                    '<a href="javascript:;" class="mini">mini</a>',
+                    '<a href="javascript:;" class="maximi">maximi</a>',
+                    '<a href="javascript:;" class="close">close</a>',
+                '</div>',
+            '</div>',
+            '<div class="mod-pop_resize">',
+                '<i class="mod-pop_resize_l"></i>',
+                '<i class="mod-pop_resize_b"></i>',
+                '<i class="mod-pop_resize_r"></i>',
+                '<i class="mod-pop_resize_lb"></i>',
+                '<i class="mod-pop_resize_rb"></i>',
+                '<div class="mod-pop_bd">',
+                    '<div class="mod-pop_bd_cnt"></div>',
+                '</div>',
+                '<div class="mod-pop_ft">',
+                    '<a href="javascript:;" class="mod-btn_s01 mod-btn_small"><span>确定</span></a>',
+                    '<a href="javascript:;" class="mod-btn_s03 mod-btn_small"><span>取消</span></a>',
+                '</div>',
+                '<div class="mod-pop_resize_area"></div>',
+                '<iframe class="mod-pop_if" frameborder="0"></iframe>',
+            '</div>'
         ].join(''),
 
         // error success
-        'status': [
+        'success': [
+            '<div class="mod-pop_hd">',
+                '<h3 class="h_tl"></h3>',
+                '<div class="h_ctrl">',
+                    '<a href="javascript:;" class="mini">mini</a>',
+                    '<a href="javascript:;" class="maximi">maximi</a>',
+                    '<a href="javascript:;" class="close">close</a>',
+                '</div>',
+            '</div>',
+            '<div class="mod-pop_resize">',
+                '<i class="mod-pop_resize_l"></i>',
+                '<i class="mod-pop_resize_b"></i>',
+                '<i class="mod-pop_resize_r"></i>',
+                '<i class="mod-pop_resize_lb"></i>',
+                '<i class="mod-pop_resize_rb"></i>',
+                '<div class="mod-pop_bd">',
+                    '<div class="mod-pop_bd_cnt"></div>',
+                '</div>',
+                '<div class="mod-pop_ft">',
+                    '<a href="javascript:;" class="mod-btn_s03 mod-btn_small"><span>确定</span></a>',
+                '<div class="mod-pop_resize_area"></div>',
+                '<iframe class="mod-pop_if" frameborder="0"></iframe>',
+            '</div>'
+
+        ].join(''),
+        'error': [
+            '<div class="mod-pop_hd">',
+                '<h3 class="h_tl"></h3>',
+                '<div class="h_ctrl">',
+                    '<a href="javascript:;" class="mini">mini</a>',
+                    '<a href="javascript:;" class="maximi">maximi</a>',
+                    '<a href="javascript:;" class="close">close</a>',
+                '</div>',
+            '</div>',
+            '<div class="mod-pop_resize">',
+                '<i class="mod-pop_resize_l"></i>',
+                '<i class="mod-pop_resize_b"></i>',
+                '<i class="mod-pop_resize_r"></i>',
+                '<i class="mod-pop_resize_lb"></i>',
+                '<i class="mod-pop_resize_rb"></i>',
+                '<div class="mod-pop_bd">',
+                    '<div class="mod-pop_bd_cnt"></div>',
+                '</div>',
+                '<div class="mod-pop_ft">',
+                    '<a href="javascript:;" class="mod-btn_s03 mod-btn_small"><span>确定</span></a>',
+                '<div class="mod-pop_resize_area"></div>',
+                '<iframe class="mod-pop_if" frameborder="0"></iframe>',
+            '</div>'
 
         ].join(''),
 
         // 自定义
         'custom': [
-
+            '<div class="mod-pop_hd">',
+                '<h3 class="h_tl"></h3>',
+                '<div class="h_ctrl">',
+                    '<a href="javascript:;" class="mini">mini</a>',
+                    '<a href="javascript:;" class="maximi">maximi</a>',
+                    '<a href="javascript:;" class="close">close</a>',
+                '</div>',
+            '</div>',
+            '<div class="mod-pop_resize">',
+                '<i class="mod-pop_resize_l"></i>',
+                '<i class="mod-pop_resize_b"></i>',
+                '<i class="mod-pop_resize_r"></i>',
+                '<i class="mod-pop_resize_lb"></i>',
+                '<i class="mod-pop_resize_rb"></i>',
+                '<div class="mod-pop_bd">',
+                    '<div class="mod-pop_bd_cnt"></div>',
+                '</div>',
+                '<div class="mod-pop_resize_area"></div>',
+                '<iframe class="mod-pop_if" frameborder="0"></iframe>',
+            '</div>'
         ].join(''),
 
         // loading
         'loading': [
-            
+            '<div class="mod-loading_icon"></div>',
+            '<a href="javascript:;" class="close">close</a>',
+            '<div class="mod-pop_bd"></div>',
+            '<iframe class="mod-pop_if" frameborder="0"></iframe>',
         ].join('')
     },
 
@@ -3366,19 +3458,69 @@ mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
             clearTimeout(she.readyKey);
         }
 
+        if(mod.fn.type(op) == 'string'){
+            op = {
+                content: op
+            };
+        }
         var 
             modFact = mod.fn.extend(true, {}, modFactory, handle.__modFact),
-            $tar = $(context),
+            $tar,
             //赋值
             option = modAssignment(modFact.data, op),
-            initHandle;
+            initHandle,
+            popCtx,
+            iId,
+            iType;
 
+        switch(context){
+            case 'alert':
+            case 'normal':
+                iId = 'modPopAlert';
+                iType = 'normal';
+                break;
+
+            case 'success':
+            case 'error':
+                iId = 'modPopStatus';
+                iType = context;
+
+                if(context == 'success'){
+                    modFact.class += ' mod-pop_success';
+                } else {
+                    modFact.class += ' mod-pop_error';
+                }
+                break;
+
+            case 'confirm':
+                iId = 'modPopConfirm'
+                iType = context;
+                break;
+
+            case 'loading':
+                iId = 'modPopLoading';
+                iType = context;
+                modFact.class += ' mod-pop_loading';
+                break;
+
+            default:
+                iId = context
+                iType = 'normal';
+                break;
+        }
+        popCtx = '#' + iId;
+
+        $tar = $(popCtx);
+
+        
+        // TODO alert、success、error、normal、loading
         if(!$tar.length){
             var el = document.createElement('div');
-            el.id = context;
+            el.id = iId;
             $tar = $(el);
 
         }
+        modFact.class = iClassArr.join(' ');
 
         $tar.each(function(){
             
@@ -3414,6 +3556,7 @@ mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
                 iModFact.build(she, attr, next);
 
             }).then(function(she, attr, next){
+
                 $(she).show();
                 attr.onload.call(she);
                 next(she, attr);
@@ -3423,9 +3566,9 @@ mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
 
             }).start(); 
         });
-        // initHandle = function(){
+        initHandle = function(){
 
-        // };
+        };
         return $tar[0];
         
 
