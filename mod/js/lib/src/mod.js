@@ -3331,115 +3331,58 @@ mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
         onovertime: function() {}
     },
     template: (function(){
-        return {
-            // confirm
-            'confirm': [
-                '<div class="mod-pop_hd">',
+        var module = [
+                '<div class="mod-pop_hd" mod-on="mousedown: dragMouseDown">',
                     '<h3 class="h_tl"></h3>',
                     '<div class="h_ctrl">',
-                        '<a mod-if="$minimize" href="javascript:;" class="mini">mini</a>',
-                        '<a href="javascript:;" class="maximi">maximi</a>',
-                        '<a mod-if="$close" href="javascript:;" class="close">close</a>',
+                        '<a mod-if="$minimize" href="javascript:;" class="mini" mod-on="click: miniClick">mini</a>',
+                        '<a href="javascript:;" class="maximi" mod-on="click: maximiClick">maximi</a>',
+                        '<a mod-if="$close" href="javascript:;" class="close" mod-on="click: closeClick">close</a>',
                     '</div>',
                 '</div>',
                 '<div class="mod-pop_resize" mod-if="$resize">',
-                    '<i class="mod-pop_resize_l"></i>',
-                    '<i class="mod-pop_resize_b"></i>',
-                    '<i class="mod-pop_resize_r"></i>',
-                    '<i class="mod-pop_resize_lb"></i>',
-                    '<i class="mod-pop_resize_rb"></i>',
+                    '<i class="mod-pop_resize_l" mod-on="mousedown: resizeLeftMouseDown"></i>',
+                    '<i class="mod-pop_resize_b" mod-on="mousedown: resizeBottomMouseDown"></i>',
+                    '<i class="mod-pop_resize_r" mod-on="mousedown: resizeRightMouseDown"></i>',
+                    '<i class="mod-pop_resize_lb" mod-on="mousedown: resizeLeftBottomMouseDown"></i>',
+                    '<i class="mod-pop_resize_rb" mod-on="mousedown: resizeRightBottomMouseDown"></i>',
                     '<div class="mod-pop_bd">',
-                        '<div class="mod-pop_bd_cnt"></div>',
+                        '<div class="mod-pop_bd_cnt">{$content}</div>',
                     '</div>',
-                    '<div class="mod-pop_ft">',
-                        '<a href="javascript:;" class="mod-btn_s01 mod-btn_small"><span>确定</span></a>',
-                        '<a href="javascript:;" class="mod-btn_s03 mod-btn_small"><span>取消</span></a>',
-                    '</div>',
+                    '{footer}'
                     '<div class="mod-pop_resize_area" mod-if="$resize"></div>',
                     '<iframe class="mod-pop_if" frameborder="0"></iframe>',
                 '</div>'
-            ].join(''),
+            ].join('');
+
+        return {
+            // confirm
+            'confirm': module.replace('{footer}', [
+                '<div class="mod-pop_ft">',
+                    '<a href="javascript:;" class="mod-btn_s01 mod-btn_small" mod-on="click: confirmOkClick"><span>确定</span></a>',
+                    '<a href="javascript:;" class="mod-btn_s03 mod-btn_small" mod-on="click: confirmCancelClick"><span>取消</span></a>',
+                '</div>',
+            ].join('')),
 
             // error success
-            'success': [
-                '<div class="mod-pop_hd">',
-                    '<h3 class="h_tl"></h3>',
-                    '<div class="h_ctrl">',
-                        '<a href="javascript:;" class="mini">mini</a>',
-                        '<a href="javascript:;" class="maximi">maximi</a>',
-                        '<a href="javascript:;" class="close">close</a>',
-                    '</div>',
-                '</div>',
-                '<div class="mod-pop_resize">',
-                    '<i class="mod-pop_resize_l"></i>',
-                    '<i class="mod-pop_resize_b"></i>',
-                    '<i class="mod-pop_resize_r"></i>',
-                    '<i class="mod-pop_resize_lb"></i>',
-                    '<i class="mod-pop_resize_rb"></i>',
-                    '<div class="mod-pop_bd">',
-                        '<div class="mod-pop_bd_cnt"></div>',
-                    '</div>',
-                    '<div class="mod-pop_ft">',
-                        '<a href="javascript:;" class="mod-btn_s03 mod-btn_small"><span>确定</span></a>',
-                    '<div class="mod-pop_resize_area"></div>',
-                    '<iframe class="mod-pop_if" frameborder="0"></iframe>',
+            'success': module.replace('{footer}', [
+                '<div class="mod-pop_ft">',
+                    '<a href="javascript:;" class="mod-btn_s03 mod-btn_small" mod-on="click: closeClick"><span>确定</span></a>',
                 '</div>'
-
-            ].join(''),
-            'error': [
-                '<div class="mod-pop_hd">',
-                    '<h3 class="h_tl"></h3>',
-                    '<div class="h_ctrl">',
-                        '<a href="javascript:;" class="mini">mini</a>',
-                        '<a href="javascript:;" class="maximi">maximi</a>',
-                        '<a href="javascript:;" class="close">close</a>',
-                    '</div>',
-                '</div>',
-                '<div class="mod-pop_resize">',
-                    '<i class="mod-pop_resize_l"></i>',
-                    '<i class="mod-pop_resize_b"></i>',
-                    '<i class="mod-pop_resize_r"></i>',
-                    '<i class="mod-pop_resize_lb"></i>',
-                    '<i class="mod-pop_resize_rb"></i>',
-                    '<div class="mod-pop_bd">',
-                        '<div class="mod-pop_bd_cnt"></div>',
-                    '</div>',
-                    '<div class="mod-pop_ft">',
-                        '<a href="javascript:;" class="mod-btn_s03 mod-btn_small"><span>确定</span></a>',
-                    '<div class="mod-pop_resize_area"></div>',
-                    '<iframe class="mod-pop_if" frameborder="0"></iframe>',
+            ].join('')),
+            
+            'error': module.replace('{footer}', [
+                '<div class="mod-pop_ft">',
+                    '<a href="javascript:;" class="mod-btn_s03 mod-btn_small" mod-on="click: closeClick"><span>确定</span></a>',
                 '</div>'
-
-            ].join(''),
-
+            ].join('')),
             // 自定义
-            'custom': [
-                '<div class="mod-pop_hd">',
-                    '<h3 class="h_tl"></h3>',
-                    '<div class="h_ctrl">',
-                        '<a href="javascript:;" class="mini">mini</a>',
-                        '<a href="javascript:;" class="maximi">maximi</a>',
-                        '<a href="javascript:;" class="close">close</a>',
-                    '</div>',
-                '</div>',
-                '<div class="mod-pop_resize">',
-                    '<i class="mod-pop_resize_l"></i>',
-                    '<i class="mod-pop_resize_b"></i>',
-                    '<i class="mod-pop_resize_r"></i>',
-                    '<i class="mod-pop_resize_lb"></i>',
-                    '<i class="mod-pop_resize_rb"></i>',
-                    '<div class="mod-pop_bd">',
-                        '<div class="mod-pop_bd_cnt"></div>',
-                    '</div>',
-                    '<div class="mod-pop_resize_area"></div>',
-                    '<iframe class="mod-pop_if" frameborder="0"></iframe>',
-                '</div>'
-            ].join(''),
+            'custom': module.replace('{footer}', ''),
 
             // loading
             'loading': [
                 '<div class="mod-loading_icon"></div>',
-                '<a href="javascript:;" class="close">close</a>',
+                '<a href="javascript:;" class="close"  mod-on="click: closeClick">close</a>',
                 '<div class="mod-pop_bd"></div>',
                 '<iframe class="mod-pop_if" frameborder="0"></iframe>',
             ].join('')
@@ -3585,12 +3528,70 @@ mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
         
         //..TODO
 
-        renderPark.template(target, modFact.extends.menus);
+        renderPark.template(target, attr);
+
+        if(attr.sizingType == 'max'){
+            
+        } else {
+
+        }
+
+        if(attr.top){
+
+        }
         
+        if(attr.top){
+
+        }
         next(target, attr);
     },
     methods: {
+        // 最大化按钮
+        maximiClick: function(){
+            alert('maximiClick');
+        },
+        // 最小化按钮
+        miniClick: function(){
+            alert('miniClick');
+
+        },
+        // 关闭按钮
+        closeClick: function(){
+            alert('closeClick');
+            
+        },
+        // 拖动弹窗
+        dragMouseDown: function(){
+
+        },
+        // 左拉弹窗
+        resizeLeftMouseDown: function(){
+
+        },
+        // 右拉弹窗
+        resizeRightMouseDown: function(){
+            
+        },
+        // 下拉弹窗
+        resizeBottomMouseDown: function(){
+
+        },
+        // 左下拉弹窗
+        resizeLeftBottomMouseDown: function(){
+
+        },
+        // 右下拉弹窗
+        resizeRightBottomMouseDown: function(){
+        },
         
+        // confirm 弹窗 确定按钮
+        confirmOkClick: function(){
+            
+        },
+        // confirm 弹窗 取消按钮
+        confirmCancelClick: function(){
+
+        }
     },
     
     attributes: {
@@ -3603,6 +3604,9 @@ mod.dialog.__modFact = mod.fn.extend(undefined, modFactory, {
         },
 
         fixed: function(){
+            //TODO...
+        },
+        resize: function(){
             //TODO...
         }
     }
