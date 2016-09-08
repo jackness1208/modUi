@@ -1,3 +1,4 @@
+'use strict';
 module.exports = function(grunt) {
 
     // 项目配置
@@ -60,6 +61,8 @@ module.exports = function(grunt) {
 
     // 加载提供"copy"任务的插件
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     
     var helpFile = function(){
@@ -80,10 +83,10 @@ module.exports = function(grunt) {
     // 注册任务
     grunt.registerTask('build', function(name) {
         if (name) {
-            grunt.task.run(['uglify:' + name, 'copy']);
+            grunt.task.run(['uglify:' + name]);
 
         } else {
-            grunt.task.run(['uglify', 'copy']);
+            grunt.task.run(['uglify']);
 
         }
     });
@@ -91,4 +94,4 @@ module.exports = function(grunt) {
     grunt.registerTask('-h', helpFile);
 
     
-}
+};

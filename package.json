@@ -1,12 +1,14 @@
 {
-    "name": "modUi",
-    "version": "1.4.10",
-    "description": "a great ui for admin",
-    "author": "jackness Lau",
-    "license": "MIT",
-    "devDependencies": {
-        "grunt": "~0.4.1",
-        "grunt-contrib-uglify": "~0.2.1",
-        "grunt-contrib-watch": "~0.6.1"
-    }
+  "name": "modUi",
+  "version": "1.4.10",
+  "description": "a great ui for admin",
+  "author": "jackness Lau",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-requirejs": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0"
+  }
 }
